@@ -1,0 +1,7 @@
+add_library(snake STATIC snake.c)
+target_include_directories(snake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(snake PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(snake_standalone snake.c)
+    target_link_libraries(snake_standalone PRIVATE snake eapps_port)
+endif()

@@ -1,0 +1,7 @@
+add_library(eweb STATIC eweb.c)
+target_include_directories(eweb PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eweb PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(eweb_standalone eweb.c)
+    target_link_libraries(eweb_standalone PRIVATE eweb eapps_port)
+endif()

@@ -1,0 +1,7 @@
+add_library(epdf STATIC epdf.c)
+target_include_directories(epdf PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(epdf PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(epdf_standalone epdf.c)
+    target_link_libraries(epdf_standalone PRIVATE epdf eapps_port)
+endif()

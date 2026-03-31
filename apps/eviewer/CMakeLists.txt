@@ -1,0 +1,7 @@
+add_library(eviewer STATIC eviewer.c)
+target_include_directories(eviewer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eviewer PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(eviewer_standalone eviewer.c)
+    target_link_libraries(eviewer_standalone PRIVATE eviewer eapps_port)
+endif()

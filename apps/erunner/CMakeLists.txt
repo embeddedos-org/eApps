@@ -1,0 +1,7 @@
+add_library(erunner STATIC erunner.c)
+target_include_directories(erunner PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(erunner PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(erunner_standalone erunner.c)
+    target_link_libraries(erunner_standalone PRIVATE erunner eapps_port)
+endif()

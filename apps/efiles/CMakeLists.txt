@@ -1,0 +1,7 @@
+add_library(efiles STATIC efiles.c)
+target_include_directories(efiles PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(efiles PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(efiles_standalone efiles.c)
+    target_link_libraries(efiles_standalone PRIVATE efiles eapps_port)
+endif()

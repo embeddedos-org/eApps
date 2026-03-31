@@ -1,0 +1,7 @@
+add_library(ebuffer STATIC ebuffer.c)
+target_include_directories(ebuffer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(ebuffer PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(ebuffer_standalone ebuffer.c)
+    target_link_libraries(ebuffer_standalone PRIVATE ebuffer eapps_port)
+endif()

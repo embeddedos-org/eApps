@@ -1,0 +1,7 @@
+add_library(etimer STATIC etimer.c)
+target_include_directories(etimer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(etimer PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(etimer_standalone etimer.c)
+    target_link_libraries(etimer_standalone PRIVATE etimer eapps_port)
+endif()

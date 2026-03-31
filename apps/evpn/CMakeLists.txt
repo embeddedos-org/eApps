@@ -1,0 +1,7 @@
+add_library(evpn STATIC evpn.c)
+target_include_directories(evpn PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(evpn PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE)
+    add_executable(evpn_standalone evpn.c)
+    target_link_libraries(evpn_standalone PRIVATE evpn eapps_port)
+endif()

@@ -1,70 +1,70 @@
-name: eApps CI
+name: CI
 
 on:
   push:
-    branches: [master, develop]
+    branches: [main]
   pull_request:
-    branches: [master]
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [main]
 
 jobs:
-  build-android-linux-wasm:
-    name: Build (Linux + Android + WASM)
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@v4
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
-
-      - name: Build core modules
-        run: ./gradlew :core:common:build :core:storage:build :core:network:build :core:platform:build :core:ui:build --no-daemon
-
-      - name: Build all apps (JVM + Android + WASM)
-        run: ./gradlew build -Peapps.target.ios=false --no-daemon
-
-      - name: Run tests
-        run: ./gradlew allTests -Peapps.target.ios=false --no-daemon
-
-      - name: Upload test reports
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-reports-linux
-          path: "**/build/reports/tests/"
-          retention-days: 7
-
-  build-ios-macos:
-    name: Build (macOS + iOS)
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@v4
-
-      - name: Build iOS + macOS targets
-        run: ./gradlew build -Peapps.target.android=false -Peapps.target.wasm=false --no-daemon
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build -j$(nproc)
+      - name: Test
+        run: cd build && ctest --output-on-failure
 
   build-windows:
-    name: Build (Windows)
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
-      - uses: gradle/actions/setup-gradle@v4
+          submodules: recursive
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Test
+        run: cd build && ctest -C Release --output-on-failure
 
-      - name: Build JVM desktop target
-        run: ./gradlew buildDesktop -Peapps.target.android=false -Peapps.target.ios=false -Peapps.target.wasm=false --no-daemon
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: brew install cmake sdl2
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build -j$(sysctl -n hw.logicalcpu)
+      - name: Test
+        run: cd build && ctest --output-on-failure
+
+  size-check:
+    runs-on: ubuntu-latest
+    needs: build-linux
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
+      - name: Build standalone
+        run: |
+          cmake -B build -DEAPPS_BUILD_STANDALONE=ON
+          cmake --build build -j$(nproc)
+      - name: Check binary sizes
+        run: |
+          echo "Binary sizes:"
+          find build/apps -name "*_standalone" -exec ls -lh {} \;
+          find build/apps -name "*_standalone" -exec sh -c 'size=$(stat -f%z "$1" 2>/dev/null || stat -c%s "$1"); if [ "$size" -gt 5242880 ]; then echo "FAIL: $1 is $(($size/1048576))MB (>5MB)"; exit 1; fi' _ {} \;
