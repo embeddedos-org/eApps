@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.core.common"
+    namespace = "com.eos.eapps.core.common"
 }

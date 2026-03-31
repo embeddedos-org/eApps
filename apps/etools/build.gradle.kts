@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.etools"
+    namespace = "com.eos.eapps.apps.etools"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.etools"
+        applicationId = "com.eos.eapps.apps.etools"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.etools.MainKt"
+        mainClass = "com.eos.eapps.apps.etools.MainKt"
     }
 }
 
@@ -22,7 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
+            implementation(project(":core:platform"))
         }
     }
 }

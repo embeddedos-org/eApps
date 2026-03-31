@@ -3,17 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.ecrush"
+    namespace = "com.eos.eapps.apps.ecrush"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.ecrush"
+        applicationId = "com.eos.eapps.apps.ecrush"
         versionCode = 1
         versionName = "1.0.0"
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.eos.eappsuite.ecrush.MainKt"
     }
 }
 
@@ -22,7 +16,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
         }
     }
 }

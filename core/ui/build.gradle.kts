@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.core.ui"
+    namespace = "com.eos.eapps.core.ui"
 }
 
 kotlin {

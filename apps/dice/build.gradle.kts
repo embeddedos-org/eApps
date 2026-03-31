@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.dice"
+    namespace = "com.eos.eapps.apps.dice"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.dice"
+        applicationId = "com.eos.eapps.apps.dice"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.dice.MainKt"
+        mainClass = "com.eos.eapps.apps.dice.MainKt"
     }
 }
 
@@ -22,7 +22,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
         }
     }
 }

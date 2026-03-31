@@ -1,0 +1,43 @@
+name: Release Suite
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: 'temurin', java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :apps:suite:assembleRelease
+      - uses: actions/upload-artifact@v4
+        with: { name: android-apk, path: apps/suite/build/outputs/apk/release/*.apk }
+
+  release-desktop:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: 'temurin', java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :apps:suite:jvmJar
+      - run: ./gradlew :apps:suite:jvmJar -Peapps.target.android=false -Peapps.target.ios=false -Peapps.target.wasm=false
+      - uses: actions/upload-artifact@v4
+        with: { name: desktop-${{ matrix.os }}, path: apps/suite/build/libs/*.jar }
+
+  release-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: 'temurin', java-version: '17' }
+      - uses: gradle/actions/setup-gradle@v4
+      - run: ./gradlew :apps:suite:wasmJsBrowserDistribution
+      - uses: actions/upload-artifact@v4
+        with: { name: web-wasm, path: apps/suite/build/dist/wasmJs/productionExecutable/ }

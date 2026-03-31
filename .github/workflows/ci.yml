@@ -1,0 +1,70 @@
+name: eApps CI
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android-linux-wasm:
+    name: Build (Linux + Android + WASM)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+
+      - name: Build core modules
+        run: ./gradlew :core:common:build :core:storage:build :core:network:build :core:platform:build :core:ui:build --no-daemon
+
+      - name: Build all apps (JVM + Android + WASM)
+        run: ./gradlew build -Peapps.target.ios=false --no-daemon
+
+      - name: Run tests
+        run: ./gradlew allTests -Peapps.target.ios=false --no-daemon
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-linux
+          path: "**/build/reports/tests/"
+          retention-days: 7
+
+  build-ios-macos:
+    name: Build (macOS + iOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build iOS + macOS targets
+        run: ./gradlew build -Peapps.target.android=false -Peapps.target.wasm=false --no-daemon
+
+  build-windows:
+    name: Build (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build JVM desktop target
+        run: ./gradlew buildDesktop -Peapps.target.android=false -Peapps.target.ios=false -Peapps.target.wasm=false --no-daemon

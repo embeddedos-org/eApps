@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.evnc"
+    namespace = "com.eos.eapps.apps.evnc"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.evnc"
+        applicationId = "com.eos.eapps.apps.evnc"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.evnc.MainKt"
+        mainClass = "com.eos.eapps.apps.evnc.MainKt"
     }
 }
 
@@ -22,7 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
+            implementation(project(":core:network"))
         }
     }
 }

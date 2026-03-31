@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.core.network"
+    namespace = "com.eos.eapps.core.network"
 }
 
 kotlin {
@@ -22,6 +22,11 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.js)
+            }
         }
     }
 }

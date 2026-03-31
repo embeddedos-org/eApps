@@ -3,17 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.ebuffer"
+    namespace = "com.eos.eapps.apps.ebuffer"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.ebuffer"
+        applicationId = "com.eos.eapps.apps.ebuffer"
         versionCode = 1
         versionName = "1.0.0"
-    }
-}
-
-compose.desktop {
-    application {
-        mainClass = "com.eos.eappsuite.ebuffer.MainKt"
     }
 }
 
@@ -22,7 +16,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
+            implementation(project(":core:platform"))
         }
     }
 }

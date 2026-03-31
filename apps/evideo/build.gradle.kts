@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.evideo"
+    namespace = "com.eos.eapps.apps.evideo"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.evideo"
+        applicationId = "com.eos.eapps.apps.evideo"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.evideo.MainKt"
+        mainClass = "com.eos.eapps.apps.evideo.MainKt"
     }
 }
 

@@ -4,67 +4,38 @@ plugins {
     id("com.android.library")
 }
 
+fun prop(name: String, default: String = "true") =
+    providers.gradleProperty(name).getOrElse(default)
+
 kotlin {
-    androidTarget {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    val enableAndroid = prop("eapps.target.android").toBoolean()
+    val enableJvm = prop("eapps.target.jvm").toBoolean()
+    val enableWasm = prop("eapps.target.wasm").toBoolean()
+    val enableIos = prop("eapps.target.ios").toBoolean()
+
+    if (enableAndroid) {
+        androidTarget {
+            compilations.all {
+                compileTaskProvider.configure {
+                    compilerOptions {
+                        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+                    }
                 }
             }
         }
     }
-    jvm()
-    iosArm64()
-    iosSimulatorArm64()
-    iosX64()
-
-    applyDefaultHierarchyTemplate()
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.findLibrary("kotlinx-coroutines-core").get())
-            implementation(libs.findLibrary("kotlinx-serialization-json").get())
-            implementation(libs.findLibrary("kotlinx-datetime").get())
-        }
-        commonTest.dependencies {
-            implementation(libs.findLibrary("kotlin-test").get())
-        }
+    if (enableJvm) {
+        jvm()
     }
-}
-
-android {
-    compileSdk = libs.findVersion("android-compileSdk").get().toString().toInt()
-    defaultConfig {
-        minSdk = libs.findVersion("android-minSdk").get().toString().toInt()
+    if (enableIos) {
+        iosArm64()
+        iosSimulatorArm64()
+        iosX64()
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    if (enableWasm) {
+        @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+        wasmJs { browser() }
     }
-}
-import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
-
-plugins {
-    id("org.jetbrains.kotlin.multiplatform")
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("com.android.library")
-}
-
-kotlin {
-    androidTarget {
-        compilations.all {
-            compileTaskProvider.configure {
-                compilerOptions {
-                    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-                }
-            }
-        }
-    }
-    jvm()
-    iosArm64()
-    iosSimulatorArm64()
-    iosX64()
 
     applyDefaultHierarchyTemplate()
 

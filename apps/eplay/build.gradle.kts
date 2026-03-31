@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.eplay"
+    namespace = "com.eos.eapps.apps.eplay"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.eplay"
+        applicationId = "com.eos.eapps.apps.eplay"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.eplay.MainKt"
+        mainClass = "com.eos.eapps.apps.eplay.MainKt"
     }
 }
 
@@ -22,7 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
+            implementation(project(":core:platform"))
         }
     }
 }

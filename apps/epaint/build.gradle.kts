@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.epaint"
+    namespace = "com.eos.eapps.apps.epaint"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.epaint"
+        applicationId = "com.eos.eapps.apps.epaint"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.epaint.MainKt"
+        mainClass = "com.eos.eapps.apps.epaint.MainKt"
     }
 }
 
@@ -22,7 +22,6 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":core:common"))
             implementation(project(":core:ui"))
-            implementation(project(":core:storage"))
         }
     }
 }

@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.tetris"
+    namespace = "com.eos.eapps.apps.tetris"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.tetris"
+        applicationId = "com.eos.eapps.apps.tetris"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.tetris.MainKt"
+        mainClass = "com.eos.eapps.apps.tetris.MainKt"
     }
 }
 

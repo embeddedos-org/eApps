@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace = "com.eos.eappsuite.erunner"
+    namespace = "com.eos.eapps.apps.erunner"
     defaultConfig {
-        applicationId = "com.eos.eappsuite.erunner"
+        applicationId = "com.eos.eapps.apps.erunner"
         versionCode = 1
         versionName = "1.0.0"
     }
@@ -13,7 +13,7 @@ android {
 
 compose.desktop {
     application {
-        mainClass = "com.eos.eappsuite.erunner.MainKt"
+        mainClass = "com.eos.eapps.apps.erunner.MainKt"
     }
 }
 
