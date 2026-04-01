@@ -12,6 +12,9 @@ set(TEST_SOURCES
 
 foreach(test ${TEST_SOURCES})
     add_executable(${test} ${test}.c)
-    target_link_libraries(${test} PRIVATE eapps_common eapps_ui eapps_storage m)
+    target_link_libraries(${test} PRIVATE eapps_common eapps_ui eapps_storage)
+    if(NOT MSVC)
+        target_link_libraries(${test} PRIVATE m)
+    endif()
     add_test(NAME ${test} COMMAND ${test})
 endforeach()
