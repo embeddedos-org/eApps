@@ -4,6 +4,7 @@
 #include "eapps/theme.h"
 #include "eapps/widgets.h"
 #include "eapps/version.h"
+#include "lvgl.h"
 #include <string.h>
 #include <stdbool.h>
 
@@ -92,33 +93,284 @@ void suite_register_all_apps(void) {
 #endif
 }
 
+/* ---- Launcher State ---- */
+
+static lv_obj_t *s_main_screen  = NULL;
+static lv_obj_t *s_grid_cont    = NULL;
+static lv_obj_t *s_app_cont     = NULL;
+static lv_obj_t *s_topbar       = NULL;
+static lv_obj_t *s_cat_tabs     = NULL;
 static const char *s_current_app_id = NULL;
+static eapps_category_t s_active_cat = EAPPS_CAT_PRODUCTIVITY;
 
-static void on_app_card_click(const char *app_id) {
-    const eapps_app_lifecycle_t *lc = eapps_registry_get_lifecycle(app_id);
+static lv_color_t hex_color(uint32_t hex)
+{
+    return lv_color_make((hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF);
+}
+
+/* ---- App Card ---- */
+
+typedef struct {
+    const char *app_id;
+} app_card_data_t;
+
+static void app_card_click_cb(lv_event_t *e)
+{
+    app_card_data_t *d = (app_card_data_t *)lv_event_get_user_data(e);
+    if (!d || !d->app_id) return;
+
+    const eapps_app_lifecycle_t *lc = eapps_registry_get_lifecycle(d->app_id);
     if (!lc || !lc->init) return;
-    s_current_app_id = app_id;
-    /* TODO: create container, call lc->init(container), hide grid */
+
+    s_current_app_id = d->app_id;
+
+    if (s_grid_cont) lv_obj_add_flag(s_grid_cont, LV_OBJ_FLAG_HIDDEN);
+    if (s_cat_tabs)  lv_obj_add_flag(s_cat_tabs, LV_OBJ_FLAG_HIDDEN);
+
+    s_app_cont = lv_obj_create(s_main_screen);
+    lv_obj_set_size(s_app_cont, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_style_bg_opa(s_app_cont, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(s_app_cont, 0, 0);
+    lv_obj_set_style_pad_all(s_app_cont, 0, 0);
+
+    lc->init(s_app_cont);
+    if (lc->on_show) lc->on_show();
+
+    const eapps_registry_entry_t *entry = eapps_registry_find(d->app_id);
+    if (entry && s_topbar) {
+        lv_obj_t *title = lv_obj_get_child(s_topbar, 1);
+        if (title) lv_label_set_text(title, entry->info.name);
+    }
 }
 
-static void on_back_click(void) {
+static void create_app_card(lv_obj_t *grid, const eapps_registry_entry_t *e)
+{
+    const eapps_palette_t *p = eapps_theme_get_palette();
+
+    lv_obj_t *card = lv_obj_create(grid);
+    lv_obj_set_size(card, 110, 100);
+    lv_obj_set_style_bg_color(card, hex_color(p->card), 0);
+    lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(card, 12, 0);
+    lv_obj_set_style_border_color(card, hex_color(p->border), 0);
+    lv_obj_set_style_border_width(card, 1, 0);
+    lv_obj_set_style_pad_all(card, 8, 0);
+    lv_obj_set_flex_flow(card, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(card, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER,
+                          LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_shadow_width(card, 4, 0);
+    lv_obj_set_style_shadow_opa(card, LV_OPA_10, 0);
+
+    lv_obj_t *icon_bg = lv_obj_create(card);
+    lv_obj_set_size(icon_bg, 40, 40);
+    lv_obj_set_style_bg_color(icon_bg, hex_color(p->primary), 0);
+    lv_obj_set_style_bg_opa(icon_bg, LV_OPA_20, 0);
+    lv_obj_set_style_radius(icon_bg, 10, 0);
+    lv_obj_set_style_border_width(icon_bg, 0, 0);
+
+    lv_obj_t *ico = lv_label_create(icon_bg);
+    lv_label_set_text(ico, e->info.icon ? e->info.icon : "?");
+    lv_obj_set_style_text_color(ico, hex_color(p->primary), 0);
+    lv_obj_center(ico);
+
+    lv_obj_t *name = lv_label_create(card);
+    lv_label_set_text(name, e->info.name);
+    lv_label_set_long_mode(name, LV_LABEL_LONG_DOT);
+    lv_obj_set_width(name, 90);
+    lv_obj_set_style_text_align(name, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_style_text_color(name, hex_color(p->on_surface), 0);
+    lv_obj_set_style_text_font(name, &lv_font_montserrat_12, 0);
+
+    static app_card_data_t card_data[EAPPS_MAX_APPS];
+    static int card_idx = 0;
+    if (card_idx < EAPPS_MAX_APPS) {
+        card_data[card_idx].app_id = e->info.id;
+        lv_obj_add_event_cb(card, app_card_click_cb, LV_EVENT_CLICKED,
+                            &card_data[card_idx]);
+        card_idx++;
+    }
+}
+
+/* ---- Category Tabs ---- */
+
+static void rebuild_grid(void);
+
+static void cat_tab_click_cb(lv_event_t *e)
+{
+    eapps_category_t cat = (eapps_category_t)(intptr_t)lv_event_get_user_data(e);
+    s_active_cat = cat;
+    rebuild_grid();
+}
+
+static lv_obj_t *create_cat_tabs(lv_obj_t *parent)
+{
+    const eapps_palette_t *p = eapps_theme_get_palette();
+    static const char *cat_names[] = {
+        "All", "Productivity", "Media", "Games", "Connect", "Security"
+    };
+
+    lv_obj_t *bar = lv_obj_create(parent);
+    lv_obj_set_size(bar, LV_PCT(100), 36);
+    lv_obj_set_style_bg_opa(bar, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(bar, 0, 0);
+    lv_obj_set_style_pad_all(bar, 0, 0);
+    lv_obj_set_style_pad_gap(bar, 4, 0);
+    lv_obj_set_flex_flow(bar, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(bar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
+                          LV_FLEX_ALIGN_CENTER);
+
+    for (int i = 0; i < (int)EAPPS_CAT_COUNT + 1; i++) {
+        lv_obj_t *btn = lv_button_create(bar);
+        lv_obj_set_size(btn, LV_SIZE_CONTENT, 30);
+        lv_obj_set_style_pad_hor(btn, 12, 0);
+        lv_obj_set_style_radius(btn, 15, 0);
+
+        bool is_all = (i == 0);
+        bool active = is_all ? (s_active_cat == 0)
+                             : ((int)s_active_cat == i - 1);
+        (void)active;
+
+        lv_obj_set_style_bg_color(btn, hex_color(p->primary), 0);
+        lv_obj_set_style_bg_opa(btn, (i == 0) ? LV_OPA_COVER : LV_OPA_20, 0);
+
+        lv_obj_t *lbl = lv_label_create(btn);
+        lv_label_set_text(lbl, cat_names[i]);
+        lv_obj_set_style_text_color(lbl,
+            (i == 0) ? hex_color(p->on_primary) : hex_color(p->primary), 0);
+        lv_obj_set_style_text_font(lbl, &lv_font_montserrat_12, 0);
+
+        intptr_t cat_val = (i == 0) ? 0 : (i - 1);
+        lv_obj_add_event_cb(btn, cat_tab_click_cb, LV_EVENT_CLICKED,
+                            (void *)cat_val);
+    }
+
+    return bar;
+}
+
+/* ---- Back Button ---- */
+
+static void back_click_cb(lv_event_t *e)
+{
+    (void)e;
     if (!s_current_app_id) return;
-    const eapps_app_lifecycle_t *lc = eapps_registry_get_lifecycle(s_current_app_id);
-    if (lc && lc->deinit) lc->deinit();
+
+    const eapps_app_lifecycle_t *lc =
+        eapps_registry_get_lifecycle(s_current_app_id);
+    if (lc) {
+        if (lc->on_hide) lc->on_hide();
+        if (lc->deinit) lc->deinit();
+    }
+
+    if (s_app_cont) {
+        lv_obj_delete(s_app_cont);
+        s_app_cont = NULL;
+    }
+
     s_current_app_id = NULL;
-    /* TODO: delete container, show grid */
+
+    if (s_grid_cont) lv_obj_clear_flag(s_grid_cont, LV_OBJ_FLAG_HIDDEN);
+    if (s_cat_tabs)  lv_obj_clear_flag(s_cat_tabs, LV_OBJ_FLAG_HIDDEN);
+
+    if (s_topbar) {
+        lv_obj_t *title = lv_obj_get_child(s_topbar, 1);
+        if (title) lv_label_set_text(title, "EoS Apps");
+    }
 }
 
-bool suite_init(lv_obj_t *parent) {
-    (void)parent;
-    (void)on_app_card_click;
-    (void)on_back_click;
+/* ---- Grid Rebuild ---- */
+
+static void rebuild_grid(void)
+{
+    if (!s_grid_cont) return;
+    lv_obj_clean(s_grid_cont);
+
+    int count = 0;
+    const eapps_registry_entry_t *all = eapps_registry_get_all(&count);
+    if (!all) return;
+
+    for (int i = 0; i < count; i++) {
+        create_app_card(s_grid_cont, &all[i]);
+    }
+}
+
+/* ---- Suite Init (Home Screen) ---- */
+
+bool suite_init(lv_obj_t *parent)
+{
+    const eapps_palette_t *p = eapps_theme_get_palette();
+    eapps_theme_init(true);
 
     suite_register_all_apps();
-    /* TODO: create top bar, search bar, category tabs, app grid */
+
+    s_main_screen = lv_obj_create(parent);
+    lv_obj_set_size(s_main_screen, LV_PCT(100), LV_PCT(100));
+    lv_obj_set_style_bg_color(s_main_screen, hex_color(p->background), 0);
+    lv_obj_set_style_bg_opa(s_main_screen, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(s_main_screen, 0, 0);
+    lv_obj_set_style_radius(s_main_screen, 0, 0);
+    lv_obj_set_style_pad_all(s_main_screen, 0, 0);
+    lv_obj_set_flex_flow(s_main_screen, LV_FLEX_FLOW_COLUMN);
+
+    /* Top bar */
+    s_topbar = lv_obj_create(s_main_screen);
+    lv_obj_set_size(s_topbar, LV_PCT(100), 48);
+    lv_obj_set_style_bg_color(s_topbar, hex_color(p->primary), 0);
+    lv_obj_set_style_bg_opa(s_topbar, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(s_topbar, 0, 0);
+    lv_obj_set_style_border_width(s_topbar, 0, 0);
+    lv_obj_set_style_pad_hor(s_topbar, 12, 0);
+    lv_obj_set_flex_flow(s_topbar, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(s_topbar, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER,
+                          LV_FLEX_ALIGN_CENTER);
+
+    lv_obj_t *back_btn = lv_button_create(s_topbar);
+    lv_obj_set_size(back_btn, 36, 36);
+    lv_obj_set_style_bg_opa(back_btn, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_shadow_width(back_btn, 0, 0);
+    lv_obj_t *back_lbl = lv_label_create(back_btn);
+    lv_label_set_text(back_lbl, LV_SYMBOL_LEFT);
+    lv_obj_set_style_text_color(back_lbl, hex_color(p->on_primary), 0);
+    lv_obj_center(back_lbl);
+    lv_obj_add_event_cb(back_btn, back_click_cb, LV_EVENT_CLICKED, NULL);
+
+    lv_obj_t *title = lv_label_create(s_topbar);
+    lv_label_set_text(title, "EoS Apps");
+    lv_obj_set_style_text_color(title, hex_color(p->on_primary), 0);
+    lv_obj_set_style_text_font(title, &lv_font_montserrat_16, 0);
+
+    /* Search bar */
+    lv_obj_t *search_row = lv_obj_create(s_main_screen);
+    lv_obj_set_size(search_row, LV_PCT(100), 52);
+    lv_obj_set_style_bg_opa(search_row, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(search_row, 0, 0);
+    lv_obj_set_style_pad_all(search_row, 6, 0);
+    eapps_search_bar_create(search_row);
+
+    /* Category tabs */
+    s_cat_tabs = create_cat_tabs(s_main_screen);
+
+    /* App grid (scrollable) */
+    s_grid_cont = eapps_grid_create(s_main_screen, 4);
+    lv_obj_set_flex_grow(s_grid_cont, 1);
+    lv_obj_set_size(s_grid_cont, LV_PCT(100), LV_SIZE_CONTENT);
+    lv_obj_add_flag(s_grid_cont, LV_OBJ_FLAG_SCROLLABLE);
+
+    rebuild_grid();
+
     return true;
 }
 
-void suite_deinit(void) {
+void suite_deinit(void)
+{
+    if (s_current_app_id) {
+        const eapps_app_lifecycle_t *lc =
+            eapps_registry_get_lifecycle(s_current_app_id);
+        if (lc && lc->deinit) lc->deinit();
+    }
     s_current_app_id = NULL;
+    s_main_screen = NULL;
+    s_grid_cont   = NULL;
+    s_app_cont    = NULL;
+    s_topbar      = NULL;
+    s_cat_tabs    = NULL;
 }
