@@ -1,4 +1,8 @@
-set(SUITE_LINK_LIBS eapps_ui eapps_port eapps_storage eapps_network eapps_platform)
+set(SUITE_LINK_LIBS eapps_ui eapps_storage eapps_network eapps_platform)
+
+if(TARGET eapps_port)
+    list(APPEND SUITE_LINK_LIBS eapps_port)
+endif()
 
 # Link all enabled app libraries
 if(EAPPS_BUILD_PRODUCTIVITY)
@@ -24,5 +28,9 @@ add_library(suite STATIC suite.c)
 target_include_directories(suite PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(suite PUBLIC ${SUITE_LINK_LIBS})
 
-add_executable(eapps_suite suite.c)
-target_link_libraries(eapps_suite PRIVATE suite eapps_port)
+if(TARGET eapps_port)
+    add_executable(eapps_suite suite.c)
+    target_link_libraries(eapps_suite PRIVATE suite eapps_port)
+endif()
+    target_link_libraries(eapps_suite PRIVATE suite eapps_port)
+endif()
