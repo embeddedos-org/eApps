@@ -22,7 +22,9 @@ if(NOT PORT_SOURCES)
     return()
 endif()
 
-if(NOT PORT_SOURCES)
+# Only build port layer if real LVGL is available (not the stub interface target)
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../extern/lvgl/CMakeLists.txt")
+    message(STATUS "LVGL submodule not found — skipping port layer build")
     return()
 endif()
 
