@@ -1,0 +1,7 @@
+add_library(echat STATIC echat.c)
+target_include_directories(echat PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(echat PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(echat_standalone echat.c)
+    target_link_libraries(echat_standalone PRIVATE echat eapps_port)
+endif()

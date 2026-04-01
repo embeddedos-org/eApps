@@ -1,0 +1,7 @@
+add_library(eguard STATIC eguard.c)
+target_include_directories(eguard PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eguard PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(eguard_standalone eguard.c)
+    target_link_libraries(eguard_standalone PRIVATE eguard eapps_port)
+endif()

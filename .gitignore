@@ -1,0 +1,101 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# Kotlin
+*.class
+*.jar
+*.war
+*.ear
+
+# Android
+*.apk
+*.aab
+*.dex
+*.ap_
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# iOS
+*.xcworkspace
+*.xcuserdata
+Pods/
+DerivedData/
+*.ipa
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node (for web builds)
+node_modules/
+dist/
+
+# Kotlin/Native
+*.klib
+*.knm
+
+# Test outputs
+test-results/
+test-reports/
+
+# Secrets
+*.keystore
+*.jks
+signing.properties
+google-services.json
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Kotlin
+*.class
+*.jar
+*.war
+
+# Android
+local.properties
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# iOS
+*.xcworkspace
+*.xcuserdata
+Pods/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build outputs
+out/
+dist/
