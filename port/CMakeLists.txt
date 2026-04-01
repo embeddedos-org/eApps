@@ -18,6 +18,14 @@ elseif(EAPPS_PLATFORM_WEB)
     )
 endif()
 
+if(NOT PORT_SOURCES)
+    return()
+endif()
+
+if(NOT PORT_SOURCES)
+    return()
+endif()
+
 add_library(eapps_port STATIC ${PORT_SOURCES})
 
 target_link_libraries(eapps_port PUBLIC eapps_ui eapps_platform lvgl)
