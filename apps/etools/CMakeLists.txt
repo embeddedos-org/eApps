@@ -1,7 +1,7 @@
 add_library(etools STATIC etools.c)
 target_include_directories(etools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(etools PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(etools_standalone etools.c)
     target_link_libraries(etools_standalone PRIVATE etools eapps_port)
 endif()

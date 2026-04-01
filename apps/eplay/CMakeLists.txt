@@ -1,7 +1,7 @@
 add_library(eplay STATIC eplay.c)
 target_include_directories(eplay PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(eplay PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(eplay_standalone eplay.c)
     target_link_libraries(eplay_standalone PRIVATE eplay eapps_port)
 endif()

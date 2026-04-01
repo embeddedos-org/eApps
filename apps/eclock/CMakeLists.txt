@@ -1,7 +1,7 @@
 add_library(eclock STATIC eclock.c)
 target_include_directories(eclock PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(eclock PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(eclock_standalone eclock.c)
     target_link_libraries(eclock_standalone PRIVATE eclock eapps_port)
 endif()

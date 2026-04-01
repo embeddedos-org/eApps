@@ -1,7 +1,7 @@
 add_library(enote STATIC enote.c)
 target_include_directories(enote PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(enote PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(enote_standalone enote.c)
     target_link_libraries(enote_standalone PRIVATE enote eapps_port)
 endif()

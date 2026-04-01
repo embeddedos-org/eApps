@@ -1,7 +1,7 @@
 add_library(egallery STATIC egallery.c)
 target_include_directories(egallery PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(egallery PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(egallery_standalone egallery.c)
     target_link_libraries(egallery_standalone PRIVATE egallery eapps_port)
 endif()

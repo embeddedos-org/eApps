@@ -1,7 +1,7 @@
 add_library(evideo STATIC evideo.c)
 target_include_directories(evideo PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(evideo PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(evideo_standalone evideo.c)
     target_link_libraries(evideo_standalone PRIVATE evideo eapps_port)
 endif()

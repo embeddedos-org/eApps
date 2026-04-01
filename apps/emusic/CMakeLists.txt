@@ -1,7 +1,7 @@
 add_library(emusic STATIC emusic.c)
 target_include_directories(emusic PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(emusic PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(emusic_standalone emusic.c)
     target_link_libraries(emusic_standalone PRIVATE emusic eapps_port)
 endif()

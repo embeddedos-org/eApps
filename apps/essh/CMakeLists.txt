@@ -1,7 +1,7 @@
 add_library(essh STATIC essh.c)
 target_include_directories(essh PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(essh PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(essh_standalone essh.c)
     target_link_libraries(essh_standalone PRIVATE essh eapps_port)
 endif()

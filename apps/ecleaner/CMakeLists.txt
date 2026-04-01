@@ -1,7 +1,7 @@
 add_library(ecleaner STATIC ecleaner.c)
 target_include_directories(ecleaner PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ecleaner PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(ecleaner_standalone ecleaner.c)
     target_link_libraries(ecleaner_standalone PRIVATE ecleaner eapps_port)
 endif()

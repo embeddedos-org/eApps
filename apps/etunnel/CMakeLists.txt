@@ -1,7 +1,7 @@
 add_library(etunnel STATIC etunnel.c)
 target_include_directories(etunnel PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(etunnel PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(etunnel_standalone etunnel.c)
     target_link_libraries(etunnel_standalone PRIVATE etunnel eapps_port)
 endif()

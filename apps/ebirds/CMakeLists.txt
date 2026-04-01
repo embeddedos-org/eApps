@@ -1,7 +1,7 @@
 add_library(ebirds STATIC ebirds.c)
 target_include_directories(ebirds PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ebirds PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(ebirds_standalone ebirds.c)
     target_link_libraries(ebirds_standalone PRIVATE ebirds eapps_port)
 endif()

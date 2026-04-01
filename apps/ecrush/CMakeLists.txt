@@ -1,7 +1,7 @@
 add_library(ecrush STATIC ecrush.c)
 target_include_directories(ecrush PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ecrush PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(ecrush_standalone ecrush.c)
     target_link_libraries(ecrush_standalone PRIVATE ecrush eapps_port)
 endif()

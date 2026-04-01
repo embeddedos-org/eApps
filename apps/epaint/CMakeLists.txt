@@ -1,7 +1,7 @@
 add_library(epaint STATIC epaint.c)
 target_include_directories(epaint PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(epaint PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(epaint_standalone epaint.c)
     target_link_libraries(epaint_standalone PRIVATE epaint eapps_port)
 endif()

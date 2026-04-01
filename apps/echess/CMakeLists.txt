@@ -1,7 +1,7 @@
 add_library(echess STATIC echess.c)
 target_include_directories(echess PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(echess PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(echess_standalone echess.c)
     target_link_libraries(echess_standalone PRIVATE echess eapps_port)
 endif()

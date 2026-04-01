@@ -1,7 +1,7 @@
 add_library(tetris STATIC tetris.c)
 target_include_directories(tetris PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(tetris PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(tetris_standalone tetris.c)
     target_link_libraries(tetris_standalone PRIVATE tetris eapps_port)
 endif()

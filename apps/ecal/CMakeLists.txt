@@ -1,7 +1,7 @@
 add_library(ecal STATIC ecal.c)
 target_include_directories(ecal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ecal PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(ecal_standalone ecal.c)
     target_link_libraries(ecal_standalone PRIVATE ecal eapps_port)
 endif()

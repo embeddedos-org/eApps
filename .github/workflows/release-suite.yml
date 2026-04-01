@@ -2,42 +2,76 @@ name: Release Suite
 
 on:
   push:
-    tags: ['v*']
+    tags: ["v*"]
+
+permissions:
+  contents: write
 
 jobs:
-  release-android:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: 'temurin', java-version: '17' }
-      - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :apps:suite:assembleRelease
-      - uses: actions/upload-artifact@v4
-        with: { name: android-apk, path: apps/suite/build/outputs/apk/release/*.apk }
-
-  release-desktop:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+  build-cli:
+    name: CLI Suite (${{ matrix.platform }})
     runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: 'temurin', java-version: '17' }
-      - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :apps:suite:jvmJar
-      - run: ./gradlew :apps:suite:jvmJar -Peapps.target.android=false -Peapps.target.ios=false -Peapps.target.wasm=false
-      - uses: actions/upload-artifact@v4
-        with: { name: desktop-${{ matrix.os }}, path: apps/suite/build/libs/*.jar }
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: windows-latest
+            platform: windows-x64
+          - os: macos-latest
+            platform: macos-x64
 
-  release-web:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with: { distribution: 'temurin', java-version: '17' }
-      - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :apps:suite:wasmJsBrowserDistribution
-      - uses: actions/upload-artifact@v4
-        with: { name: web-wasm, path: apps/suite/build/dist/wasmJs/productionExecutable/ }
+        with:
+          submodules: recursive
+
+      - name: Install SDL2 (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
+
+      - name: Install SDL2 (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Build Suite + All Standalone Apps
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DEAPPS_BUILD_STANDALONE=ON
+          cmake --build build --config Release
+
+      - name: Package (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PKG="eapps-cli-${VERSION}-${{ matrix.platform }}"
+          mkdir -p ${PKG}/bin
+          # Suite
+          cp build/apps/suite/eapps_suite ${PKG}/bin/ 2>/dev/null || true
+          # All standalone apps
+          find build/apps -name "*_standalone" -type f -executable | while read f; do
+            cp "$f" ${PKG}/bin/
+          done
+          echo "eApps CLI Suite ${VERSION}" > ${PKG}/README.txt
+          echo "All apps as standalone CLI executables." >> ${PKG}/README.txt
+          ls -la ${PKG}/bin/ >> ${PKG}/README.txt
+          tar czf ${PKG}.tar.gz ${PKG}/
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $VERSION = "${{ github.ref_name }}"
+          $PKG = "eapps-cli-${VERSION}-${{ matrix.platform }}"
+          New-Item -ItemType Directory -Force "${PKG}/bin"
+          Get-ChildItem -Path build/apps -Recurse -Filter "*.exe" | Copy-Item -Destination "${PKG}/bin/" -ErrorAction SilentlyContinue
+          "eApps CLI Suite ${VERSION} - All apps as standalone CLI executables." | Set-Content "${PKG}/README.txt"
+          Compress-Archive -Path "${PKG}/*" -DestinationPath "${PKG}.zip"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.platform }}
+          path: eapps-cli-*
+          if-no-files-found: ignore
+          retention-days: 90

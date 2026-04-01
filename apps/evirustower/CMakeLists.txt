@@ -1,7 +1,7 @@
 add_library(evirustower STATIC evirustower.c)
 target_include_directories(evirustower PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(evirustower PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(evirustower_standalone evirustower.c)
     target_link_libraries(evirustower_standalone PRIVATE evirustower eapps_port)
 endif()

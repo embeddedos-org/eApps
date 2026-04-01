@@ -1,7 +1,7 @@
 add_library(minesweeper STATIC minesweeper.c)
 target_include_directories(minesweeper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(minesweeper PUBLIC eapps_ui)
-if(EAPPS_BUILD_STANDALONE)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     add_executable(minesweeper_standalone minesweeper.c)
     target_link_libraries(minesweeper_standalone PRIVATE minesweeper eapps_port)
 endif()
