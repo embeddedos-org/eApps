@@ -1,0 +1,42 @@
+name: Cross-Repo Dispatch
+
+on:
+  push:
+    branches: [master, main]
+
+jobs:
+  dispatch:
+    name: Notify Dependent Repos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger EoSim CI
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+          repository: embeddedos-org/eosim
+          event-type: dependency-update
+          client-payload: '{"repo": "eApps", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+        continue-on-error: true
+
+      - name: Trigger ebuild CI
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+          repository: embeddedos-org/ebuild
+          event-type: dependency-update
+          client-payload: '{"repo": "eApps", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+        continue-on-error: true
+
+      - name: Trigger eos CI
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.CROSS_REPO_TOKEN }}
+          repository: embeddedos-org/eos
+          event-type: dependency-update
+          client-payload: '{"repo": "eApps", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+        continue-on-error: true
+
+      - name: Summary
+        run: |
+          echo "✅ Cross-repo dispatch sent to: eosim, ebuild, eos"
+          echo "Source: eApps @ ${{ github.sha }}"

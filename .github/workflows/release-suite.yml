@@ -1,0 +1,154 @@
+name: Release Suite
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  # ── Desktop suite (Linux / Windows / macOS) ───────────────────────
+  build-desktop:
+    name: Desktop (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: windows-latest
+            platform: windows-x64
+          - os: macos-latest
+            platform: macos-x64
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install SDL2 (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
+
+      - name: Install SDL2 (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Build Suite + All Standalone Apps
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DEAPPS_BUILD_STANDALONE=ON
+          cmake --build build --config Release
+
+      - name: Package (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PKG="eapps-cli-${VERSION}-${{ matrix.platform }}"
+          mkdir -p ${PKG}/bin
+          cp build/apps/suite/eapps_suite ${PKG}/bin/ 2>/dev/null || true
+          find build/apps -name "*_standalone" -type f -executable | while read f; do
+            cp "$f" ${PKG}/bin/
+          done
+          echo "eApps CLI Suite ${VERSION}" > ${PKG}/README.txt
+          echo "All apps as standalone CLI executables." >> ${PKG}/README.txt
+          ls -la ${PKG}/bin/ >> ${PKG}/README.txt
+          tar czf ${PKG}.tar.gz ${PKG}/
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $VERSION = "${{ github.ref_name }}"
+          $PKG = "eapps-cli-${VERSION}-${{ matrix.platform }}"
+          New-Item -ItemType Directory -Force "${PKG}/bin"
+          Get-ChildItem -Path build/apps -Recurse -Filter "*.exe" | Copy-Item -Destination "${PKG}/bin/" -ErrorAction SilentlyContinue
+          "eApps CLI Suite ${VERSION} - All apps as standalone CLI executables." | Set-Content "${PKG}/README.txt"
+          Compress-Archive -Path "${PKG}/*" -DestinationPath "${PKG}.zip"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.platform }}
+          path: eapps-cli-*
+          if-no-files-found: ignore
+          retention-days: 90
+
+  # ── EoS cross-compiled suite ──────────────────────────────────────
+  build-eos:
+    name: EoS (${{ matrix.arch }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: aarch64
+            pkg: gcc-aarch64-linux-gnu
+            cc: aarch64-linux-gnu-gcc
+            platform: eos-aarch64
+          - arch: arm-hf
+            pkg: gcc-arm-linux-gnueabihf
+            cc: arm-linux-gnueabihf-gcc
+            platform: eos-arm-hf
+          - arch: riscv64
+            pkg: gcc-riscv64-linux-gnu
+            cc: riscv64-linux-gnu-gcc
+            platform: eos-riscv64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y cmake ${{ matrix.pkg }}
+      - name: Configure (EoS)
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/eos.cmake -DCMAKE_C_COMPILER=${{ matrix.cc }}
+      - name: Build
+        run: cmake --build build -j$(nproc)
+      - name: Package
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PKG="eapps-cli-${VERSION}-${{ matrix.platform }}"
+          mkdir -p ${PKG}/lib ${PKG}/bin
+          find build -name "*.a" -type f | while read f; do cp "$f" ${PKG}/lib/; done
+          find build/apps -type f -executable | while read f; do cp "$f" ${PKG}/bin/ 2>/dev/null || true; done
+          echo "eApps CLI Suite ${VERSION} for EoS ${{ matrix.arch }}" > ${PKG}/README.txt
+          tar czf ${PKG}.tar.gz ${PKG}/
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.platform }}
+          path: eapps-cli-*-eos-*.tar.gz
+          if-no-files-found: ignore
+          retention-days: 90
+
+  # ── WASM suite ────────────────────────────────────────────────────
+  build-wasm:
+    name: WASM (Emscripten)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: "3.1.51"
+      - name: Configure
+        run: cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
+      - name: Build
+        run: cmake --build build-web -j$(nproc)
+      - name: Package
+        run: |
+          VERSION="${{ github.ref_name }}"
+          PKG="eapps-cli-${VERSION}-wasm"
+          mkdir -p ${PKG}
+          find build-web -name "*.wasm" -o -name "*.js" -o -name "*.html" | while read f; do cp "$f" ${PKG}/; done
+          echo "eApps CLI Suite ${VERSION} for Web (WASM)" > ${PKG}/README.txt
+          tar czf ${PKG}.tar.gz ${PKG}/
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-wasm
+          path: eapps-cli-*-wasm.tar.gz
+          if-no-files-found: ignore
+          retention-days: 90

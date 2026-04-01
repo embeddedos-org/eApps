@@ -1,0 +1,7 @@
+add_library(esession STATIC esession.c)
+target_include_directories(esession PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(esession PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(esession_standalone esession.c)
+    target_link_libraries(esession_standalone PRIVATE esession eapps_port)
+endif()

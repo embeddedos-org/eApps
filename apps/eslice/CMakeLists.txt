@@ -1,0 +1,7 @@
+add_library(eslice STATIC eslice.c)
+target_include_directories(eslice PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eslice PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(eslice_standalone eslice.c)
+    target_link_libraries(eslice_standalone PRIVATE eslice eapps_port)
+endif()

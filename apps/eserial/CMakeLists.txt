@@ -1,0 +1,7 @@
+add_library(eserial STATIC eserial.c)
+target_include_directories(eserial PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eserial PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(eserial_standalone eserial.c)
+    target_link_libraries(eserial_standalone PRIVATE eserial eapps_port)
+endif()

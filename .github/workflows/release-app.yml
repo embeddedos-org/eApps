@@ -1,0 +1,152 @@
+name: Release Individual App
+
+on:
+  workflow_dispatch:
+    inputs:
+      app:
+        description: "App to release"
+        required: true
+        type: choice
+        options:
+          - ecal
+          - enote
+          - econverter
+          - ebuffer
+          - efiles
+          - ecleaner
+          - eclock
+          - etools
+          - etimer
+          - epdf
+          - ezip
+          - eviewer
+          - esession
+          - emusic
+          - evideo
+          - egallery
+          - eplay
+          - epaint
+          - snake
+          - tetris
+          - minesweeper
+          - dice
+          - erunner
+          - esurfer
+          - echess
+          - ebirds
+          - eslice
+          - eblocks
+          - ecrush
+          - eftp
+          - eserial
+          - essh
+          - evnc
+          - etunnel
+          - echat
+          - evpn
+          - eguard
+          - evirustower
+          - eweb
+          - esettings
+          - ehmi
+      version:
+        description: "Version tag (e.g. 1.0.0)"
+        required: true
+        default: "1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ inputs.app }} (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+          - os: windows-latest
+            platform: windows-x64
+          - os: macos-latest
+            platform: macos-x64
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install SDL2 (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
+
+      - name: Install SDL2 (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Configure & Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DEAPPS_BUILD_STANDALONE=ON
+          cmake --build build --config Release
+
+      - name: Package (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          APP="${{ inputs.app }}"
+          VER="${{ inputs.version }}"
+          PKG="eapps-${APP}-v${VER}-${{ matrix.platform }}"
+          mkdir -p ${PKG}
+          BIN=$(find build/apps/${APP} -name "${APP}_standalone" -type f 2>/dev/null | head -1)
+          if [ -n "$BIN" ]; then
+            cp "$BIN" ${PKG}/${APP}
+            chmod +x ${PKG}/${APP}
+          fi
+          tar czf ${PKG}.tar.gz ${PKG}/
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $APP = "${{ inputs.app }}"
+          $VER = "${{ inputs.version }}"
+          $PKG = "eapps-${APP}-v${VER}-${{ matrix.platform }}"
+          New-Item -ItemType Directory -Force $PKG
+          $bin = Get-ChildItem -Path "build/apps/${APP}" -Recurse -Filter "${APP}_standalone.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($bin) { Copy-Item $bin.FullName "${PKG}/${APP}.exe" }
+          Compress-Archive -Path "${PKG}/*" -DestinationPath "${PKG}.zip"
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app }}-${{ matrix.platform }}
+          path: eapps-${{ inputs.app }}-*
+          retention-days: 90
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Generate SHA256SUMS
+        run: |
+          find artifacts -type f \( -name "*.zip" -o -name "*.tar.gz" \) | while read f; do
+            sha256sum "$f"
+          done > SHA256SUMS.txt
+          mv artifacts/* . 2>/dev/null || true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "${{ inputs.app }}-v${{ inputs.version }}"
+          name: "${{ inputs.app }} v${{ inputs.version }}"
+          body: "Individual release of **${{ inputs.app }}** v${{ inputs.version }} for Linux, Windows, and macOS."
+          files: |
+            eapps-${{ inputs.app }}-*.tar.gz
+            eapps-${{ inputs.app }}-*.zip
+            SHA256SUMS.txt
