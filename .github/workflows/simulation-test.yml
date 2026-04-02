@@ -64,7 +64,8 @@ jobs:
           eosim simulate --platform ${{ matrix.platform }} --duration 15 --headless
           echo "✅ ${{ matrix.platform }}: PASSED"
       - name: Run platform tests
-        run: eosim test ${{ matrix.platform }} || true
+        run: eosim test ${{ matrix.platform }}
+        continue-on-error: true
 
   # ── Cross-platform EoSim validation ───────────────────────────────
   cross-platform:

@@ -75,7 +75,7 @@ jobs:
         uses: mymindstorm/setup-emsdk@v14
 
       - name: Configure
-        run: emcmake cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
+        run: emcmake cmake -B build-web
 
       - name: Build
         run: cmake --build build-web --parallel

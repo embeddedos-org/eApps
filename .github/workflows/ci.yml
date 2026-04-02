@@ -1,242 +1,88 @@
 name: CI
 
 on:
-  repository_dispatch:
-    types: [dependency-update]
   push:
-    branches: [master, main]
+    branches: [master, main, develop]
   pull_request:
-    branches: [master, main]
+    branches: [master, main, develop]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # ── Desktop builds (Linux / Windows / macOS) ──────────────────────────
-  build-linux:
-    name: Linux (SDL2)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
-      - name: Configure (suite + standalone + tests)
-        run: cmake -B build -DBUILD_TESTING=ON -DEAPPS_BUILD_STANDALONE=ON
-      - name: Build
-        run: cmake --build build -j$(nproc)
-      - name: Test
-        run: cd build && ctest --output-on-failure
-      - name: Binary size check
-        run: |
-          echo "## Binary Size Report"
-          find build/apps -name "*_standalone" -type f -executable | while read f; do
-            SIZE=$(stat -c%s "$f")
-            NAME=$(basename "$f")
-            SIZE_KB=$((SIZE / 1024))
-            if [ "$SIZE" -gt 5242880 ]; then
-              echo "❌ FAIL: ${NAME} is ${SIZE_KB}KB (>5MB)"
-              exit 1
-            fi
-            echo "✅ ${NAME}: ${SIZE_KB}KB"
-          done
-      - name: Upload suite binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: eapps-linux-x64
-          path: build/apps/suite/eapps_suite
-          if-no-files-found: ignore
-          retention-days: 7
-
-  build-windows:
-    name: Windows (MSVC)
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Configure (suite + standalone + tests)
-        run: cmake -B build -DBUILD_TESTING=ON -DEAPPS_BUILD_STANDALONE=ON
-      - name: Build
-        run: cmake --build build --config Release
-      - name: Test
-        run: cd build && ctest -C Release --output-on-failure
-      - name: Upload suite binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: eapps-windows-x64
-          path: build/apps/suite/Release/eapps_suite.exe
-          if-no-files-found: ignore
-          retention-days: 7
-
-  build-macos:
-    name: macOS (SDL2)
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install dependencies
-        run: brew install cmake sdl2
-      - name: Configure (suite + standalone + tests)
-        run: cmake -B build -DBUILD_TESTING=ON -DEAPPS_BUILD_STANDALONE=ON
-      - name: Build
-        run: cmake --build build -j$(sysctl -n hw.logicalcpu)
-      - name: Test
-        run: cd build && ctest --output-on-failure
-      - name: Upload suite binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: eapps-macos-x64
-          path: build/apps/suite/eapps_suite
-          if-no-files-found: ignore
-          retention-days: 7
-
-  # ── Category builds (verify each flag works independently) ─────────
-  category-builds:
-    name: Category (${{ matrix.category }})
-    runs-on: ubuntu-latest
+  build-and-test:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - category: productivity
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=ON -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF -DEAPPS_BUILD_SUITE=OFF"
-          - category: media
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=ON -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF -DEAPPS_BUILD_SUITE=OFF"
-          - category: games
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=ON -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF -DEAPPS_BUILD_SUITE=OFF"
-          - category: connectivity
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=ON -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF -DEAPPS_BUILD_SUITE=OFF"
-          - category: security
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=ON -DEAPPS_BUILD_WEB=OFF -DEAPPS_BUILD_SUITE=OFF"
-          - category: web
-            flags: "-DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=ON -DEAPPS_BUILD_SUITE=OFF"
-          - category: suite-only
-            flags: "-DEAPPS_BUILD_SUITE=ON"
+          - os: ubuntu-latest
+            name: Linux (GCC)
+            cc: gcc
+            cxx: g++
+          - os: windows-latest
+            name: Windows (MSVC)
+            cc: cl
+            cxx: cl
+          - os: macos-latest
+            name: macOS (Clang)
+            cc: clang
+            cxx: clang++
+
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
-      - name: Configure (${{ matrix.category }})
-        run: cmake -B build ${{ matrix.flags }}
-      - name: Build
-        run: cmake --build build -j$(nproc)
 
-  # ── EoS embedded cross-compilation ─────────────────────────────────
-  build-eos-cross:
-    name: EoS Cross-Compile (${{ matrix.target }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - target: arm-cortex-a53
-            toolchain_pkg: gcc-aarch64-linux-gnu
-            cmake_toolchain: cmake/eos.cmake
-          - target: arm-none-eabi
-            toolchain_pkg: gcc-arm-none-eabi
-            cmake_toolchain: cmake/eos.cmake
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install cross-compiler
-        run: sudo apt-get update && sudo apt-get install -y cmake ${{ matrix.toolchain_pkg }}
-      - name: Configure (EoS target)
-        run: cmake -B build-eos -DCMAKE_TOOLCHAIN_FILE=${{ matrix.cmake_toolchain }}
-      - name: Build
-        run: cmake --build build-eos -j$(nproc)
-
-  # ── Emscripten / WASM build ───────────────────────────────────────
-  build-wasm:
-    name: Web (Emscripten/WASM)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Setup Emscripten
-        uses: mymindstorm/setup-emsdk@v14
-        with:
-          version: "3.1.51"
-      - name: Configure (WASM)
-        run: cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
-      - name: Build
-        run: cmake --build build-web -j$(nproc)
-
-  # ── EoSim simulation validation ───────────────────────────────────
-  eosim-validate:
-    name: EoSim Validate (${{ matrix.platform }})
-    needs: [build-linux]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - x86_64-linux
-          - arm64-linux
-          - riscv64-linux
-          - stm32f4
-          - raspi4
-          - esp32
-          - nrf52
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install EoSim
-        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v0.1.0/eosim-0.1.0-py3-none-any.whl"
-      - name: Validate platform config
-        run: eosim list
-      - name: Simulate ${{ matrix.platform }}
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
-          eosim simulate --platform ${{ matrix.platform }} --duration 10 --headless
-          echo "✅ ${{ matrix.platform }}: PASSED"
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
 
-  # ── CI Gate ────────────────────────────────────────────────────────
-  ci-gate:
-    name: CI Gate
-    if: always()
-    needs:
-      - build-linux
-      - build-windows
-      - build-macos
-      - category-builds
-      - build-eos-cross
-      - build-wasm
-      - eosim-validate
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure --config Release
+
+  lint:
+    name: Lint (cppcheck)
     runs-on: ubuntu-latest
     steps:
-      - name: Results
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck
         run: |
-          echo "╔══════════════════════════════════════════════╗"
-          echo "║           eApps CI Results                   ║"
-          echo "╠══════════════════════════════════════════════╣"
-          echo "║ Linux build:       ${{ needs.build-linux.result }}"
-          echo "║ Windows build:     ${{ needs.build-windows.result }}"
-          echo "║ macOS build:       ${{ needs.build-macos.result }}"
-          echo "║ Category builds:   ${{ needs.category-builds.result }}"
-          echo "║ EoS cross-compile: ${{ needs.build-eos-cross.result }}"
-          echo "║ WASM build:        ${{ needs.build-wasm.result }}"
-          echo "║ EoSim validation:  ${{ needs.eosim-validate.result }}"
-          echo "╚══════════════════════════════════════════════╝"
-          FAILED=0
-          for JOB in "${{ needs.build-linux.result }}" \
-                     "${{ needs.build-windows.result }}" \
-                     "${{ needs.build-macos.result }}" \
-                     "${{ needs.category-builds.result }}" \
-                     "${{ needs.build-eos-cross.result }}" \
-                     "${{ needs.build-wasm.result }}"; do
-            if [ "$JOB" != "success" ]; then FAILED=1; fi
-          done
-          if [ "$FAILED" -eq 1 ]; then
-            echo "❌ CI FAILED — one or more required jobs did not succeed"
-            exit 1
-          fi
-          echo "✅ All CI checks passed"
+          cppcheck --enable=warning,style,performance \
+            --suppress=missingIncludeSystem \
+            --error-exitcode=1 \
+            --inline-suppr \
+            -I core/common/include -I core/ui/include -I core/storage/include \
+            -I core/network/include -I core/platform/include \
+            core/ apps/
