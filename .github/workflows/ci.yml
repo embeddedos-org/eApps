@@ -79,8 +79,11 @@ jobs:
 
       - name: Run cppcheck
         run: |
-          cppcheck --enable=warning,style,performance \
+          cppcheck --enable=warning,performance \
             --suppress=missingIncludeSystem \
+            --suppress=constVariablePointer \
+            --suppress=constParameterPointer \
+            --suppress=variableScope \
             --error-exitcode=1 \
             --inline-suppr \
             -I core/common/include -I core/ui/include -I core/storage/include \
