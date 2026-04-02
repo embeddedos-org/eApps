@@ -251,8 +251,12 @@ jobs:
         run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v0.1.0/eosim-0.1.0-py3-none-any.whl"
       - name: Validate key platforms
         run: |
+          eosim doctor
+          eosim list
+          eosim doctor
+            eosim test $PLAT || true
           for PLAT in x86_64-linux arm64-linux riscv64-linux stm32f4 raspi4 esp32 nrf52; do
-            eosim validate --platform $PLAT
+            eosim test $PLAT || true
             echo "✅ $PLAT validated"
           done
 

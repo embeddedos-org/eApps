@@ -10,4 +10,6 @@ target_include_directories(eapps_ui PUBLIC
 )
 
 target_link_libraries(eapps_ui PUBLIC eapps_common lvgl)
-target_link_libraries(eapps_ui PRIVATE m)
+if(NOT MSVC)
+    target_link_libraries(eapps_ui PRIVATE m)
+endif()

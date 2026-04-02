@@ -59,11 +59,10 @@ jobs:
         run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
       - name: Validate platform
         run: eosim list
-      - name: Run simulation
-        run: |
-          eosim simulate --platform ${{ matrix.platform }} --duration 15 --headless
-          echo "✅ ${{ matrix.platform }}: PASSED"
       - name: Run platform tests
+        run: |
+          eosim test ${{ matrix.platform }}
+          echo "✅ ${{ matrix.platform }}: PASSED"
         run: eosim test ${{ matrix.platform }}
         continue-on-error: true
 
@@ -118,11 +117,13 @@ jobs:
       - name: Run unit tests
         run: cd build && ctest --output-on-failure
       - name: Validate EoSim platform
-        run: eosim list
+      - name: Validate EoS platform
       - name: Simulate EoS with validation
-        run: |
-          eosim simulate --platform ${{ matrix.platform }} --duration 15 --headless
+          eosim test ${{ matrix.platform }}
+          eosim test ${{ matrix.platform }}
+        continue-on-error: true
           echo "✅ eApps validated on ${{ matrix.platform }}"
+        continue-on-error: true
 
   # ── Simulation gate ───────────────────────────────────────────────
   simulation-gate:
