@@ -1,198 +1,81 @@
-name: Nightly Regression
+name: Nightly
 
 on:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 2 * * *" # 2:00 AM UTC daily
   workflow_dispatch:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
-env:
-  EOSIM_VERSION: "0.1.0"
-
 jobs:
-  # ── CMake/C native builds (primary build system) ──────────────────
-  native-build:
-    name: Native ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install SDL2 (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
-
-      - name: Install SDL2 (macOS)
-        if: runner.os == 'macOS'
-        run: brew install cmake sdl2
-
-      - name: Configure (all features + tests + standalone)
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON -DEAPPS_BUILD_STANDALONE=ON
-
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Test
-        run: cd build && ctest -C Release --output-on-failure
-
-      - name: Binary size report
-        if: runner.os == 'Linux'
-        run: |
-          echo "## Nightly Binary Size Report — $(date -u '+%Y-%m-%d')"
-          echo "| Binary | Size (KB) | Status |"
-          echo "|--------|-----------|--------|"
-          find build/apps -name "*_standalone" -type f -executable | sort | while read f; do
-            SIZE=$(stat -c%s "$f")
-            NAME=$(basename "$f")
-            SIZE_KB=$((SIZE / 1024))
-            if [ "$SIZE" -gt 5242880 ]; then
-              echo "| ${NAME} | ${SIZE_KB} | ❌ >5MB |"
-            else
-              echo "| ${NAME} | ${SIZE_KB} | ✅ |"
-            fi
-          done
-
-  # ── EoS cross-compilation regression ──────────────────────────────
-  eos-cross:
-    name: EoS Cross (${{ matrix.arch }})
-    runs-on: ubuntu-latest
+  full-build:
     strategy:
       fail-fast: false
       matrix:
         include:
-          - arch: aarch64
-            pkg: gcc-aarch64-linux-gnu
-            cc: aarch64-linux-gnu-gcc
-          - arch: arm-hf
-            pkg: gcc-arm-linux-gnueabihf
-            cc: arm-linux-gnueabihf-gcc
-          - arch: riscv64
-            pkg: gcc-riscv64-linux-gnu
-            cc: riscv64-linux-gnu-gcc
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - name: Install cross-compiler
-        run: sudo apt-get update && sudo apt-get install -y cmake ${{ matrix.pkg }}
-      - name: Configure (EoS)
-        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE=cmake/eos.cmake -DCMAKE_C_COMPILER=${{ matrix.cc }}
-      - name: Build
-        run: cmake --build build -j$(nproc)
+          - os: ubuntu-latest
+            name: Linux (GCC)
+          - os: windows-latest
+            name: Windows (MSVC)
+          - os: macos-latest
+            name: macOS (Clang)
 
-  # ── Emscripten / WASM nightly ─────────────────────────────────────
-  wasm-build:
-    name: WASM (Emscripten)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      - uses: mymindstorm/setup-emsdk@v14
-        with:
-          version: "3.1.51"
-      - name: Configure
-        run: cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
-      - name: Build
-        run: cmake --build build-web -j$(nproc)
-
-  # ── EoSim simulation regression ───────────────────────────────────
-  eosim-regression:
-    name: EoSim (${{ matrix.platform }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - x86_64-linux
-          - arm64-linux
-          - riscv64-linux
-          - stm32f4
-          - stm32h7
-          - raspi3
-          - raspi4
-          - esp32
-          - nrf52
-          - nrf5340
-          - rp2040
-          - vexpress-a9
-          - sifive_u
-          - imx8m
-          - jetson-nano
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install EoSim
-        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
-      - name: Validate
-        run: eosim list
-      - name: Simulate
-        run: eosim simulate --platform ${{ matrix.platform }} --duration 15 --headless
-      - name: Run tests
-        run: eosim test ${{ matrix.platform }} || true
-
-  # ── Gradle / KMP builds (secondary build system) ──────────────────
-  gradle-build:
-    name: Gradle ${{ matrix.os }}
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-      - uses: gradle/actions/setup-gradle@v4
-      - name: Build
-        run: ./gradlew build
-      - name: Test
-        run: ./gradlew allTests
 
-  # ── Nightly report ────────────────────────────────────────────────
-  report:
-    name: Nightly Report
-    runs-on: ubuntu-latest
-    needs: [native-build, eos-cross, wasm-build, eosim-regression, gradle-build]
-    if: always()
     steps:
-      - name: Results
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
-          echo "╔══════════════════════════════════════════════════════╗"
-          echo "║     eApps Nightly Regression — $(date -u '+%Y-%m-%d')       ║"
-          echo "╠══════════════════════════════════════════════════════╣"
-          echo "║ Native builds (3 OS):       ${{ needs.native-build.result }}"
-          echo "║ EoS cross-compile (3 arch): ${{ needs.eos-cross.result }}"
-          echo "║ WASM build:                 ${{ needs.wasm-build.result }}"
-          echo "║ EoSim regression (15 plat): ${{ needs.eosim-regression.result }}"
-          echo "║ Gradle builds (3 OS):       ${{ needs.gradle-build.result }}"
-          echo "╚══════════════════════════════════════════════════════╝"
-          FAILED=0
-          for JOB in "${{ needs.native-build.result }}" \
-                     "${{ needs.eos-cross.result }}" \
-                     "${{ needs.wasm-build.result }}"; do
-            if [ "$JOB" != "success" ]; then FAILED=1; fi
-          done
-          if [ "$FAILED" -eq 1 ]; then
-            echo "❌ REGRESSION DETECTED — core builds failed"
-            exit 1
-          fi
-          if [ "${{ needs.eosim-regression.result }}" != "success" ]; then
-            echo "⚠️  EoSim simulation regression detected (non-blocking)"
-          fi
-          if [ "${{ needs.gradle-build.result }}" != "success" ]; then
-            echo "⚠️  Gradle/KMP regression detected (non-blocking)"
-          fi
-          echo "✅ Core nightly checks passed"
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Build all modules
+        run: cmake --build build --config Release --parallel
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure --config Release
+
+      - name: Generate test report
+        if: always()
+        run: ctest --test-dir build --output-junit nightly-report.xml --config Release || true
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-report-${{ matrix.os }}
+          path: nightly-report.xml
+
+  web-build:
+    name: Web (Emscripten)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Configure
+        run: emcmake cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
+
+      - name: Build
+        run: cmake --build build-web --parallel

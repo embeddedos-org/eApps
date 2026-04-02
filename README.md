@@ -23,7 +23,7 @@ cmake --build build
 ./build/eapps_suite
 
 # Build with tests
-cmake -B build -DEAPPS_PORT=sdl2 -DEAPPS_BUILD_TESTS=ON
+cmake -B build -DEAPPS_PORT=sdl2 -DBUILD_TESTING=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
 
@@ -175,7 +175,7 @@ eApps/
 | Flag | Description |
 |------|-------------|
 | `EAPPS_PORT` | Target port: `sdl2`, `eos`, `web` |
-| `EAPPS_BUILD_TESTS` | Enable unit tests |
+| `BUILD_TESTING` | Enable unit tests (standard CMake variable) |
 | `EAPPS_BUILD_STANDALONE` | Per-app standalone executables (OFF by default) |
 | `EAPPS_BUILD_PRODUCTIVITY` | ecal, enote, econverter, ebuffer, efiles, ecleaner, eclock, etools, etimer, epdf, ezip, eviewer, esession |
 | `EAPPS_BUILD_MEDIA` | emusic, evideo, egallery, eplay, epaint |
@@ -186,7 +186,7 @@ eApps/
 ## 🧪 Tests
 
 ```bash
-cmake -B build -DEAPPS_PORT=sdl2 -DEAPPS_BUILD_TESTS=ON
+cmake -B build -DEAPPS_PORT=sdl2 -DBUILD_TESTING=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
@@ -200,53 +200,6 @@ ctest --test-dir build --output-on-failure
 | `test_registry` | App registration, lookup, enumeration |
 | `test_prefs` | Preferences save/load/delete |
 | `test_game_engine` | Game loop, sprite, collision detection |
-
----
-
-## 🚀 CI/CD
-
-| Workflow | Schedule | Coverage |
-|----------|----------|----------|
-| **CI** | Every push/PR | Build matrix (Linux × Windows × macOS) + tests |
-| **Nightly** | 2:00 AM UTC daily | Full build + test + regression report |
-| **Weekly** | Monday 6:00 AM UTC | Comprehensive build + dependency audit |
-| **EoSim Sanity** | 4:00 AM UTC daily | EoSim install + simulation validation |
-| **Simulation Test** | 3:00 AM UTC daily | QEMU/EoSim platform simulation |
-| **Release** | Tag `v*.*.*` | Build → test → package → GitHub Release |
-
----
-
-## 📚 Documentation
-
-| Document | Description |
-|----------|-------------|
-| [Architecture](docs/architecture.md) | Module structure, build system, platform layers |
-| [Adding Apps](docs/adding-apps.md) | Step-by-step guide to add a new app |
-| [Porting Guide](docs/porting-guide.md) | How to port to a new platform |
-| [Platform Guide](docs/platform-guide.md) | Platform-specific build and deployment notes |
-
----
-
-## Related Projects
-
-| Project | Repository | Purpose |
-|---|---|---|
-| **eos** | [embeddedos-org/eos](https://github.com/embeddedos-org/eos) | Embedded OS — provides HAL for display/input |
-| **eboot** | [embeddedos-org/eboot](https://github.com/embeddedos-org/eboot) | Bootloader — secure boot, A/B slots |
-| **ebuild** | [embeddedos-org/ebuild](https://github.com/embeddedos-org/ebuild) | Build system — SDK generator, packaging |
-| **eipc** | [embeddedos-org/eipc](https://github.com/embeddedos-org/eipc) | IPC framework — Go + C SDK, HMAC auth |
-| **eai** | [embeddedos-org/eai](https://github.com/embeddedos-org/eai) | AI layer — LLM inference, agent loop |
-| **eni** | [embeddedos-org/eni](https://github.com/embeddedos-org/eni) | Neural interface — BCI, Neuralink adapter |
-| **eosim** | [embeddedos-org/eosim](https://github.com/embeddedos-org/eosim) | Multi-architecture simulator |
-| **EoStudio** | [embeddedos-org/EoStudio](https://github.com/embeddedos-org/EoStudio) | Design suite with LLM integration |
-
-## Standards Compliance
-
-This project is part of the EoS ecosystem and aligns with international standards including ISO/IEC/IEEE 15288:2023, ISO/IEC 12207, ISO/IEC/IEEE 42010, ISO/IEC 25000, ISO/IEC 25010, ISO/IEC 27001, ISO/IEC 15408, IEC 61508, ISO 26262, DO-178C, FIPS 140-3, POSIX (IEEE 1003), WCAG 2.1, and more. See the [EoS Compliance Documentation](https://github.com/embeddedos-org/.github/tree/master/docs/compliance) for full details including NTIA SBOM, SPDX, CycloneDX, and OpenChain compliance.
-
-## 📜 License
-
-MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
