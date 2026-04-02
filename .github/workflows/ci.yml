@@ -63,7 +63,7 @@ jobs:
         run: cmake --build build --config Release --parallel
 
       - name: Test
-        run: ctest --test-dir build --output-on-failure --config Release
+        run: ctest --test-dir build --output-on-failure -C Release
 
   lint:
     name: Lint (cppcheck)

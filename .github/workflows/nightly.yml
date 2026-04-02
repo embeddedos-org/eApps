@@ -49,11 +49,11 @@ jobs:
         run: cmake --build build --config Release --parallel
 
       - name: Run tests
-        run: ctest --test-dir build --output-on-failure --config Release
+        run: ctest --test-dir build --output-on-failure -C Release
 
       - name: Generate test report
         if: always()
-        run: ctest --test-dir build --output-junit nightly-report.xml --config Release || true
+        run: ctest --test-dir build --output-junit nightly-report.xml -C Release || true
 
       - name: Upload test report
         if: always()

@@ -116,7 +116,7 @@ typedef struct {
 
 static void app_card_click_cb(lv_event_t *e)
 {
-    app_card_data_t *d = (app_card_data_t *)lv_event_get_user_data(e);
+    const app_card_data_t *d = (const app_card_data_t *)lv_event_get_user_data(e);
     if (!d || !d->app_id) return;
 
     const eapps_app_lifecycle_t *lc = eapps_registry_get_lifecycle(d->app_id);

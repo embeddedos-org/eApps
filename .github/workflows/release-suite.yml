@@ -59,7 +59,7 @@ jobs:
         run: |
           cmake -B build-test -DBUILD_TESTING=ON
           cmake --build build-test --config Release --parallel
-          ctest --test-dir build-test --output-on-failure --config Release
+          ctest --test-dir build-test --output-on-failure -C Release
 
       - name: Package (Linux)
         if: runner.os == 'Linux'
