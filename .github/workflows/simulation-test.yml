@@ -63,7 +63,6 @@ jobs:
         run: |
           eosim test ${{ matrix.platform }}
           echo "✅ ${{ matrix.platform }}: PASSED"
-        run: eosim test ${{ matrix.platform }}
         continue-on-error: true
 
   # ── Cross-platform EoSim validation ───────────────────────────────
@@ -116,12 +115,9 @@ jobs:
           cmake --build build -j$(nproc)
       - name: Run unit tests
         run: cd build && ctest --output-on-failure
-      - name: Validate EoSim platform
       - name: Validate EoS platform
-      - name: Simulate EoS with validation
+        run: |
           eosim test ${{ matrix.platform }}
-          eosim test ${{ matrix.platform }}
-        continue-on-error: true
           echo "✅ eApps validated on ${{ matrix.platform }}"
         continue-on-error: true
 

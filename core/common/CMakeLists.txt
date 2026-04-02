@@ -13,5 +13,3 @@ target_include_directories(eapps_common PUBLIC
 if(NOT MSVC)
     target_link_libraries(eapps_common PRIVATE m)
 endif()
-    target_link_libraries(eapps_common PRIVATE m)
-endif()
