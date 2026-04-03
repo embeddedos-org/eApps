@@ -1,0 +1,7 @@
+add_library(eremote STATIC eremote.c eremote_engine.c)
+target_include_directories(eremote PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eremote PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(eremote_standalone eremote.c eremote_engine.c)
+    target_link_libraries(eremote_standalone PRIVATE eremote eapps_port)
+endif()

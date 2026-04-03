@@ -1,0 +1,7 @@
+add_library(esurfer STATIC esurfer.c)
+target_include_directories(esurfer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(esurfer PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(esurfer_standalone esurfer.c)
+    target_link_libraries(esurfer_standalone PRIVATE esurfer eapps_port)
+endif()

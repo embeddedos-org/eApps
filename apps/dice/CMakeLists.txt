@@ -1,0 +1,7 @@
+add_library(dice STATIC dice.c)
+target_include_directories(dice PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(dice PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(dice_standalone dice.c)
+    target_link_libraries(dice_standalone PRIVATE dice eapps_port)
+endif()

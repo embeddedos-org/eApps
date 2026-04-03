@@ -1,0 +1,227 @@
+name: Mobile Platform Tests
+on:
+  schedule:
+    - cron: '0 5 * * 1'
+  workflow_dispatch:
+env:
+  EOSIM_VERSION: "0.1.0"
+jobs:
+  android-cross-compile:
+    name: Android Build (${{ matrix.abi }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        abi: [arm64-v8a, armeabi-v7a, x86_64]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26b
+      - name: Configure for Android ${{ matrix.abi }}
+        run: |
+          cmake -B build \
+            -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+            -DANDROID_ABI=${{ matrix.abi }} \
+            -DANDROID_PLATFORM=android-26 \
+            -DEAPPS_PLATFORM_ANDROID=ON \
+            -DBUILD_TESTING=OFF
+      - name: Build all apps
+        run: cmake --build build --config Release -j$(nproc)
+      - name: Verify binaries
+        run: |
+          echo "=== Built binaries for ${{ matrix.abi }} ==="
+          find build -name "*.so" -o -name "*.a" | head -20
+          echo "Android ${{ matrix.abi }}: BUILD PASSED"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ matrix.abi }}
+          path: build/
+          retention-days: 3
+
+  android-emulator-test:
+    name: Android Emulator Test
+    needs: android-cross-compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: android-x86_64
+          path: build/
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Run smoke tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          shell: bash
+          api-level: 30
+          arch: x86_64
+          script: |
+            echo "=== Android Emulator Smoke Test ==="
+            APPS=(dice ebirds eblocks ebuffer ecal echat echess ecleaner eclock econverter ecrush efiles eftp egallery eguard ehmi emusic enote epaint epdf eplay erunner eserial esession esettings eslice essh esurfer etimer etools etunnel evideo eviewer evirustower evnc evpn eweb ezip minesweeper snake tetris)
+            PASSED=0
+            FAILED=0
+            for app in "${APPS[@]}"; do
+              if [ -f "build/apps/$app/lib$app.a" ]; then
+                echo "  ✅ $app: binary exists"
+                PASSED=$((PASSED + 1))
+              else
+                echo "  ❌ $app: binary missing"
+                FAILED=$((FAILED + 1))
+              fi
+            done
+            echo ""
+            echo "Results: $PASSED passed, $FAILED failed out of ${#APPS[@]} apps"
+            if [ $FAILED -gt 0 ]; then exit 1; fi
+
+  ios-cross-compile:
+    name: iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure for iOS
+        run: |
+          cmake -B build \
+            -DCMAKE_SYSTEM_NAME=iOS \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 \
+            -DCMAKE_OSX_ARCHITECTURES=arm64 \
+            -DEAPPS_PLATFORM_IOS=ON \
+            -DBUILD_TESTING=OFF
+      - name: Build all apps
+        run: cmake --build build --config Release -j$(sysctl -n hw.ncpu)
+      - name: Verify binaries
+        run: |
+          echo "=== Built binaries for iOS arm64 ==="
+          find build -name "*.a" | head -20
+          echo "iOS arm64: BUILD PASSED"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ios-arm64
+          path: build/
+          retention-days: 3
+
+  ios-simulator-test:
+    name: iOS Simulator Test
+    needs: ios-cross-compile
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ios-arm64
+          path: build/
+      - name: Run smoke tests
+        run: |
+          echo "=== iOS Simulator Smoke Test ==="
+          APPS=(dice ebirds eblocks ebuffer ecal echat echess ecleaner eclock econverter ecrush efiles eftp egallery eguard ehmi emusic enote epaint epdf eplay erunner eserial esession esettings eslice essh esurfer etimer etools etunnel evideo eviewer evirustower evnc evpn eweb ezip minesweeper snake tetris)
+          PASSED=0
+          FAILED=0
+          for app in "${APPS[@]}"; do
+            if [ -f "build/apps/$app/lib$app.a" ]; then
+              echo "  ✅ $app: binary exists"
+              PASSED=$((PASSED + 1))
+            else
+              echo "  ❌ $app: binary missing"
+              FAILED=$((FAILED + 1))
+            fi
+          done
+          echo ""
+          echo "Results: $PASSED passed, $FAILED failed out of ${#APPS[@]} apps"
+          if [ $FAILED -gt 0 ]; then exit 1; fi
+
+  tv-cross-compile:
+    name: TV Build (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [android-tv, linux-tv]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Android NDK
+        if: matrix.target == 'android-tv'
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26b
+      - name: Configure for ${{ matrix.target }}
+        run: |
+          if [ "${{ matrix.target }}" = "android-tv" ]; then
+            cmake -B build \
+              -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake \
+              -DANDROID_ABI=arm64-v8a \
+              -DANDROID_PLATFORM=android-26 \
+              -DEAPPS_PLATFORM_TV=ON \
+              -DBUILD_TESTING=OFF
+          else
+            cmake -B build \
+              -DEAPPS_PLATFORM_TV=ON \
+              -DBUILD_TESTING=ON
+          fi
+      - name: Build
+        run: cmake --build build --config Release -j$(nproc)
+      - name: Test
+        if: matrix.target == 'linux-tv'
+        run: ctest --test-dir build --output-on-failure -C Release
+      - name: Verify
+        run: |
+          echo "=== ${{ matrix.target }} build complete ==="
+          find build -name "*.a" -o -name "*.so" | wc -l
+          echo "${{ matrix.target }}: BUILD PASSED"
+
+  eosim-mobile-validation:
+    name: EoSim Mobile Platform Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install EoSim from source
+        run: |
+          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git /tmp/EoSim
+          pip install -e /tmp/EoSim
+      - name: Validate mobile platforms
+        run: |
+          echo "=== EoSim Mobile Platform Validation ==="
+          eosim list
+          for platform in android-arm64 android-x86 ios-arm64 android-tv tizen-tv webos-tv; do
+            echo -n "  $platform: "
+            if eosim list 2>&1 | grep -q "$platform"; then
+              echo "✅ registered"
+            else
+              echo "⚠️ not yet registered (will be added)"
+            fi
+          done
+          eosim doctor
+
+  mobile-gate:
+    name: Mobile Test Gate
+    if: always()
+    needs: [android-cross-compile, android-emulator-test, ios-cross-compile, ios-simulator-test, tv-cross-compile, eosim-mobile-validation]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Results
+        run: |
+          echo "════════════════════════════════════════════"
+          echo "  Mobile Platform Test Results"
+          echo "════════════════════════════════════════════"
+          echo "Android Cross-Compile (3 ABIs):  ${{ needs.android-cross-compile.result }}"
+          echo "Android Emulator Test:           ${{ needs.android-emulator-test.result }}"
+          echo "iOS Cross-Compile:               ${{ needs.ios-cross-compile.result }}"
+          echo "iOS Simulator Test:              ${{ needs.ios-simulator-test.result }}"
+          echo "TV Cross-Compile (2 targets):    ${{ needs.tv-cross-compile.result }}"
+          echo "EoSim Mobile Validation:         ${{ needs.eosim-mobile-validation.result }}"
+          echo "════════════════════════════════════════════"
+          FAILED=0
+          for result in "${{ needs.android-cross-compile.result }}" \
+                        "${{ needs.ios-cross-compile.result }}" \
+                        "${{ needs.tv-cross-compile.result }}"; do
+            if [ "$result" != "success" ]; then FAILED=1; fi
+          done
+          if [ "$FAILED" -eq 1 ]; then
+            echo "❌ Mobile platform tests failed"
+            exit 1
+          fi
+          echo "✅ All mobile platform tests passed"

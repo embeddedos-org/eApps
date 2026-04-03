@@ -1,0 +1,81 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # 2:00 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  full-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux (GCC)
+          - os: windows-latest
+            name: Windows (MSVC)
+          - os: macos-latest
+            name: macOS (Clang)
+
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Build all modules
+        run: cmake --build build --config Release --parallel
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure -C Release
+
+      - name: Generate test report
+        if: always()
+        run: ctest --test-dir build --output-junit nightly-report.xml -C Release || true
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-report-${{ matrix.os }}
+          path: nightly-report.xml
+
+  web-build:
+    name: Web (Emscripten)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+
+      - name: Configure
+        run: emcmake cmake -B build-web
+
+      - name: Build
+        run: cmake --build build-web --parallel

@@ -1,0 +1,7 @@
+add_library(econverter STATIC econverter.c)
+target_include_directories(econverter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(econverter PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(econverter_standalone econverter.c)
+    target_link_libraries(econverter_standalone PRIVATE econverter eapps_port)
+endif()

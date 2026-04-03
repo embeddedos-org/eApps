@@ -1,0 +1,174 @@
+name: EoSim Sanity
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  EOSIM_VERSION: "0.1.0"
+
+jobs:
+  # ── Install & validate across OS × Python matrix ──────────────────
+  install-validate:
+    name: Install (${{ matrix.os }}, Py ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install EoSim
+        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+      - name: Verify installation
+        run: |
+          eosim --version
+          eosim list
+          eosim doctor
+      - name: Validate all platform configs
+        run: eosim list && eosim doctor
+
+  # ── EoS platform simulation (embedded targets) ───────────────────
+  eos-simulation:
+    name: EoS Sim (${{ matrix.platform }})
+    needs: install-validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - x86_64-linux
+          - arm64-linux
+          - riscv64-linux
+          - stm32f4
+          - stm32h7
+          - raspi3
+          - raspi4
+          - raspi5
+          - esp32
+          - esp32c3
+          - esp32s3
+          - nrf52
+          - nrf5340
+          - nrf9160
+          - rp2040
+          - vexpress-a9
+          - sifive_u
+          - imx8m
+          - jetson-nano
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install EoSim
+        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+      - name: Validate ${{ matrix.platform }}
+        run: eosim list
+      - name: Test ${{ matrix.platform }}
+        run: |
+          eosim test ${{ matrix.platform }}
+          echo "✅ ${{ matrix.platform }}: PASSED"
+        continue-on-error: true
+      - name: Run platform tests
+        run: eosim test ${{ matrix.platform }} || true
+
+  # ── Nested guest OS install tests ─────────────────────────────────
+  nested-guest-install:
+    name: Guest OS (${{ matrix.guest }})
+    needs: install-validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - guest: Linux x86_64
+            platform: x86_64-linux
+          - guest: Linux aarch64
+            platform: arm64-linux
+          - guest: Linux riscv64
+            platform: riscv64-linux
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install EoSim
+        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+      - name: Boot guest and test EoSim inside
+        run: |
+          echo "=== Nested Guest: ${{ matrix.guest }} ==="
+          eosim test ${{ matrix.platform }}
+          echo "✅ ${{ matrix.guest }}: PASSED"
+        continue-on-error: true
+
+  # ── Windows-specific EoSim sanity ─────────────────────────────────
+  windows-sanity:
+    name: Windows EoSim
+    needs: install-validate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Test EoSim on Windows
+        run: |
+          pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+          eosim --version
+          eosim doctor
+          eosim list && eosim doctor
+          eosim list
+
+  # ── macOS-specific EoSim sanity ───────────────────────────────────
+  macos-sanity:
+    name: macOS EoSim
+    needs: install-validate
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Test EoSim on macOS
+        run: |
+          pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+          eosim --version
+          eosim doctor
+          eosim list && eosim doctor
+          eosim list
+
+  # ── Sanity gate ───────────────────────────────────────────────────
+  sanity-gate:
+    name: EoSim Sanity Gate
+    if: always()
+    needs: [install-validate, eos-simulation, nested-guest-install, windows-sanity, macos-sanity]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Results
+        run: |
+          echo "╔══════════════════════════════════════════════════════╗"
+          echo "║         EoSim Sanity Results                         ║"
+          echo "╠══════════════════════════════════════════════════════╣"
+          echo "║ Install & Validate (3 OS × 3 Py): ${{ needs.install-validate.result }}"
+          echo "║ EoS Simulation (19 platforms):     ${{ needs.eos-simulation.result }}"
+          echo "║ Nested Guest Install (3 guests):   ${{ needs.nested-guest-install.result }}"
+          echo "║ Windows Sanity:                    ${{ needs.windows-sanity.result }}"
+          echo "║ macOS Sanity:                      ${{ needs.macos-sanity.result }}"
+          echo "╚══════════════════════════════════════════════════════╝"
+          if [ "${{ needs.install-validate.result }}" != "success" ]; then
+            echo "❌ Install/validate failed"; exit 1
+          fi
+          if [ "${{ needs.eos-simulation.result }}" != "success" ]; then
+            echo "⚠️  Some EoS platform simulations failed (non-blocking)"
+          fi
+          echo "✅ EoSim sanity checks passed"

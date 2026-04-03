@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [dependency-update]
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install sdl2
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Test
+        run: ctest --test-dir build --output-on-failure -C Release
+
+  build-categories:
+    name: Category (${{ matrix.category }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - category: productivity
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=ON -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF
+          - category: media
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=ON -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF
+          - category: games
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=ON -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF
+          - category: connectivity
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=ON -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=OFF
+          - category: security
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=ON -DEAPPS_BUILD_WEB=OFF
+          - category: web
+            flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=ON
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: Build ${{ matrix.category }}
+        run: |
+          cmake -B build ${{ matrix.flags }} -DEAPPS_BUILD_SUITE=OFF
+          cmake --build build
+
+  sanitize:
+    name: Sanitizers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: Build with ASAN/UBSAN
+        run: |
+          cmake -B build \
+            -DBUILD_TESTING=ON \
+            -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1

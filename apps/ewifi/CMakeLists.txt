@@ -1,0 +1,7 @@
+add_library(ewifi STATIC ewifi.c ewifi_engine.c ewifi_passwords.c ewifi_vault.c)
+target_include_directories(ewifi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(ewifi PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(ewifi_standalone ewifi.c ewifi_engine.c ewifi_passwords.c ewifi_vault.c)
+    target_link_libraries(ewifi_standalone PRIVATE ewifi eapps_port)
+endif()

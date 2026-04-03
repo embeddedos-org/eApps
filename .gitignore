@@ -1,0 +1,83 @@
+# Build directories
+build/
+build-*/
+out/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+!cmake/*.cmake
+
+# Compiled objects
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Embedded firmware
+*.elf
+*.bin
+*.hex
+*.map
+*.srec
+
+# WASM output
+*.wasm
+*.js
+!port/web/shell.html
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.kate-swp
+.project
+.cproject
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Debug
+*.dSYM/
+core
+vgcore.*
+
+# Test artifacts
+Testing/
+*.gcno
+*.gcda
+*.gcov
+coverage/
+lcov.info
+
+# Package artifacts
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# Dependency directories
+node_modules/
+
+# SBOM output
+sbom/*.json
+!sbom/sbom-template.json

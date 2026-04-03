@@ -1,0 +1,7 @@
+add_library(eftp STATIC eftp.c)
+target_include_directories(eftp PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(eftp PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(eftp_standalone eftp.c)
+    target_link_libraries(eftp_standalone PRIVATE eftp eapps_port)
+endif()

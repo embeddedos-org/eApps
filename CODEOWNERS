@@ -1,0 +1,41 @@
+# eApps Code Owners
+# Each line defines owners for a path pattern.
+# Owners are automatically requested for review on PRs.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+*                       @embeddedos-org/eapps-maintainers
+
+# Core libraries
+core/common/            @embeddedos-org/eapps-core
+core/ui/                @embeddedos-org/eapps-core
+core/storage/           @embeddedos-org/eapps-core
+core/network/           @embeddedos-org/eapps-core @embeddedos-org/eapps-security
+core/platform/          @embeddedos-org/eapps-core
+
+# Applications
+apps/                   @embeddedos-org/eapps-apps
+
+# Security-sensitive apps
+apps/essh/              @embeddedos-org/eapps-security
+apps/evnc/              @embeddedos-org/eapps-security
+apps/etunnel/           @embeddedos-org/eapps-security
+apps/evpn/              @embeddedos-org/eapps-security
+apps/eguard/            @embeddedos-org/eapps-security
+apps/eweb/              @embeddedos-org/eapps-security
+apps/eftp/              @embeddedos-org/eapps-security
+apps/echat/             @embeddedos-org/eapps-security
+
+# Platform ports
+port/                   @embeddedos-org/eapps-platform
+port/eos/               @embeddedos-org/eapps-platform @embeddedos-org/eos-core
+
+# Build system and CI
+cmake/                  @embeddedos-org/eapps-infra
+.github/                @embeddedos-org/eapps-infra
+
+# Documentation
+docs/                   @embeddedos-org/eapps-maintainers
+
+# Security policy
+SECURITY.md             @embeddedos-org/eapps-security
