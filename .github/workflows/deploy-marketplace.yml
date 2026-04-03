@@ -1,13 +1,14 @@
 name: Deploy Marketplace
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - 'index.html'
       - 'css/**'
       - 'js/**'
       - 'data/**'
       - 'assets/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
