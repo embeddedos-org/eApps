@@ -1,4 +1,4 @@
-/* ── EoS Marketplace – Dynamic App Loader ── */
+/* ── EoS Marketplace v2.0 – Dynamic App Loader ── */
 (function () {
   'use strict';
 
@@ -9,22 +9,39 @@
   let searchQuery = '';
 
   const CATEGORY_ICONS = {
-    extensions: '🧩',
+    'browser-ext': '🌐',
+    'ide-ext': '🛠️',
+    'mobile-android': '📱',
+    'mobile-ios': '🍎',
     desktop: '🖥️',
-    mobile: '📱',
-    service: '☁️',
     native: '⚙️',
-    web: '🌐'
+    service: '☁️',
+    'os-images': '💿'
   };
 
   const PLATFORM_LABELS = {
     chrome: 'Chrome', firefox: 'Firefox', safari: 'Safari',
+    edge: 'Edge', opera: 'Opera', brave: 'Brave',
     vscode: 'VS Code', jetbrains: 'JetBrains', obsidian: 'Obsidian',
+    sublime: 'Sublime', neovim: 'Neovim',
     slack: 'Slack', raycast: 'Raycast', github: 'GitHub',
     'google-workspace': 'Google WS', office365: 'Office 365',
     windows: 'Windows', macos: 'macOS', linux: 'Linux',
-    android: 'Android', ios: 'iOS', eos: 'EoS',
-    web: 'Web', firebase: 'Firebase', cloud: 'Cloud', docker: 'Docker'
+    'windows-x64': 'Win x64', 'windows-arm64': 'Win ARM',
+    'macos-intel': 'macOS Intel', 'macos-apple-silicon': 'macOS M-series',
+    'linux-x64': 'Linux x64', 'linux-arm64': 'Linux ARM',
+    android: 'Android', 'android-tv': 'Android TV',
+    'android-tablet': 'Tablet', 'wear-os': 'Wear OS',
+    ios: 'iOS', ipados: 'iPadOS', 'apple-tv': 'Apple TV',
+    eos: 'EoS', freebsd: 'FreeBSD',
+    web: 'Web', pwa: 'PWA', wasm: 'WASM',
+    firebase: 'Firebase', cloud: 'Cloud', docker: 'Docker',
+    x86_64: 'x86_64', arm64: 'ARM64', riscv: 'RISC-V',
+    iso: 'ISO', img: 'IMG',
+    stm32: 'STM32', esp32: 'ESP32', rpi: 'RPi',
+    firmware: 'Firmware',
+    virtualbox: 'VirtualBox', vmware: 'VMware',
+    qemu: 'QEMU', ova: 'OVA', vmdk: 'VMDK', qcow2: 'qcow2'
   };
 
   async function init() {
@@ -49,15 +66,11 @@
     if (!el) return;
     const counts = {};
     allApps.forEach(a => { counts[a.category] = (counts[a.category] || 0) + 1; });
-    el.innerHTML = `
-      <div class="stat"><div class="stat-number">${allApps.length}</div><div class="stat-label">Total Apps</div></div>
-      <div class="stat"><div class="stat-number">${counts.extensions || 0}</div><div class="stat-label">Extensions</div></div>
-      <div class="stat"><div class="stat-number">${counts.desktop || 0}</div><div class="stat-label">Desktop</div></div>
-      <div class="stat"><div class="stat-number">${counts.mobile || 0}</div><div class="stat-label">Mobile</div></div>
-      <div class="stat"><div class="stat-number">${counts.service || 0}</div><div class="stat-label">Services</div></div>
-      <div class="stat"><div class="stat-number">${counts.native || 0}</div><div class="stat-label">Native</div></div>
-      <div class="stat"><div class="stat-number">${counts.web || 0}</div><div class="stat-label">Web</div></div>
-    `;
+    let html = `<div class="stat"><div class="stat-number">${allApps.length}</div><div class="stat-label">Total Apps</div></div>`;
+    categories.forEach(c => {
+      html += `<div class="stat"><div class="stat-number">${counts[c.id] || 0}</div><div class="stat-label">${c.name}</div></div>`;
+    });
+    el.innerHTML = html;
   }
 
   function renderFilters() {
@@ -73,16 +86,19 @@
   function getDownloadUrl(app) {
     if (app.downloadUrl) return app.downloadUrl;
     if (app.downloads) {
-      return app.downloads.windows || app.downloads.android || app.downloads.macos || app.downloads.linux || app.releaseUrl;
+      const keys = Object.keys(app.downloads);
+      return app.downloads[keys[0]] || app.releaseUrl;
     }
     return app.releaseUrl;
   }
 
   function renderCard(app) {
     const icon = CATEGORY_ICONS[app.category] || '📦';
-    const platforms = (app.platform || []).map(p =>
+    const platforms = (app.platform || []).slice(0, 6).map(p =>
       `<span class="platform-badge">${PLATFORM_LABELS[p] || p}</span>`
     ).join('');
+    const extraPlatforms = (app.platform || []).length > 6
+      ? `<span class="platform-badge">+${app.platform.length - 6}</span>` : '';
     const tags = (app.tags || []).slice(0, 4).map(t =>
       `<span class="tag">#${t}</span>`
     ).join('');
@@ -90,10 +106,13 @@
     const downloadUrl = getDownloadUrl(app);
     let downloadBtn = '';
     if (app.downloads && Object.keys(app.downloads).length > 1) {
-      const entries = Object.entries(app.downloads);
+      const entries = Object.entries(app.downloads).slice(0, 3);
       downloadBtn = entries.map(([plat, url]) =>
         `<a href="${url}" class="btn btn-primary" target="_blank">⬇ ${PLATFORM_LABELS[plat] || plat}</a>`
       ).join('');
+      if (Object.keys(app.downloads).length > 3) {
+        downloadBtn += `<a href="${app.releaseUrl}" class="btn btn-outline" target="_blank">+${Object.keys(app.downloads).length - 3} more</a>`;
+      }
     } else if (downloadUrl) {
       downloadBtn = `<a href="${downloadUrl}" class="btn btn-primary" target="_blank">⬇ Download</a>`;
     }
@@ -106,7 +125,7 @@
         <span class="card-version">v${app.version}</span>
       </div>
       <div class="card-desc">${app.description}</div>
-      <div class="card-platforms">${platforms}</div>
+      <div class="card-platforms">${platforms}${extraPlatforms}</div>
       <div class="card-tags">${tags}</div>
       <div class="card-actions">
         ${downloadBtn}
@@ -124,7 +143,8 @@
       const searchMatch = !q ||
         app.name.toLowerCase().includes(q) ||
         app.description.toLowerCase().includes(q) ||
-        (app.tags || []).some(t => t.toLowerCase().includes(q));
+        (app.tags || []).some(t => t.toLowerCase().includes(q)) ||
+        (app.platform || []).some(p => p.toLowerCase().includes(q));
       return catMatch && searchMatch;
     });
 

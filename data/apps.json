@@ -1,314 +1,1149 @@
 {
   "meta": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "lastUpdated": "2026-04-03",
     "org": "embeddedos-org",
     "hubUrl": "https://embeddedos-org.github.io/eApps/"
   },
   "categories": [
     {
-      "id": "extensions",
-      "name": "Browser & Editor Extensions",
-      "icon": "🧩",
-      "description": "Extend your browser and IDE with EoS productivity tools"
+      "id": "browser-ext",
+      "name": "Browser Extensions",
+      "icon": "🌐",
+      "description": "Chrome, Firefox, Safari, Edge, Opera, Brave browser extensions"
+    },
+    {
+      "id": "ide-ext",
+      "name": "IDE & Dev Tools",
+      "icon": "🛠️",
+      "description": "VS Code, JetBrains, Obsidian, Sublime, Vim/Neovim extensions"
+    },
+    {
+      "id": "mobile-android",
+      "name": "Android & TV",
+      "icon": "📱",
+      "description": "Android Phone, Tablet, Android TV, Wear OS apps"
+    },
+    {
+      "id": "mobile-ios",
+      "name": "iOS & iPadOS",
+      "icon": "🍎",
+      "description": "iPhone, iPad, Apple Watch, Apple TV apps"
     },
     {
       "id": "desktop",
-      "name": "Desktop Applications",
+      "name": "Desktop",
       "icon": "🖥️",
-      "description": "Native desktop apps for Windows, macOS, and Linux"
-    },
-    {
-      "id": "mobile",
-      "name": "Mobile Applications",
-      "icon": "📱",
-      "description": "Android and iOS apps for on-the-go productivity"
-    },
-    {
-      "id": "service",
-      "name": "Service & Cloud Apps",
-      "icon": "☁️",
-      "description": "Backend services, APIs, and cloud-connected applications"
+      "description": "Windows, macOS, Linux, EoS — x86_64, ARM64, Apple Silicon"
     },
     {
       "id": "native",
-      "name": "Embedded / Native Apps",
+      "name": "Embedded / Native",
       "icon": "⚙️",
-      "description": "Lightweight native apps built with LVGL for EoS platform"
+      "description": "C + LVGL apps for EoS and embedded platforms"
     },
     {
-      "id": "web",
-      "name": "Web Applications",
-      "icon": "🌐",
-      "description": "Browser-based apps accessible from any device"
+      "id": "service",
+      "name": "Cloud & Services",
+      "icon": "☁️",
+      "description": "Firebase, Docker, APIs, backend services"
+    },
+    {
+      "id": "os-images",
+      "name": "OS & VM Images",
+      "icon": "💿",
+      "description": "EoS ISO, VirtualBox OVA, VMware VMDK, QEMU qcow2"
     }
   ],
   "apps": [
     {
       "id": "eoffice-chrome",
       "name": "eOffice for Chrome",
-      "description": "Full eOffice productivity suite as a Chrome extension — docs, sheets, slides, planner, and more.",
-      "category": "extensions",
+      "description": "Full eOffice productivity suite as a Chrome extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
       "platform": [
         "chrome"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/chrome/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-chrome-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0/eoffice-chrome-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0",
       "tags": [
         "productivity",
         "office",
         "docs",
         "sheets"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0/eoffice-chrome-1.0.0.zip"
     },
     {
       "id": "eoffice-firefox",
       "name": "eOffice for Firefox",
-      "description": "eOffice productivity suite as a Firefox add-on.",
-      "category": "extensions",
+      "description": "Full eOffice productivity suite as a Firefox extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
       "platform": [
         "firefox"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/firefox/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-firefox-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0/eoffice-firefox-1.0.0.xpi",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0",
       "tags": [
         "productivity",
-        "office"
-      ]
+        "office",
+        "docs",
+        "sheets"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0/eoffice-firefox-1.0.0.zip"
     },
     {
       "id": "eoffice-safari",
       "name": "eOffice for Safari",
-      "description": "eOffice productivity suite as a Safari extension.",
-      "category": "extensions",
+      "description": "Full eOffice productivity suite as a Safari extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
       "platform": [
         "safari"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
-      "source": "extensions/safari/",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/safari/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-safari-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0/eoffice-safari-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0",
       "tags": [
         "productivity",
         "office",
-        "macos"
-      ]
+        "docs",
+        "sheets"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0/eoffice-safari-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-edge",
+      "name": "eOffice for Edge",
+      "description": "Full eOffice productivity suite as a Edge extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
+      "platform": [
+        "edge"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/edge/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-edge-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "docs",
+        "sheets"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-edge-v1.0.0/eoffice-edge-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-opera",
+      "name": "eOffice for Opera",
+      "description": "Full eOffice productivity suite as a Opera extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
+      "platform": [
+        "opera"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/opera/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-opera-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "docs",
+        "sheets"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-opera-v1.0.0/eoffice-opera-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-brave",
+      "name": "eOffice for Brave",
+      "description": "Full eOffice productivity suite as a Brave extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "browser-ext",
+      "platform": [
+        "brave"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/brave/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-brave-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "docs",
+        "sheets"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-brave-v1.0.0/eoffice-brave-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-chrome",
+      "name": "eBrowser for Chrome",
+      "description": "eBrowser privacy tools and ad-blocker for Chrome.",
+      "category": "browser-ext",
+      "platform": [
+        "chrome"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/chrome/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-chrome-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-chrome-v1.0.0/ebrowser-ext-chrome-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-firefox",
+      "name": "eBrowser for Firefox",
+      "description": "eBrowser privacy tools and ad-blocker for Firefox.",
+      "category": "browser-ext",
+      "platform": [
+        "firefox"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/firefox/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-firefox-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-firefox-v1.0.0/ebrowser-ext-firefox-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-safari",
+      "name": "eBrowser for Safari",
+      "description": "eBrowser privacy tools and ad-blocker for Safari.",
+      "category": "browser-ext",
+      "platform": [
+        "safari"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/safari/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-safari-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-safari-v1.0.0/ebrowser-ext-safari-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-edge",
+      "name": "eBrowser for Edge",
+      "description": "eBrowser privacy tools and ad-blocker for Edge.",
+      "category": "browser-ext",
+      "platform": [
+        "edge"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/edge/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-edge-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-edge-v1.0.0/ebrowser-ext-edge-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-opera",
+      "name": "eBrowser for Opera",
+      "description": "eBrowser privacy tools and ad-blocker for Opera.",
+      "category": "browser-ext",
+      "platform": [
+        "opera"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/opera/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-opera-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-opera-v1.0.0/ebrowser-ext-opera-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ext-brave",
+      "name": "eBrowser for Brave",
+      "description": "eBrowser privacy tools and ad-blocker for Brave.",
+      "category": "browser-ext",
+      "platform": [
+        "brave"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/brave/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-brave-v1.0.0",
+      "tags": [
+        "privacy",
+        "security",
+        "adblocker",
+        "browser"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-brave-v1.0.0/ebrowser-ext-brave-1.0.0.zip"
+    },
+    {
+      "id": "ebot-chrome",
+      "name": "eBot AI for Chrome",
+      "description": "AI assistant chatbot extension for Chrome — ask questions, summarize pages, translate.",
+      "category": "browser-ext",
+      "platform": [
+        "chrome"
+      ],
+      "icon": "assets/icons/ebot.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/chrome/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-chrome-v1.0.0",
+      "tags": [
+        "ai",
+        "chatbot",
+        "assistant",
+        "productivity"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-chrome-v1.0.0/ebot-chrome-1.0.0.zip"
+    },
+    {
+      "id": "ebot-firefox",
+      "name": "eBot AI for Firefox",
+      "description": "AI assistant chatbot extension for Firefox — ask questions, summarize pages, translate.",
+      "category": "browser-ext",
+      "platform": [
+        "firefox"
+      ],
+      "icon": "assets/icons/ebot.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/firefox/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-firefox-v1.0.0",
+      "tags": [
+        "ai",
+        "chatbot",
+        "assistant",
+        "productivity"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-firefox-v1.0.0/ebot-firefox-1.0.0.zip"
+    },
+    {
+      "id": "ebot-edge",
+      "name": "eBot AI for Edge",
+      "description": "AI assistant chatbot extension for Edge — ask questions, summarize pages, translate.",
+      "category": "browser-ext",
+      "platform": [
+        "edge"
+      ],
+      "icon": "assets/icons/ebot.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/browser/edge/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-edge-v1.0.0",
+      "tags": [
+        "ai",
+        "chatbot",
+        "assistant",
+        "productivity"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-edge-v1.0.0/ebot-edge-1.0.0.zip"
     },
     {
       "id": "eoffice-vscode",
       "name": "eOffice for VS Code",
-      "description": "Access eOffice docs, sheets, and notes directly inside Visual Studio Code.",
-      "category": "extensions",
+      "description": "Access eOffice docs, sheets, and notes directly inside VS Code.",
+      "category": "ide-ext",
       "platform": [
         "vscode"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/vscode/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-vscode-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0/eoffice-vscode-1.0.0.vsix",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0",
       "tags": [
         "productivity",
         "ide",
-        "editor"
-      ]
+        "editor",
+        "office"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0/eoffice-vscode-1.0.0.zip"
     },
     {
       "id": "eoffice-jetbrains",
       "name": "eOffice for JetBrains",
-      "description": "eOffice integration for IntelliJ, WebStorm, and other JetBrains IDEs.",
-      "category": "extensions",
+      "description": "Access eOffice docs, sheets, and notes directly inside JetBrains.",
+      "category": "ide-ext",
       "platform": [
         "jetbrains"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/jetbrains/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-jetbrains-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0/eoffice-jetbrains-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0",
       "tags": [
         "productivity",
-        "ide"
-      ]
+        "ide",
+        "editor",
+        "office"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0/eoffice-jetbrains-1.0.0.zip"
     },
     {
       "id": "eoffice-obsidian",
       "name": "eOffice for Obsidian",
-      "description": "Sync eOffice notes and docs with your Obsidian vault.",
-      "category": "extensions",
+      "description": "Access eOffice docs, sheets, and notes directly inside Obsidian.",
+      "category": "ide-ext",
       "platform": [
         "obsidian"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/obsidian/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-obsidian-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0",
       "tags": [
         "productivity",
-        "notes",
-        "knowledge"
-      ]
+        "ide",
+        "editor",
+        "office"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-sublime",
+      "name": "eOffice for Sublime Text",
+      "description": "Access eOffice docs, sheets, and notes directly inside Sublime Text.",
+      "category": "ide-ext",
+      "platform": [
+        "sublime"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/sublime/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-sublime-v1.0.0",
+      "tags": [
+        "productivity",
+        "ide",
+        "editor",
+        "office"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-sublime-v1.0.0/eoffice-sublime-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-neovim",
+      "name": "eOffice for Neovim",
+      "description": "Access eOffice docs, sheets, and notes directly inside Neovim.",
+      "category": "ide-ext",
+      "platform": [
+        "neovim"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/neovim/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0",
+      "tags": [
+        "productivity",
+        "ide",
+        "editor",
+        "office"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0/eoffice-neovim-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-vscode",
+      "name": "EoStudio for VS Code",
+      "description": "EoStudio code generation, UI preview, and hardware tools for VS Code.",
+      "category": "ide-ext",
+      "platform": [
+        "vscode"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/vscode/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-vscode-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "hardware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-vscode-v1.0.0/eostudio-vscode-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-jetbrains",
+      "name": "EoStudio for JetBrains",
+      "description": "EoStudio code generation, UI preview, and hardware tools for JetBrains.",
+      "category": "ide-ext",
+      "platform": [
+        "jetbrains"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/jetbrains/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-jetbrains-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "hardware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-jetbrains-v1.0.0/eostudio-jetbrains-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-obsidian",
+      "name": "EoStudio for Obsidian",
+      "description": "EoStudio code generation, UI preview, and hardware tools for Obsidian.",
+      "category": "ide-ext",
+      "platform": [
+        "obsidian"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/obsidian/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "hardware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0/eostudio-obsidian-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-sublime",
+      "name": "EoStudio for Sublime Text",
+      "description": "EoStudio code generation, UI preview, and hardware tools for Sublime Text.",
+      "category": "ide-ext",
+      "platform": [
+        "sublime"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/sublime/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-sublime-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "hardware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-sublime-v1.0.0/eostudio-sublime-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-neovim",
+      "name": "EoStudio for Neovim",
+      "description": "EoStudio code generation, UI preview, and hardware tools for Neovim.",
+      "category": "ide-ext",
+      "platform": [
+        "neovim"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "extensions/neovim/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "hardware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0/eostudio-neovim-1.0.0.zip"
     },
     {
       "id": "eoffice-slack",
       "name": "eOffice for Slack",
-      "description": "Share and collaborate on eOffice documents inside Slack channels.",
-      "category": "extensions",
+      "description": "eOffice integration for Slack — collaborate on docs and sheets.",
+      "category": "ide-ext",
       "platform": [
         "slack"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/slack/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-slack-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
-        "messaging"
-      ]
+        "integration"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.zip"
     },
     {
       "id": "eoffice-raycast",
       "name": "eOffice for Raycast",
-      "description": "Quick-launch eOffice apps from Raycast on macOS.",
-      "category": "extensions",
+      "description": "eOffice integration for Raycast — collaborate on docs and sheets.",
+      "category": "ide-ext",
       "platform": [
         "raycast"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/raycast/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-raycast-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0",
       "tags": [
         "productivity",
-        "launcher",
-        "macos"
-      ]
+        "collaboration",
+        "integration"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.zip"
     },
     {
       "id": "eoffice-github",
-      "name": "eOffice GitHub App",
-      "description": "Auto-generate docs from repos, sync issues with ePlanner, and more.",
-      "category": "extensions",
+      "name": "eOffice for GitHub",
+      "description": "eOffice integration for GitHub — collaborate on docs and sheets.",
+      "category": "ide-ext",
       "platform": [
         "github"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/github/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-github-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0",
       "tags": [
-        "devtools",
-        "automation",
-        "github"
-      ]
+        "productivity",
+        "collaboration",
+        "integration"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.zip"
     },
     {
       "id": "eoffice-google-workspace",
       "name": "eOffice for Google Workspace",
-      "description": "Bridge eOffice with Google Docs, Sheets, and Drive.",
-      "category": "extensions",
+      "description": "eOffice integration for Google Workspace — collaborate on docs and sheets.",
+      "category": "ide-ext",
       "platform": [
         "google-workspace"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/google-workspace/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-gws-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-gws-v1.0.0/eoffice-gws-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0",
       "tags": [
         "productivity",
-        "cloud",
-        "google"
-      ]
+        "collaboration",
+        "integration"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0/eoffice-google-workspace-1.0.0.zip"
     },
     {
       "id": "eoffice-office365",
       "name": "eOffice for Office 365",
-      "description": "Connect eOffice with Microsoft 365 apps and services.",
-      "category": "extensions",
+      "description": "eOffice integration for Office 365 — collaborate on docs and sheets.",
+      "category": "ide-ext",
       "platform": [
         "office365"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/office365/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-o365-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-o365-v1.0.0/eoffice-o365-1.0.0.zip",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0",
       "tags": [
         "productivity",
-        "microsoft",
-        "cloud"
-      ]
+        "collaboration",
+        "integration"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0/eoffice-office365-1.0.0.zip"
+    },
+    {
+      "id": "eride-android",
+      "name": "eRide for Android",
+      "description": "Ride-sharing and transportation with real-time tracking, fare estimation. Available for Android Phone, Tablet, and Android TV.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tv",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/eride.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/eride/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0",
+      "tags": [
+        "transport",
+        "ride-sharing",
+        "maps",
+        "flutter",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0/eride-android-1.0.0.zip"
+    },
+    {
+      "id": "esocial-android",
+      "name": "eSocial for Android",
+      "description": "Social networking with posts, feeds, messaging, and community features. Available for Android Phone, Tablet, and Android TV.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tv",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/esocial.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/esocial/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0",
+      "tags": [
+        "social",
+        "messaging",
+        "community",
+        "flutter",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0/esocial-android-1.0.0.zip"
+    },
+    {
+      "id": "etrack-android",
+      "name": "eTrack for Android",
+      "description": "Package and delivery tracking with real-time status updates. Available for Android Phone, Tablet, and Android TV.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tv",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/etrack.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/etrack/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0",
+      "tags": [
+        "logistics",
+        "tracking",
+        "delivery",
+        "flutter",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0/etrack-android-1.0.0.zip"
+    },
+    {
+      "id": "etravel-android",
+      "name": "eTravel for Android",
+      "description": "Travel planning and booking with itinerary management. Available for Android Phone, Tablet, and Android TV.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tv",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/etravel.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/etravel/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0",
+      "tags": [
+        "travel",
+        "booking",
+        "itinerary",
+        "flutter",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0/etravel-android-1.0.0.zip"
+    },
+    {
+      "id": "ewallet-android",
+      "name": "eWallet for Android",
+      "description": "Digital wallet with payments, transaction history, multi-currency. Available for Android Phone, Tablet, and Android TV.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tv",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/ewallet.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/ewallet/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0",
+      "tags": [
+        "fintech",
+        "payments",
+        "wallet",
+        "flutter",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0/ewallet-android-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-android",
+      "name": "eOffice for Android",
+      "description": "Full eOffice suite on Android — eDocs, eSheets, eSlides, eNotes, ePlanner.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tablet",
+        "android-tv"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eoffice/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "android",
+        "flutter"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0/eoffice-android-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-android",
+      "name": "EoStudio for Android",
+      "description": "Visual design IDE on Android tablet — UI design, code generation, preview.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eostudio/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-android-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-android-v1.0.0/eostudio-android-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-android",
+      "name": "eBrowser for Android",
+      "description": "Privacy-first web browser for Android with ad-blocker and tracker protection.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/ebrowser/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-android-v1.0.0",
+      "tags": [
+        "browser",
+        "privacy",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-android-v1.0.0/ebrowser-android-1.0.0.zip"
+    },
+    {
+      "id": "ebot-android",
+      "name": "eBot AI for Android",
+      "description": "AI assistant chatbot with on-device and cloud LLM support.",
+      "category": "mobile-android",
+      "platform": [
+        "android",
+        "android-tablet"
+      ],
+      "icon": "assets/icons/ebot.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/ebot/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0",
+      "tags": [
+        "ai",
+        "chatbot",
+        "assistant",
+        "android"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0/ebot-android-1.0.0.zip"
+    },
+    {
+      "id": "eride-ios",
+      "name": "eRide for iOS",
+      "description": "Ride-sharing and transportation with real-time tracking, fare estimation. Available for iPhone and iPad via TestFlight.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/eride.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/eride/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-ios-v1.0.0",
+      "tags": [
+        "transport",
+        "ride-sharing",
+        "maps",
+        "flutter",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-ios-v1.0.0/eride-ios-1.0.0.zip"
+    },
+    {
+      "id": "esocial-ios",
+      "name": "eSocial for iOS",
+      "description": "Social networking with posts, feeds, messaging, and community features. Available for iPhone and iPad via TestFlight.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/esocial.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/esocial/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-ios-v1.0.0",
+      "tags": [
+        "social",
+        "messaging",
+        "community",
+        "flutter",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-ios-v1.0.0/esocial-ios-1.0.0.zip"
+    },
+    {
+      "id": "etrack-ios",
+      "name": "eTrack for iOS",
+      "description": "Package and delivery tracking with real-time status updates. Available for iPhone and iPad via TestFlight.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/etrack.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/etrack/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-ios-v1.0.0",
+      "tags": [
+        "logistics",
+        "tracking",
+        "delivery",
+        "flutter",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-ios-v1.0.0/etrack-ios-1.0.0.zip"
+    },
+    {
+      "id": "etravel-ios",
+      "name": "eTravel for iOS",
+      "description": "Travel planning and booking with itinerary management. Available for iPhone and iPad via TestFlight.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/etravel.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/etravel/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-ios-v1.0.0",
+      "tags": [
+        "travel",
+        "booking",
+        "itinerary",
+        "flutter",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-ios-v1.0.0/etravel-ios-1.0.0.zip"
+    },
+    {
+      "id": "ewallet-ios",
+      "name": "eWallet for iOS",
+      "description": "Digital wallet with payments, transaction history, multi-currency. Available for iPhone and iPad via TestFlight.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/ewallet.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/lib/features/ewallet/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-ios-v1.0.0",
+      "tags": [
+        "fintech",
+        "payments",
+        "wallet",
+        "flutter",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-ios-v1.0.0/ewallet-ios-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-ios",
+      "name": "eOffice for iOS",
+      "description": "Full eOffice suite on iPhone and iPad — eDocs, eSheets, eSlides, eNotes, ePlanner.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eoffice/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-ios-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "ios",
+        "flutter"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-ios-v1.0.0/eoffice-ios-1.0.0.zip"
+    },
+    {
+      "id": "eostudio-ios",
+      "name": "EoStudio for iPadOS",
+      "description": "Visual design IDE on iPad — UI design, code generation, 3D preview.",
+      "category": "mobile-ios",
+      "platform": [
+        "ipados"
+      ],
+      "icon": "assets/icons/eostudio.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eostudio/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-ios-v1.0.0",
+      "tags": [
+        "design",
+        "ide",
+        "codegen",
+        "ipados"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-ios-v1.0.0/eostudio-ios-1.0.0.zip"
+    },
+    {
+      "id": "ebrowser-ios",
+      "name": "eBrowser for iOS",
+      "description": "Privacy-first web browser for iPhone and iPad.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/ebrowser/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ios-v1.0.0",
+      "tags": [
+        "browser",
+        "privacy",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ios-v1.0.0/ebrowser-ios-1.0.0.zip"
+    },
+    {
+      "id": "ebot-ios",
+      "name": "eBot AI for iOS",
+      "description": "AI assistant chatbot for iPhone and iPad.",
+      "category": "mobile-ios",
+      "platform": [
+        "ios",
+        "ipados"
+      ],
+      "icon": "assets/icons/ebot.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/ebot/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-ios-v1.0.0",
+      "tags": [
+        "ai",
+        "chatbot",
+        "assistant",
+        "ios"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-ios-v1.0.0/ebot-ios-1.0.0.zip"
     },
     {
       "id": "eoffice-desktop",
       "name": "eOffice Desktop",
-      "description": "Full eOffice suite as a native desktop application — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
+      "description": "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
       "category": "desktop",
       "platform": [
-        "windows",
-        "macos",
-        "linux"
+        "windows-x64",
+        "windows-arm64",
+        "macos-intel",
+        "macos-apple-silicon",
+        "linux-x64",
+        "linux-arm64",
+        "eos",
+        "freebsd"
       ],
       "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-desktop-v1.0.0",
-      "downloads": {
-        "windows": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eOffice-Desktop-1.0.0-source.zip",
-        "macos": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eOffice-Desktop-1.0.0-source.zip",
-        "linux": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eOffice-Desktop-1.0.0-source.zip"
-      },
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0",
       "tags": [
         "productivity",
         "office",
         "electron"
-      ]
+      ],
+      "downloads": {
+        "windows-x64": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-win-x64.zip",
+        "windows-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-win-arm64.zip",
+        "macos-intel": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-macos-x64.zip",
+        "macos-apple-silicon": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-macos-arm64.zip",
+        "linux-x64": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-linux-x64.zip",
+        "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-linux-arm64.zip"
+      }
     },
     {
       "id": "eostudio-desktop",
       "name": "EoStudio",
-      "description": "Visual design studio & IDE for EoS — UI design, 3D modeling, CAD, game engine, hardware design, code generation, simulation, and AI-assisted development.",
+      "description": "Visual design studio & IDE — UI, 3D, CAD, games, hardware, code generation, simulation.",
       "category": "desktop",
       "platform": [
-        "windows",
-        "macos",
-        "linux"
+        "windows-x64",
+        "windows-arm64",
+        "macos-intel",
+        "macos-apple-silicon",
+        "linux-x64",
+        "linux-arm64",
+        "eos",
+        "freebsd"
       ],
       "icon": "assets/icons/eostudio.svg",
-      "repo": "https://github.com/embeddedos-org/EoStudio",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eostudio/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eostudio-v1.0.0",
-      "downloads": {
-        "windows": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-v1.0.0/EoStudio-1.0.0-source.zip",
-        "macos": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-v1.0.0/EoStudio-1.0.0-source.zip",
-        "linux": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-v1.0.0/EoStudio-1.0.0-source.zip"
-      },
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0",
       "tags": [
         "design",
         "ide",
@@ -316,226 +1151,87 @@
         "3d",
         "codegen",
         "python"
-      ]
+      ],
+      "downloads": {
+        "windows-x64": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-win-x64.zip",
+        "windows-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-win-arm64.zip",
+        "macos-intel": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-macos-x64.zip",
+        "macos-apple-silicon": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-macos-arm64.zip",
+        "linux-x64": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-linux-x64.zip",
+        "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-linux-arm64.zip"
+      }
+    },
+    {
+      "id": "eosim-desktop",
+      "name": "EoSim",
+      "description": "Hardware & platform simulator — 63+ boards (ARM, RISC-V, ESP32, STM32, RPi, Jetson), QEMU, native engine, GUI renderers.",
+      "category": "desktop",
+      "platform": [
+        "windows-x64",
+        "windows-arm64",
+        "macos-intel",
+        "macos-apple-silicon",
+        "linux-x64",
+        "linux-arm64",
+        "eos",
+        "freebsd"
+      ],
+      "icon": "assets/icons/eosim.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eosim/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0",
+      "tags": [
+        "simulator",
+        "hardware",
+        "qemu",
+        "embedded",
+        "python"
+      ],
+      "downloads": {
+        "windows-x64": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-win-x64.zip",
+        "windows-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-win-arm64.zip",
+        "macos-intel": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-macos-x64.zip",
+        "macos-apple-silicon": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-macos-arm64.zip",
+        "linux-x64": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-linux-x64.zip",
+        "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-linux-arm64.zip"
+      }
     },
     {
       "id": "ebrowser-desktop",
       "name": "eBrowser",
-      "description": "Lightweight, secure, privacy-first web browser built with the EoS rendering engine. Supports HTML5, CSS3, JavaScript, SVG, TLS 1.3, and plugin architecture.",
+      "description": "Privacy-first web browser with custom rendering engine, HTML5, CSS3, JS, SVG, TLS 1.3, plugins.",
       "category": "desktop",
       "platform": [
-        "windows",
-        "macos",
-        "linux",
-        "eos"
+        "windows-x64",
+        "windows-arm64",
+        "macos-intel",
+        "macos-apple-silicon",
+        "linux-x64",
+        "linux-arm64",
+        "eos",
+        "freebsd"
       ],
       "icon": "assets/icons/ebrowser.svg",
-      "repo": "https://github.com/embeddedos-org/eBrowser",
+      "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/ebrowser/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ebrowser-v1.0.0",
-      "downloads": {
-        "windows": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-v1.0.0/eBrowser-1.0.0-source.zip",
-        "macos": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-v1.0.0/eBrowser-1.0.0-source.zip",
-        "linux": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-v1.0.0/eBrowser-1.0.0-source.zip"
-      },
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0",
       "tags": [
         "browser",
         "privacy",
         "security",
         "c",
         "lvgl"
-      ]
-    },
-    {
-      "id": "eride",
-      "name": "eRide",
-      "description": "Ride-sharing and transportation service app with real-time tracking, fare estimation, and driver matching.",
-      "category": "mobile",
-      "platform": [
-        "android",
-        "ios"
       ],
-      "icon": "assets/icons/eride.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/eride/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eride-v1.0.0",
       "downloads": {
-        "android": "https://github.com/embeddedos-org/eApps/releases/download/eride-v1.0.0/eServiceApps-1.0.0-source.zip",
-        "ios": "https://testflight.apple.com/join/eRide"
-      },
-      "tags": [
-        "transport",
-        "ride-sharing",
-        "maps",
-        "flutter"
-      ]
-    },
-    {
-      "id": "esocial",
-      "name": "eSocial",
-      "description": "Social networking app with posts, feeds, messaging, and community features.",
-      "category": "mobile",
-      "platform": [
-        "android",
-        "ios"
-      ],
-      "icon": "assets/icons/esocial.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/esocial/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/esocial-v1.0.0",
-      "downloads": {
-        "android": "https://github.com/embeddedos-org/eApps/releases/download/esocial-v1.0.0/eServiceApps-1.0.0-source.zip",
-        "ios": "https://testflight.apple.com/join/eSocial"
-      },
-      "tags": [
-        "social",
-        "messaging",
-        "community",
-        "flutter"
-      ]
-    },
-    {
-      "id": "etrack",
-      "name": "eTrack",
-      "description": "Package and delivery tracking app with real-time status updates and notifications.",
-      "category": "mobile",
-      "platform": [
-        "android",
-        "ios"
-      ],
-      "icon": "assets/icons/etrack.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/etrack/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/etrack-v1.0.0",
-      "downloads": {
-        "android": "https://github.com/embeddedos-org/eApps/releases/download/etrack-v1.0.0/eServiceApps-1.0.0-source.zip",
-        "ios": "https://testflight.apple.com/join/eTrack"
-      },
-      "tags": [
-        "logistics",
-        "tracking",
-        "delivery",
-        "flutter"
-      ]
-    },
-    {
-      "id": "etravel",
-      "name": "eTravel",
-      "description": "Travel planning and booking app with itinerary management, hotel/flight search, and trip sharing.",
-      "category": "mobile",
-      "platform": [
-        "android",
-        "ios"
-      ],
-      "icon": "assets/icons/etravel.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/etravel/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/etravel-v1.0.0",
-      "downloads": {
-        "android": "https://github.com/embeddedos-org/eApps/releases/download/etravel-v1.0.0/eServiceApps-1.0.0-source.zip",
-        "ios": "https://testflight.apple.com/join/eTravel"
-      },
-      "tags": [
-        "travel",
-        "booking",
-        "itinerary",
-        "flutter"
-      ]
-    },
-    {
-      "id": "ewallet",
-      "name": "eWallet",
-      "description": "Digital wallet with payments, transaction history, and multi-currency support.",
-      "category": "mobile",
-      "platform": [
-        "android",
-        "ios"
-      ],
-      "icon": "assets/icons/ewallet.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/ewallet/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ewallet-v1.0.0",
-      "downloads": {
-        "android": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-v1.0.0/eServiceApps-1.0.0-source.zip",
-        "ios": "https://testflight.apple.com/join/eWallet"
-      },
-      "tags": [
-        "fintech",
-        "payments",
-        "wallet",
-        "flutter"
-      ]
-    },
-    {
-      "id": "eserviceapps-backend",
-      "name": "eServiceApps Backend",
-      "description": "Firebase-powered backend services — authentication, Firestore database, notifications, and wallet APIs for all eServiceApps.",
-      "category": "service",
-      "platform": [
-        "firebase",
-        "cloud"
-      ],
-      "icon": "assets/icons/eservice.svg",
-      "repo": "https://github.com/embeddedos-org/eServiceApps",
-      "source": "service-apps/backend/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eservice-backend-v1.0.0",
-      "tags": [
-        "backend",
-        "firebase",
-        "api",
-        "auth"
-      ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eservice-backend-v1.0.0/eServiceApps-1.0.0-source.zip"
-    },
-    {
-      "id": "eoffice-server",
-      "name": "eOffice Server",
-      "description": "Self-hosted eOffice backend for document collaboration, real-time sync, and storage.",
-      "category": "service",
-      "platform": [
-        "docker",
-        "cloud"
-      ],
-      "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
-      "source": "service-apps/eoffice-server/",
-      "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eoffice-server-v1.0.0",
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0/eoffice-server-1.0.0.zip",
-      "tags": [
-        "backend",
-        "docker",
-        "collaboration",
-        "self-hosted"
-      ]
-    },
-    {
-      "id": "eoffice-web",
-      "name": "eOffice Web",
-      "description": "Full eOffice suite in the browser — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
-      "category": "web",
-      "platform": [
-        "web"
-      ],
-      "icon": "assets/icons/eoffice.svg",
-      "repo": "https://github.com/embeddedos-org/eOffice",
-      "source": "desktop-apps/eoffice/browser/",
-      "version": "1.0.0",
-      "releaseUrl": "https://embeddedos-org.github.io/eApps/",
-      "downloadUrl": "https://embeddedos-org.github.io/eApps/",
-      "tags": [
-        "productivity",
-        "office",
-        "web",
-        "pwa"
-      ]
+        "windows-x64": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-win-x64.zip",
+        "windows-arm64": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-win-arm64.zip",
+        "macos-intel": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-macos-x64.zip",
+        "macos-apple-silicon": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-macos-arm64.zip",
+        "linux-x64": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-linux-x64.zip",
+        "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-linux-arm64.zip"
+      }
     },
     {
       "id": "efiles",
@@ -549,7 +1245,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/efiles.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -557,10 +1254,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0",
       "tags": [
-        "utility",
-        "files",
-        "manager",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0/efiles-1.0.0.zip"
     },
@@ -576,7 +1273,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/emusic.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -584,10 +1282,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0",
       "tags": [
-        "media",
-        "music",
-        "player",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0/emusic-1.0.0.zip"
     },
@@ -603,7 +1301,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/evideo.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -611,10 +1310,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0",
       "tags": [
-        "media",
-        "video",
-        "player",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0/evideo-1.0.0.zip"
     },
@@ -630,7 +1329,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/egallery.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -638,10 +1338,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0",
       "tags": [
-        "media",
-        "photos",
-        "gallery",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0/egallery-1.0.0.zip"
     },
@@ -657,7 +1357,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/echat.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -665,10 +1366,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0",
       "tags": [
-        "communication",
-        "messaging",
-        "chat",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0/echat-1.0.0.zip"
     },
@@ -684,7 +1385,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/enote.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -692,17 +1394,17 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0",
       "tags": [
-        "productivity",
-        "notes",
-        "markdown",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0/enote-1.0.0.zip"
     },
     {
       "id": "ecal",
       "name": "eCal",
-      "description": "Calendar app with event management, reminders, and multi-calendar sync.",
+      "description": "Calendar with event management, reminders, and multi-calendar sync.",
       "category": "native",
       "platform": [
         "eos",
@@ -711,7 +1413,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ecal.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -719,10 +1422,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0",
       "tags": [
-        "productivity",
-        "calendar",
-        "schedule",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0/ecal-1.0.0.zip"
     },
@@ -738,7 +1441,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eclock.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -746,17 +1450,17 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0",
       "tags": [
-        "utility",
-        "clock",
-        "alarm",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0/eclock-1.0.0.zip"
     },
     {
       "id": "esettings",
       "name": "eSettings",
-      "description": "System settings and preferences manager for EoS.",
+      "description": "System settings and preferences manager.",
       "category": "native",
       "platform": [
         "eos",
@@ -764,7 +1468,9 @@
         "linux",
         "macos",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/esettings.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -772,23 +1478,27 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0",
       "tags": [
-        "system",
-        "settings",
-        "config",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0/esettings-1.0.0.zip"
     },
     {
       "id": "ewifi",
       "name": "eWifi",
-      "description": "Wi-Fi network manager with scanning, connection management, and diagnostics.",
+      "description": "Wi-Fi network manager with scanning and diagnostics.",
       "category": "native",
       "platform": [
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ewifi.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -796,10 +1506,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0",
       "tags": [
-        "network",
-        "wifi",
-        "system",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0/ewifi-1.0.0.zip"
     },
@@ -814,7 +1524,9 @@
         "linux",
         "macos",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/evpn.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -822,11 +1534,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0",
       "tags": [
-        "network",
-        "vpn",
-        "security",
-        "privacy",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0/evpn-1.0.0.zip"
     },
@@ -839,7 +1550,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/essh.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -847,10 +1562,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0",
       "tags": [
-        "devtools",
-        "ssh",
-        "terminal",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0/essh-1.0.0.zip"
     },
@@ -863,7 +1578,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eftp.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -871,10 +1590,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0",
       "tags": [
-        "network",
-        "ftp",
-        "file-transfer",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0/eftp-1.0.0.zip"
     },
@@ -890,7 +1609,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/epdf.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -898,10 +1618,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0",
       "tags": [
-        "productivity",
-        "pdf",
-        "reader",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0/epdf-1.0.0.zip"
     },
@@ -917,7 +1637,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/epaint.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -925,17 +1646,17 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0",
       "tags": [
-        "creative",
-        "drawing",
-        "paint",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0/epaint-1.0.0.zip"
     },
     {
       "id": "econverter",
       "name": "eConverter",
-      "description": "Unit converter for length, weight, temperature, currency, and more.",
+      "description": "Unit converter for length, weight, temperature, currency.",
       "category": "native",
       "platform": [
         "eos",
@@ -944,7 +1665,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/econverter.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -952,23 +1674,27 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0",
       "tags": [
-        "utility",
-        "converter",
-        "tools",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0/econverter-1.0.0.zip"
     },
     {
       "id": "ezip",
       "name": "eZip",
-      "description": "Archive manager supporting ZIP, TAR, GZIP, 7z, and more.",
+      "description": "Archive manager supporting ZIP, TAR, GZIP, 7z.",
       "category": "native",
       "platform": [
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ezip.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -976,23 +1702,27 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0",
       "tags": [
-        "utility",
-        "archive",
-        "compression",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0/ezip-1.0.0.zip"
     },
     {
       "id": "eguard",
       "name": "eGuard",
-      "description": "Security suite — antivirus, firewall, and privacy protection.",
+      "description": "Security suite — antivirus, firewall, privacy protection.",
       "category": "native",
       "platform": [
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eguard.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1000,10 +1730,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0",
       "tags": [
-        "security",
-        "antivirus",
-        "firewall",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0/eguard-1.0.0.zip"
     },
@@ -1017,7 +1747,10 @@
         "windows",
         "linux",
         "macos",
-        "android"
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ecleaner.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1025,10 +1758,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0",
       "tags": [
-        "utility",
-        "cleaner",
-        "optimizer",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0/ecleaner-1.0.0.zip"
     },
@@ -1041,7 +1774,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eremote.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1049,10 +1786,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0",
       "tags": [
-        "remote",
-        "rdp",
-        "vnc",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0/eremote-1.0.0.zip"
     },
@@ -1065,7 +1802,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/evnc.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1073,9 +1814,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0",
       "tags": [
-        "remote",
-        "vnc",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0/evnc-1.0.0.zip"
     },
@@ -1088,7 +1830,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eserial.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1096,11 +1842,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0",
       "tags": [
-        "devtools",
-        "serial",
-        "embedded",
-        "debug",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0/eserial-1.0.0.zip"
     },
@@ -1116,7 +1861,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1124,10 +1870,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0",
       "tags": [
-        "ai",
-        "chatbot",
-        "assistant",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0/ebot-1.0.0.zip"
     },
@@ -1140,7 +1886,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/etools.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1148,10 +1898,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0",
       "tags": [
-        "devtools",
-        "utility",
-        "system",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0/etools-1.0.0.zip"
     },
@@ -1164,7 +1914,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/etunnel.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1172,10 +1926,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0",
       "tags": [
-        "network",
-        "tunnel",
-        "port-forwarding",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0/etunnel-1.0.0.zip"
     },
@@ -1191,7 +1945,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/snake.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1199,10 +1954,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0",
       "tags": [
-        "game",
-        "arcade",
-        "classic",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0/snake-1.0.0.zip"
     },
@@ -1218,7 +1973,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/tetris.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1226,10 +1982,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0",
       "tags": [
-        "game",
-        "puzzle",
-        "classic",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0/tetris-1.0.0.zip"
     },
@@ -1245,7 +2001,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/minesweeper.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1253,10 +2010,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0",
       "tags": [
-        "game",
-        "puzzle",
-        "classic",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0/minesweeper-1.0.0.zip"
     },
@@ -1272,7 +2029,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/echess.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1280,10 +2038,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0",
       "tags": [
-        "game",
-        "board",
-        "strategy",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0/echess-1.0.0.zip"
     },
@@ -1299,7 +2057,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/dice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1307,9 +2066,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0",
       "tags": [
-        "game",
-        "utility",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0/dice-1.0.0.zip"
     },
@@ -1324,7 +2084,9 @@
         "linux",
         "macos",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eplay.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1332,22 +2094,27 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0",
       "tags": [
-        "media",
-        "launcher",
-        "games",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0/eplay-1.0.0.zip"
     },
     {
       "id": "ehmi",
       "name": "eHMI",
-      "description": "Human-Machine Interface designer and dashboard for IoT/automotive.",
+      "description": "Human-Machine Interface designer for IoT/automotive.",
       "category": "native",
       "platform": [
         "eos",
         "windows",
-        "linux"
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ehmi.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1355,24 +2122,27 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0",
       "tags": [
-        "iot",
-        "hmi",
-        "dashboard",
-        "automotive",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0/ehmi-1.0.0.zip"
     },
     {
       "id": "esurfer",
       "name": "eSurfer",
-      "description": "Lightweight web surfer / mini browser for quick searches.",
+      "description": "Lightweight web surfer for quick searches.",
       "category": "native",
       "platform": [
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/esurfer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1380,10 +2150,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0",
       "tags": [
-        "web",
-        "browser",
-        "search",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0/esurfer-1.0.0.zip"
     },
@@ -1399,7 +2169,8 @@
         "macos",
         "android",
         "ios",
-        "web"
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/etimer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1407,10 +2178,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0",
       "tags": [
-        "productivity",
-        "timer",
-        "pomodoro",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0/etimer-1.0.0.zip"
     },
@@ -1423,7 +2194,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/erunner.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1431,10 +2206,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0",
       "tags": [
-        "utility",
-        "launcher",
-        "system",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0/erunner-1.0.0.zip"
     },
@@ -1449,7 +2224,9 @@
         "linux",
         "macos",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eviewer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1457,10 +2234,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0",
       "tags": [
-        "utility",
-        "viewer",
-        "files",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0/eviewer-1.0.0.zip"
     },
@@ -1473,7 +2250,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/ebuffer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1481,10 +2262,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0",
       "tags": [
-        "utility",
-        "clipboard",
-        "buffer",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0/ebuffer-1.0.0.zip"
     },
@@ -1497,7 +2278,11 @@
         "eos",
         "windows",
         "linux",
-        "macos"
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/eslice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1505,10 +2290,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0",
       "tags": [
-        "utility",
-        "screenshot",
-        "capture",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0/eslice-1.0.0.zip"
     },
@@ -1518,7 +2303,14 @@
       "description": "Session and window manager for EoS desktop.",
       "category": "native",
       "platform": [
-        "eos"
+        "eos",
+        "windows",
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/esession.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1526,10 +2318,10 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0",
       "tags": [
-        "system",
-        "session",
-        "desktop",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0/esession-1.0.0.zip"
     },
@@ -1544,7 +2336,9 @@
         "linux",
         "macos",
         "android",
-        "ios"
+        "ios",
+        "web",
+        "freebsd"
       ],
       "icon": "assets/icons/suite.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
@@ -1552,43 +2346,525 @@
       "version": "1.0.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0",
       "tags": [
-        "launcher",
-        "suite",
-        "hub",
-        "lvgl"
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
       ],
       "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0/suite-1.0.0.zip"
     },
     {
-      "id": "eosim-desktop",
-      "name": "EoSim",
-      "description": "Full-stack hardware & platform simulator — emulate 63+ boards (ARM, RISC-V, ESP32, STM32, Raspberry Pi, Jetson, etc.), run EoS firmware, QEMU integration, native bus/CPU/memory simulation, GUI with 3D viewers, and domain-specific renderers for vehicles, drones, satellites, medical, weather, finance, and gaming.",
-      "category": "desktop",
+      "id": "ecrush",
+      "name": "eCrush",
+      "description": "Match-3 puzzle game with combos and power-ups.",
+      "category": "native",
       "platform": [
+        "eos",
         "windows",
-        "macos",
         "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
+      ],
+      "icon": "assets/icons/ecrush.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/ecrush/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0",
+      "tags": [
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0/ecrush-1.0.0.zip"
+    },
+    {
+      "id": "ebirds",
+      "name": "eBirds",
+      "description": "Physics-based launcher game with destructible environments.",
+      "category": "native",
+      "platform": [
+        "eos",
+        "windows",
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
+      ],
+      "icon": "assets/icons/ebirds.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/ebirds/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0",
+      "tags": [
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0/ebirds-1.0.0.zip"
+    },
+    {
+      "id": "eblocks",
+      "name": "eBlocks",
+      "description": "Block-breaker game with paddle and power-ups.",
+      "category": "native",
+      "platform": [
+        "eos",
+        "windows",
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
+      ],
+      "icon": "assets/icons/eblocks.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/eblocks/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0",
+      "tags": [
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0/eblocks-1.0.0.zip"
+    },
+    {
+      "id": "evirustower",
+      "name": "eVirusTower",
+      "description": "Tower defense game with virus waves and upgrades.",
+      "category": "native",
+      "platform": [
+        "eos",
+        "windows",
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
+      ],
+      "icon": "assets/icons/evirustower.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/evirustower/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0",
+      "tags": [
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0/evirustower-1.0.0.zip"
+    },
+    {
+      "id": "eweb",
+      "name": "eWeb",
+      "description": "Lightweight embedded web browser component.",
+      "category": "native",
+      "platform": [
+        "eos",
+        "windows",
+        "linux",
+        "macos",
+        "android",
+        "ios",
+        "web",
+        "freebsd"
+      ],
+      "icon": "assets/icons/eweb.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "apps/eweb/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0",
+      "tags": [
+        "native",
+        "lvgl",
+        "c",
+        "embedded"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0/eweb-1.0.0.zip"
+    },
+    {
+      "id": "eserviceapps-backend",
+      "name": "eServiceApps Backend",
+      "description": "Firebase-powered backend — auth, Firestore, notifications, wallet APIs.",
+      "category": "service",
+      "platform": [
+        "firebase",
+        "cloud"
+      ],
+      "icon": "assets/icons/eserviceapps.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "service-apps/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserviceapps-backend-v1.0.0",
+      "tags": [
+        "backend",
+        "firebase",
+        "api",
+        "auth"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserviceapps-backend-v1.0.0/eserviceapps-backend-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-server",
+      "name": "eOffice Server",
+      "description": "Self-hosted eOffice backend for document collaboration, real-time sync, storage. Docker deployable.",
+      "category": "service",
+      "platform": [
+        "docker",
+        "cloud"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eoffice/packages/server/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0",
+      "tags": [
+        "backend",
+        "docker",
+        "collaboration",
+        "self-hosted"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0/eoffice-server-1.0.0.zip"
+    },
+    {
+      "id": "eoffice-web",
+      "name": "eOffice Web",
+      "description": "Full eOffice suite in the browser — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "category": "service",
+      "platform": [
+        "web",
+        "pwa"
+      ],
+      "icon": "assets/icons/eoffice.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/eoffice/browser/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0",
+      "tags": [
+        "productivity",
+        "office",
+        "web",
+        "pwa"
+      ],
+      "downloadUrl": "https://embeddedos-org.github.io/eApps/"
+    },
+    {
+      "id": "ebrowser-wasm",
+      "name": "eBrowser WASM",
+      "description": "eBrowser running in the browser via WebAssembly — no install required.",
+      "category": "service",
+      "platform": [
+        "web",
+        "wasm"
+      ],
+      "icon": "assets/icons/ebrowser.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "desktop-apps/ebrowser/",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-wasm-v1.0.0",
+      "tags": [
+        "browser",
+        "wasm",
+        "web"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-wasm-v1.0.0/ebrowser-wasm-1.0.0.zip"
+    },
+    {
+      "id": "eos-desktop-x64",
+      "name": "EoS Desktop (x86_64)",
+      "description": "EoS Desktop operating system ISO for x86_64 PCs and laptops.",
+      "category": "os-images",
+      "platform": [
+        "x86_64",
+        "iso"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-x64-v1.0.0",
+      "tags": [
+        "os",
+        "desktop",
+        "x86_64",
+        "iso"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-x64-v1.0.0/eos-desktop-x64-1.0.0.zip"
+    },
+    {
+      "id": "eos-desktop-arm64",
+      "name": "EoS Desktop (ARM64)",
+      "description": "EoS Desktop operating system ISO for ARM64 devices (Raspberry Pi, Apple Silicon VMs).",
+      "category": "os-images",
+      "platform": [
+        "arm64",
+        "iso"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-arm64-v1.0.0",
+      "tags": [
+        "os",
+        "desktop",
+        "arm64",
+        "iso"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-arm64-v1.0.0/eos-desktop-arm64-1.0.0.zip"
+    },
+    {
+      "id": "eos-server-x64",
+      "name": "EoS Server (x86_64)",
+      "description": "EoS Server operating system ISO for headless servers and cloud VMs.",
+      "category": "os-images",
+      "platform": [
+        "x86_64",
+        "iso"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-x64-v1.0.0",
+      "tags": [
+        "os",
+        "server",
+        "x86_64",
+        "iso"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-x64-v1.0.0/eos-server-x64-1.0.0.zip"
+    },
+    {
+      "id": "eos-server-arm64",
+      "name": "EoS Server (ARM64)",
+      "description": "EoS Server operating system ISO for ARM64 servers.",
+      "category": "os-images",
+      "platform": [
+        "arm64",
+        "iso"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-arm64-v1.0.0",
+      "tags": [
+        "os",
+        "server",
+        "arm64",
+        "iso"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-arm64-v1.0.0/eos-server-arm64-1.0.0.zip"
+    },
+    {
+      "id": "eos-embedded-stm32",
+      "name": "EoS Embedded (STM32)",
+      "description": "EoS firmware image for STM32 microcontrollers.",
+      "category": "os-images",
+      "platform": [
+        "stm32",
+        "firmware"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-stm32-v1.0.0",
+      "tags": [
+        "os",
+        "embedded",
+        "stm32",
+        "firmware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-stm32-v1.0.0/eos-embedded-stm32-1.0.0.zip"
+    },
+    {
+      "id": "eos-embedded-esp32",
+      "name": "EoS Embedded (ESP32)",
+      "description": "EoS firmware image for ESP32 microcontrollers.",
+      "category": "os-images",
+      "platform": [
+        "esp32",
+        "firmware"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-esp32-v1.0.0",
+      "tags": [
+        "os",
+        "embedded",
+        "esp32",
+        "firmware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-esp32-v1.0.0/eos-embedded-esp32-1.0.0.zip"
+    },
+    {
+      "id": "eos-embedded-rpi",
+      "name": "EoS Embedded (Raspberry Pi)",
+      "description": "EoS image for Raspberry Pi (Zero, 3, 4, 5).",
+      "category": "os-images",
+      "platform": [
+        "rpi",
+        "arm64",
+        "img"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0",
+      "tags": [
+        "os",
+        "embedded",
+        "raspberry-pi",
+        "img"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0/eos-embedded-rpi-1.0.0.zip"
+    },
+    {
+      "id": "eos-embedded-riscv",
+      "name": "EoS Embedded (RISC-V)",
+      "description": "EoS firmware for RISC-V development boards.",
+      "category": "os-images",
+      "platform": [
+        "riscv",
+        "firmware"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-riscv-v1.0.0",
+      "tags": [
+        "os",
+        "embedded",
+        "riscv",
+        "firmware"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-riscv-v1.0.0/eos-embedded-riscv-1.0.0.zip"
+    },
+    {
+      "id": "eosim-virtualbox",
+      "name": "EoSim VirtualBox (OVA)",
+      "description": "Pre-configured EoSim development environment for VirtualBox. Import and run.",
+      "category": "os-images",
+      "platform": [
+        "virtualbox",
+        "ova"
+      ],
+      "icon": "assets/icons/eosim.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-virtualbox-v1.0.0",
+      "tags": [
+        "simulator",
+        "virtualbox",
+        "vm",
+        "ova"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-virtualbox-v1.0.0/eosim-virtualbox-1.0.0.zip"
+    },
+    {
+      "id": "eosim-vmware",
+      "name": "EoSim VMware (VMDK)",
+      "description": "Pre-configured EoSim development environment for VMware Workstation/Fusion.",
+      "category": "os-images",
+      "platform": [
+        "vmware",
+        "vmdk"
+      ],
+      "icon": "assets/icons/eosim.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-vmware-v1.0.0",
+      "tags": [
+        "simulator",
+        "vmware",
+        "vm",
+        "vmdk"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-vmware-v1.0.0/eosim-vmware-1.0.0.zip"
+    },
+    {
+      "id": "eosim-qemu",
+      "name": "EoSim QEMU (qcow2)",
+      "description": "EoSim disk image for QEMU — run with qemu-system-x86_64.",
+      "category": "os-images",
+      "platform": [
+        "qemu",
+        "qcow2"
+      ],
+      "icon": "assets/icons/eosim.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-qemu-v1.0.0",
+      "tags": [
+        "simulator",
+        "qemu",
+        "vm",
+        "qcow2"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-qemu-v1.0.0/eosim-qemu-1.0.0.zip"
+    },
+    {
+      "id": "eosim-docker",
+      "name": "EoSim Docker",
+      "description": "EoSim as a Docker container — docker pull embeddedos/eosim.",
+      "category": "os-images",
+      "platform": [
         "docker"
       ],
       "icon": "assets/icons/eosim.svg",
-      "repo": "https://github.com/embeddedos-org/EoSim",
-      "source": "desktop-apps/eosim/",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eosim-v1.0.0",
-      "downloads": {
-        "windows": "https://github.com/embeddedos-org/eApps/releases/download/eosim-v1.0.0/EoSim-1.0.0-source.zip",
-        "macos": "https://github.com/embeddedos-org/eApps/releases/download/eosim-v1.0.0/EoSim-1.0.0-source.zip",
-        "linux": "https://github.com/embeddedos-org/eApps/releases/download/eosim-v1.0.0/EoSim-1.0.0-source.zip"
-      },
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-docker-v1.0.0",
       "tags": [
         "simulator",
-        "hardware",
-        "qemu",
-        "embedded",
-        "iot",
-        "firmware",
-        "python"
-      ]
+        "docker",
+        "container"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-docker-v1.0.0/eosim-docker-1.0.0.zip"
+    },
+    {
+      "id": "eos-liveusb",
+      "name": "EoS Live USB",
+      "description": "Bootable EoS Live USB image — try EoS without installing.",
+      "category": "os-images",
+      "platform": [
+        "x86_64",
+        "arm64",
+        "iso"
+      ],
+      "icon": "assets/icons/eos.svg",
+      "repo": "https://github.com/embeddedos-org/eApps",
+      "source": "",
+      "version": "1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0",
+      "tags": [
+        "os",
+        "live",
+        "usb",
+        "iso"
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0/eos-liveusb-1.0.0.zip"
     }
   ]
 }
