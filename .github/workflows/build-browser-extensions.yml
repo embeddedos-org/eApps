@@ -1,0 +1,192 @@
+name: Build & Release Browser Extensions
+on:
+  push:
+    tags:
+      - 'eoffice-chrome-v*'
+      - 'eoffice-firefox-v*'
+      - 'eoffice-safari-v*'
+    branches: [master]
+    paths:
+      - 'extensions/browser/**'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target browser (chrome, firefox, all)'
+        required: true
+        default: 'all'
+        type: choice
+        options: [chrome, firefox, all]
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  build-chrome:
+    if: >
+      github.event_name == 'workflow_dispatch' && (inputs.target == 'chrome' || inputs.target == 'all') ||
+      startsWith(github.ref, 'refs/tags/eoffice-chrome') ||
+      (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: extensions/browser
+        run: npm ci --ignore-scripts 2>/dev/null || true
+
+      - name: Build Chrome extension
+        working-directory: extensions/browser
+        run: |
+          VERSION="${GITHUB_REF_NAME#eoffice-chrome-v}"
+          [ "$VERSION" = "$GITHUB_REF_NAME" ] && VERSION="0.0.0-dev"
+
+          # Update manifest version
+          jq --arg v "$VERSION" '.version = $v' manifest.json > tmp.json && mv tmp.json manifest.json
+
+          # Package as .zip (Chrome Web Store format)
+          mkdir -p ../../dist
+          zip -r ../../dist/eoffice-chrome-${VERSION}.zip . \
+            -x "node_modules/*" "*.git*" "package*.json" "tsconfig*"
+
+      - name: Upload Chrome artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension
+          path: dist/eoffice-chrome-*.zip
+
+  build-firefox:
+    if: >
+      github.event_name == 'workflow_dispatch' && (inputs.target == 'firefox' || inputs.target == 'all') ||
+      startsWith(github.ref, 'refs/tags/eoffice-firefox') ||
+      (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install web-ext
+        run: npm install -g web-ext
+
+      - name: Build Firefox extension (.xpi)
+        working-directory: extensions/browser
+        run: |
+          VERSION="${GITHUB_REF_NAME#eoffice-firefox-v}"
+          [ "$VERSION" = "$GITHUB_REF_NAME" ] && VERSION="0.0.0-dev"
+
+          # Create Firefox-compatible manifest (add browser_specific_settings)
+          jq --arg v "$VERSION" '
+            .version = $v |
+            .browser_specific_settings = {
+              "gecko": {
+                "id": "eoffice@embeddedos.org",
+                "strict_min_version": "109.0",
+                "update_url": "https://embeddedos-org.github.io/eApps/updates/firefox-updates.json"
+              }
+            }
+          ' manifest.json > manifest_ff.json && mv manifest_ff.json manifest.json
+
+          # Build .xpi via web-ext
+          mkdir -p ../../dist
+          web-ext build --artifacts-dir ../../dist --filename eoffice-firefox-${VERSION}.xpi \
+            --ignore-files "node_modules" "package*.json" "tsconfig*"
+
+      - name: Upload Firefox artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firefox-extension
+          path: dist/eoffice-firefox-*.xpi
+
+  release:
+    needs: [build-chrome, build-firefox]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Browser Extension ${{ github.ref_name }}"
+          body: |
+            ## Browser Extension Release
+
+            ### Installation
+            **Chrome:**
+            1. Download the `.zip` file below
+            2. Go to `chrome://extensions/`
+            3. Enable "Developer mode"
+            4. Click "Load unpacked" and select the extracted folder
+
+            **Firefox:**
+            1. Download the `.xpi` file below
+            2. Go to `about:addons`
+            3. Click gear icon → "Install Add-on From File"
+            4. Select the `.xpi` file
+          files: dist/*
+
+  update-auto-update-manifest:
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Chrome update manifest
+        run: |
+          VERSION="${GITHUB_REF_NAME#*-v}"
+          TAG="${GITHUB_REF_NAME}"
+          mkdir -p updates
+
+          cat > updates/chrome-updates.xml << EOF
+          <?xml version='1.0' encoding='UTF-8'?>
+          <gupdate xmlns='http://www.google.com/update2/response' protocol='2.0'>
+            <app appid='eoffice-extension-id'>
+              <updatecheck codebase='https://github.com/embeddedos-org/eApps/releases/download/${TAG}/eoffice-chrome-${VERSION}.zip' version='${VERSION}' />
+            </app>
+          </gupdate>
+          EOF
+
+      - name: Generate Firefox update manifest
+        run: |
+          VERSION="${GITHUB_REF_NAME#*-v}"
+          TAG="${GITHUB_REF_NAME}"
+
+          cat > updates/firefox-updates.json << EOF
+          {
+            "addons": {
+              "eoffice@embeddedos.org": {
+                "updates": [
+                  {
+                    "version": "${VERSION}",
+                    "update_link": "https://github.com/embeddedos-org/eApps/releases/download/${TAG}/eoffice-firefox-${VERSION}.xpi"
+                  }
+                ]
+              }
+            }
+          }
+          EOF
+
+      - name: Commit update manifests
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add updates/
+          git diff --cached --quiet || git commit -m "chore: update browser extension auto-update manifests"
+          git push

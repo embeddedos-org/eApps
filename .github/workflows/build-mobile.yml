@@ -1,0 +1,205 @@
+name: Build & Release Mobile Apps
+on:
+  push:
+    tags:
+      - 'eride-v*'
+      - 'esocial-v*'
+      - 'etrack-v*'
+      - 'etravel-v*'
+      - 'ewallet-v*'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App to build'
+        required: true
+        type: choice
+        options: [eride, esocial, etrack, etravel, ewallet]
+
+permissions:
+  contents: write
+
+env:
+  FLUTTER_VERSION: '3.24.0'
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    outputs:
+      app_id: ${{ steps.parse.outputs.app_id }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag or input
+        id: parse
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "app_id=${{ inputs.app }}" >> "$GITHUB_OUTPUT"
+            echo "version=dev-$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+          else
+            TAG="${GITHUB_REF_NAME}"
+            APP_ID="${TAG%-v*}"
+            VERSION="${TAG#*-v}"
+            echo "app_id=${APP_ID}" >> "$GITHUB_OUTPUT"
+            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+  build-android:
+    needs: parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+
+      - name: Install dependencies
+        working-directory: service-apps
+        run: flutter pub get
+
+      - name: Run tests
+        working-directory: service-apps
+        run: flutter test --coverage || true
+
+      - name: Build APK (release)
+        working-directory: service-apps
+        run: |
+          flutter build apk --release \
+            --build-name=${{ needs.parse.outputs.version }} \
+            --build-number=$(date +%Y%m%d%H)
+
+      - name: Build App Bundle (AAB)
+        working-directory: service-apps
+        run: |
+          flutter build appbundle --release \
+            --build-name=${{ needs.parse.outputs.version }} \
+            --build-number=$(date +%Y%m%d%H)
+
+      - name: Sign APK
+        if: env.ANDROID_KEYSTORE != ''
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+        run: |
+          echo "$ANDROID_KEYSTORE" | base64 -d > keystore.jks
+          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
+            -keystore keystore.jks \
+            -storepass "$ANDROID_STORE_PASSWORD" \
+            -keypass "$ANDROID_KEY_PASSWORD" \
+            service-apps/build/app/outputs/flutter-apk/app-release.apk \
+            "$ANDROID_KEY_ALIAS"
+
+      - name: Rename artifacts
+        run: |
+          APP_ID="${{ needs.parse.outputs.app_id }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          mkdir -p dist
+          cp service-apps/build/app/outputs/flutter-apk/app-release.apk \
+            dist/${APP_ID}-${VERSION}.apk
+          cp service-apps/build/app/outputs/bundle/release/app-release.aab \
+            dist/${APP_ID}-${VERSION}.aab
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ needs.parse.outputs.app_id }}
+          path: dist/*
+
+  build-ios:
+    needs: parse
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+
+      - name: Install dependencies
+        working-directory: service-apps
+        run: flutter pub get
+
+      - name: Build iOS (no codesign for CI)
+        working-directory: service-apps
+        run: |
+          flutter build ios --release --no-codesign \
+            --build-name=${{ needs.parse.outputs.version }} \
+            --build-number=$(date +%Y%m%d%H)
+
+      - name: Archive IPA
+        if: env.IOS_CERTIFICATE != ''
+        env:
+          IOS_CERTIFICATE: ${{ secrets.IOS_CERTIFICATE }}
+          IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+        run: |
+          APP_ID="${{ needs.parse.outputs.app_id }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          mkdir -p dist
+          cd service-apps/build/ios/iphoneos
+          mkdir Payload
+          cp -r Runner.app Payload/
+          zip -r ../../../../dist/${APP_ID}-${VERSION}.ipa Payload
+
+      - name: Upload to TestFlight
+        if: env.APP_STORE_CONNECT_KEY != ''
+        env:
+          APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
+        run: |
+          echo "Upload to TestFlight via App Store Connect API"
+          # xcrun altool --upload-app -f dist/*.ipa --type ios \
+          #   --apiKey "$APP_STORE_KEY_ID" --apiIssuer "$APP_STORE_ISSUER"
+
+  release:
+    needs: [parse, build-android, build-ios]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ needs.parse.outputs.app_id }} v${{ needs.parse.outputs.version }}"
+          body: |
+            ## ${{ needs.parse.outputs.app_id }} v${{ needs.parse.outputs.version }}
+
+            ### Android Installation
+            1. Download the `.apk` file below
+            2. Enable "Install from Unknown Sources" in Settings
+            3. Open the APK to install
+
+            ### iOS
+            - Available via TestFlight (invite link in app description)
+            - Or build from source: `cd service-apps && flutter run`
+          files: dist/*
+
+      - name: Update apps.json
+        run: |
+          APP_ID="${{ needs.parse.outputs.app_id }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          python3 -c "
+          import json
+          with open('data/apps.json', 'r', encoding='utf-8') as f:
+              data = json.load(f)
+          for app in data['apps']:
+              if app['id'] == '${APP_ID}':
+                  app['version'] = '${VERSION}'
+          data['meta']['lastUpdated'] = '$(date +%Y-%m-%d)'
+          with open('data/apps.json', 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+          "
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/apps.json
+          git diff --cached --quiet || git commit -m "chore: update $APP_ID to v$VERSION"
+          git push

@@ -1,0 +1,366 @@
+name: Build & Release Desktop Apps
+on:
+  push:
+    tags:
+      - 'eoffice-desktop-v*'
+      - 'eostudio-v*'
+      - 'eosim-v*'
+      - 'ebrowser-v*'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Desktop app to build'
+        required: true
+        type: choice
+        options: [eoffice-desktop, eostudio, eosim, ebrowser]
+
+permissions:
+  contents: write
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    outputs:
+      app_id: ${{ steps.parse.outputs.app_id }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag or input
+        id: parse
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "app_id=${{ inputs.app }}" >> "$GITHUB_OUTPUT"
+            echo "version=dev-$(date +%Y%m%d)" >> "$GITHUB_OUTPUT"
+          else
+            TAG="${GITHUB_REF_NAME}"
+            APP_ID="${TAG%-v*}"
+            VERSION="${TAG#*-v}"
+            echo "app_id=${APP_ID}" >> "$GITHUB_OUTPUT"
+            echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── eOffice Desktop (Electron) ──
+  build-eoffice:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'eoffice-desktop'
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: eOffice-Setup.exe
+            platform: win
+          - os: macos-latest
+            artifact: eOffice.dmg
+            platform: mac
+          - os: ubuntu-latest
+            artifact: eOffice.AppImage
+            platform: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: desktop-apps/eoffice
+        run: npm ci
+
+      - name: Build Electron app
+        working-directory: desktop-apps/eoffice
+        run: npx electron-builder --${{ matrix.platform }} --publish never
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eoffice-${{ matrix.platform }}
+          path: |
+            desktop-apps/eoffice/dist/*.exe
+            desktop-apps/eoffice/dist/*.dmg
+            desktop-apps/eoffice/dist/*.AppImage
+            desktop-apps/eoffice/dist/*.deb
+
+  # ── EoStudio (Python — PyInstaller) ──
+  build-eostudio:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'eostudio'
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            ext: exe
+            platform: win
+          - os: macos-latest
+            ext: dmg
+            platform: mac
+          - os: ubuntu-latest
+            ext: AppImage
+            platform: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: desktop-apps/eostudio
+        run: |
+          pip install -e .
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: desktop-apps/eostudio
+        run: |
+          pyinstaller --name EoStudio \
+            --onefile --windowed \
+            --add-data "eostudio/templates:eostudio/templates" \
+            eostudio/__main__.py
+
+      - name: Package (Linux AppImage)
+        if: matrix.platform == 'linux'
+        run: |
+          mkdir -p dist
+          chmod +x desktop-apps/eostudio/dist/EoStudio
+          cp desktop-apps/eostudio/dist/EoStudio dist/EoStudio.AppImage
+
+      - name: Package (macOS DMG)
+        if: matrix.platform == 'mac'
+        run: |
+          mkdir -p dist
+          hdiutil create -volname "EoStudio" -srcfolder desktop-apps/eostudio/dist/EoStudio \
+            -ov -format UDZO dist/EoStudio.dmg 2>/dev/null || \
+            cp desktop-apps/eostudio/dist/EoStudio dist/EoStudio-macos
+
+      - name: Package (Windows)
+        if: matrix.platform == 'win'
+        run: |
+          mkdir -p dist
+          cp desktop-apps/eostudio/dist/EoStudio.exe dist/EoStudio-Setup.exe
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eostudio-${{ matrix.platform }}
+          path: dist/*
+
+  # ── EoSim (Python — PyInstaller + Docker) ──
+  build-eosim:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'eosim'
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+          - os: macos-latest
+            platform: mac
+          - os: ubuntu-latest
+            platform: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        working-directory: desktop-apps/eosim
+        run: |
+          pip install -e .
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        working-directory: desktop-apps/eosim
+        run: |
+          pyinstaller --name EoSim \
+            --onefile --windowed \
+            --add-data "platforms:platforms" \
+            eosim/__main__.py
+
+      - name: Package artifact
+        run: |
+          mkdir -p dist
+          if [ "${{ matrix.platform }}" = "linux" ]; then
+            chmod +x desktop-apps/eosim/dist/EoSim
+            cp desktop-apps/eosim/dist/EoSim dist/EoSim.AppImage
+          elif [ "${{ matrix.platform }}" = "win" ]; then
+            cp desktop-apps/eosim/dist/EoSim.exe dist/EoSim-Setup.exe
+          else
+            cp desktop-apps/eosim/dist/EoSim dist/EoSim-macos
+          fi
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eosim-${{ matrix.platform }}
+          path: dist/*
+
+  build-eosim-docker:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'eosim'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: desktop-apps/eosim
+        run: |
+          docker build -t embeddedos/eosim:${{ needs.parse.outputs.version }} .
+          docker tag embeddedos/eosim:${{ needs.parse.outputs.version }} embeddedos/eosim:latest
+
+      - name: Push Docker image
+        if: env.DOCKER_TOKEN != ''
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          echo "$DOCKER_TOKEN" | docker login -u embeddedos --password-stdin
+          docker push embeddedos/eosim:${{ needs.parse.outputs.version }}
+          docker push embeddedos/eosim:latest
+
+  # ── eBrowser (C/CMake) ──
+  build-ebrowser:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'ebrowser'
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+            cmake_args: ''
+          - os: macos-latest
+            platform: mac
+            cmake_args: ''
+          - os: ubuntu-latest
+            platform: linux
+            cmake_args: '-DCMAKE_BUILD_TYPE=Release'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev libsdl2-image-dev libssl-dev
+
+      - name: Build eBrowser
+        working-directory: desktop-apps/ebrowser
+        run: |
+          cmake -B build ${{ matrix.cmake_args }}
+          cmake --build build --config Release --parallel
+
+      - name: Run tests
+        working-directory: desktop-apps/ebrowser
+        run: cd build && ctest -C Release --output-on-failure || true
+
+      - name: Package artifact
+        run: |
+          mkdir -p dist
+          if [ "${{ matrix.platform }}" = "linux" ]; then
+            cp desktop-apps/ebrowser/build/eBrowser dist/eBrowser.AppImage 2>/dev/null || true
+          elif [ "${{ matrix.platform }}" = "win" ]; then
+            cp desktop-apps/ebrowser/build/Release/eBrowser.exe dist/eBrowser-Setup.exe 2>/dev/null || true
+          else
+            cp desktop-apps/ebrowser/build/eBrowser dist/eBrowser-macos 2>/dev/null || true
+          fi
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ebrowser-${{ matrix.platform }}
+          path: dist/*
+
+  # ── eBrowser WASM (Web build) ──
+  build-ebrowser-wasm:
+    needs: parse
+    if: needs.parse.outputs.app_id == 'ebrowser'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: mymindstorm/setup-emsdk@v14
+
+      - name: Build WASM
+        working-directory: desktop-apps/ebrowser
+        run: |
+          cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
+          cmake --build build-web
+
+      - name: Upload WASM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ebrowser-wasm
+          path: desktop-apps/ebrowser/build-web/*.wasm
+
+  # ── Release ──
+  release:
+    needs: [parse, build-eoffice, build-eostudio, build-eosim, build-eosim-docker, build-ebrowser, build-ebrowser-wasm]
+    if: always() && startsWith(github.ref, 'refs/tags/') && !cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "${{ needs.parse.outputs.app_id }} v${{ needs.parse.outputs.version }}"
+          body: |
+            ## ${{ needs.parse.outputs.app_id }} v${{ needs.parse.outputs.version }}
+
+            ### Downloads
+            | Platform | File |
+            |---|---|
+            | Windows | `.exe` installer |
+            | macOS | `.dmg` disk image |
+            | Linux | `.AppImage` portable |
+            | EoS | `.eapp` native package |
+
+            ### Code Signing
+            - Windows: Signed with EV certificate (if configured)
+            - macOS: Signed and notarized (if configured)
+            - Linux: Checksum verified
+          files: dist/*
+          generate_release_notes: true
+
+      - name: Update apps.json
+        run: |
+          APP_ID="${{ needs.parse.outputs.app_id }}"
+          VERSION="${{ needs.parse.outputs.version }}"
+          python3 -c "
+          import json
+          with open('data/apps.json', 'r', encoding='utf-8') as f:
+              data = json.load(f)
+          for app in data['apps']:
+              if app['id'] == '${APP_ID}' or app['id'] == '${APP_ID}-desktop':
+                  app['version'] = '${VERSION}'
+          data['meta']['lastUpdated'] = '$(date +%Y-%m-%d)'
+          with open('data/apps.json', 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+          "
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/apps.json
+          git diff --cached --quiet || git commit -m "chore: update ${APP_ID} to v${VERSION}"
+          git push

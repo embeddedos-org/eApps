@@ -1,0 +1,118 @@
+name: Build & Release VS Code Extension
+on:
+  push:
+    tags:
+      - 'eoffice-vscode-v*'
+    branches: [master]
+    paths:
+      - 'extensions/vscode/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: extensions/vscode
+        run: npm ci
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_NAME" == eoffice-vscode-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#eoffice-vscode-v}"
+          else
+            VERSION="0.0.0-dev.$(date +%Y%m%d%H%M%S)"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Update package version
+        working-directory: extensions/vscode
+        run: |
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' package.json > tmp.json
+          mv tmp.json package.json
+
+      - name: Compile TypeScript
+        working-directory: extensions/vscode
+        run: npm run compile 2>/dev/null || npx tsc -p tsconfig.json --noEmit false 2>/dev/null || true
+
+      - name: Package .vsix
+        working-directory: extensions/vscode
+        run: |
+          mkdir -p ../../dist
+          vsce package --no-dependencies -o ../../dist/eoffice-vscode-${{ steps.version.outputs.version }}.vsix
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-extension
+          path: dist/*.vsix
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vscode-extension
+          path: dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "eOffice for VS Code ${{ github.ref_name }}"
+          body: |
+            ## eOffice for VS Code
+
+            ### Installation
+            ```bash
+            code --install-extension eoffice-vscode-*.vsix
+            ```
+
+            Or install from VS Code:
+            1. Open Extensions panel (`Ctrl+Shift+X`)
+            2. Click `...` menu → "Install from VSIX..."
+            3. Select the downloaded `.vsix` file
+          files: dist/*.vsix
+
+  publish-marketplace:
+    needs: release
+    if: startsWith(github.ref, 'refs/tags/') && vars.PUBLISH_VSCE == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: vscode-extension
+          path: dist
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install vsce
+        run: npm install -g @vscode/vsce
+
+      - name: Publish to VS Code Marketplace
+        run: vsce publish --packagePath dist/*.vsix
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
