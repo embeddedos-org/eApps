@@ -111,6 +111,7 @@ if(EAPPS_BUILD_SECURITY)
     add_subdirectory(apps/evpn)
     add_subdirectory(apps/eguard)
     add_subdirectory(apps/evirustower)
+    add_subdirectory(apps/ebot)
 endif()
 
 if(EAPPS_BUILD_WEB)
