@@ -528,8 +528,8 @@
       "repo": "https://github.com/embeddedos-org/eOffice",
       "source": "desktop-apps/eoffice/browser/",
       "version": "1.0.0",
-      "releaseUrl": "https://embeddedos-org.github.io/eOffice/",
-      "downloadUrl": "https://embeddedos-org.github.io/eOffice/",
+      "releaseUrl": "https://embeddedos-org.github.io/eApps/",
+      "downloadUrl": "https://embeddedos-org.github.io/eApps/",
       "tags": [
         "productivity",
         "office",
@@ -555,13 +555,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/efiles/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/efiles-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0",
       "tags": [
         "utility",
         "files",
         "manager",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0/efiles-1.0.0.zip"
     },
     {
       "id": "emusic",
@@ -581,13 +582,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/emusic/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/emusic-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0",
       "tags": [
         "media",
         "music",
         "player",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0/emusic-1.0.0.zip"
     },
     {
       "id": "evideo",
@@ -607,13 +609,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evideo/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/evideo-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0",
       "tags": [
         "media",
         "video",
         "player",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0/evideo-1.0.0.zip"
     },
     {
       "id": "egallery",
@@ -633,13 +636,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/egallery/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/egallery-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0",
       "tags": [
         "media",
         "photos",
         "gallery",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0/egallery-1.0.0.zip"
     },
     {
       "id": "echat",
@@ -659,13 +663,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/echat/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/echat-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0",
       "tags": [
         "communication",
         "messaging",
         "chat",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0/echat-1.0.0.zip"
     },
     {
       "id": "enote",
@@ -685,13 +690,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/enote/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/enote-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0",
       "tags": [
         "productivity",
         "notes",
         "markdown",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0/enote-1.0.0.zip"
     },
     {
       "id": "ecal",
@@ -711,13 +717,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ecal/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ecal-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0",
       "tags": [
         "productivity",
         "calendar",
         "schedule",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0/ecal-1.0.0.zip"
     },
     {
       "id": "eclock",
@@ -737,13 +744,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eclock/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eclock-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0",
       "tags": [
         "utility",
         "clock",
         "alarm",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0/eclock-1.0.0.zip"
     },
     {
       "id": "esettings",
@@ -762,13 +770,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esettings/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/esettings-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0",
       "tags": [
         "system",
         "settings",
         "config",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0/esettings-1.0.0.zip"
     },
     {
       "id": "ewifi",
@@ -785,13 +794,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ewifi/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ewifi-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0",
       "tags": [
         "network",
         "wifi",
         "system",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0/ewifi-1.0.0.zip"
     },
     {
       "id": "evpn",
@@ -810,14 +820,15 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evpn/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/evpn-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0",
       "tags": [
         "network",
         "vpn",
         "security",
         "privacy",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0/evpn-1.0.0.zip"
     },
     {
       "id": "essh",
@@ -834,13 +845,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/essh/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/essh-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0",
       "tags": [
         "devtools",
         "ssh",
         "terminal",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0/essh-1.0.0.zip"
     },
     {
       "id": "eftp",
@@ -857,13 +869,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eftp/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eftp-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0",
       "tags": [
         "network",
         "ftp",
         "file-transfer",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0/eftp-1.0.0.zip"
     },
     {
       "id": "epdf",
@@ -883,13 +896,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/epdf/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/epdf-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0",
       "tags": [
         "productivity",
         "pdf",
         "reader",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0/epdf-1.0.0.zip"
     },
     {
       "id": "epaint",
@@ -909,13 +923,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/epaint/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/epaint-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0",
       "tags": [
         "creative",
         "drawing",
         "paint",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0/epaint-1.0.0.zip"
     },
     {
       "id": "econverter",
@@ -935,13 +950,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/econverter/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/econverter-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0",
       "tags": [
         "utility",
         "converter",
         "tools",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0/econverter-1.0.0.zip"
     },
     {
       "id": "ezip",
@@ -958,13 +974,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ezip/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ezip-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0",
       "tags": [
         "utility",
         "archive",
         "compression",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0/ezip-1.0.0.zip"
     },
     {
       "id": "eguard",
@@ -981,13 +998,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eguard/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eguard-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0",
       "tags": [
         "security",
         "antivirus",
         "firewall",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0/eguard-1.0.0.zip"
     },
     {
       "id": "ecleaner",
@@ -1005,13 +1023,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ecleaner/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ecleaner-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0",
       "tags": [
         "utility",
         "cleaner",
         "optimizer",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0/ecleaner-1.0.0.zip"
     },
     {
       "id": "eremote",
@@ -1028,13 +1047,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eremote/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eremote-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0",
       "tags": [
         "remote",
         "rdp",
         "vnc",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0/eremote-1.0.0.zip"
     },
     {
       "id": "evnc",
@@ -1051,12 +1071,13 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evnc/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/evnc-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0",
       "tags": [
         "remote",
         "vnc",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0/evnc-1.0.0.zip"
     },
     {
       "id": "eserial",
@@ -1073,14 +1094,15 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eserial/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eserial-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0",
       "tags": [
         "devtools",
         "serial",
         "embedded",
         "debug",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0/eserial-1.0.0.zip"
     },
     {
       "id": "ebot",
@@ -1100,13 +1122,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebot/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ebot-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0",
       "tags": [
         "ai",
         "chatbot",
         "assistant",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0/ebot-1.0.0.zip"
     },
     {
       "id": "etools",
@@ -1123,13 +1146,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etools/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/etools-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0",
       "tags": [
         "devtools",
         "utility",
         "system",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0/etools-1.0.0.zip"
     },
     {
       "id": "etunnel",
@@ -1146,13 +1170,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etunnel/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/etunnel-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0",
       "tags": [
         "network",
         "tunnel",
         "port-forwarding",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0/etunnel-1.0.0.zip"
     },
     {
       "id": "snake",
@@ -1172,13 +1197,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/snake/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/snake-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0",
       "tags": [
         "game",
         "arcade",
         "classic",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0/snake-1.0.0.zip"
     },
     {
       "id": "tetris",
@@ -1198,13 +1224,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/tetris/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/tetris-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0",
       "tags": [
         "game",
         "puzzle",
         "classic",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0/tetris-1.0.0.zip"
     },
     {
       "id": "minesweeper",
@@ -1224,13 +1251,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/minesweeper/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/minesweeper-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0",
       "tags": [
         "game",
         "puzzle",
         "classic",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0/minesweeper-1.0.0.zip"
     },
     {
       "id": "echess",
@@ -1250,13 +1278,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/echess/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/echess-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0",
       "tags": [
         "game",
         "board",
         "strategy",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0/echess-1.0.0.zip"
     },
     {
       "id": "dice",
@@ -1276,12 +1305,13 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/dice/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/dice-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0",
       "tags": [
         "game",
         "utility",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0/dice-1.0.0.zip"
     },
     {
       "id": "eplay",
@@ -1300,13 +1330,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eplay/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eplay-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0",
       "tags": [
         "media",
         "launcher",
         "games",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0/eplay-1.0.0.zip"
     },
     {
       "id": "ehmi",
@@ -1322,14 +1353,15 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ehmi/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ehmi-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0",
       "tags": [
         "iot",
         "hmi",
         "dashboard",
         "automotive",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0/ehmi-1.0.0.zip"
     },
     {
       "id": "esurfer",
@@ -1346,13 +1378,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esurfer/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/esurfer-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0",
       "tags": [
         "web",
         "browser",
         "search",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0/esurfer-1.0.0.zip"
     },
     {
       "id": "etimer",
@@ -1372,13 +1405,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etimer/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/etimer-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0",
       "tags": [
         "productivity",
         "timer",
         "pomodoro",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0/etimer-1.0.0.zip"
     },
     {
       "id": "erunner",
@@ -1395,13 +1429,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/erunner/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/erunner-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0",
       "tags": [
         "utility",
         "launcher",
         "system",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0/erunner-1.0.0.zip"
     },
     {
       "id": "eviewer",
@@ -1420,13 +1455,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eviewer/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eviewer-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0",
       "tags": [
         "utility",
         "viewer",
         "files",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0/eviewer-1.0.0.zip"
     },
     {
       "id": "ebuffer",
@@ -1443,13 +1479,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebuffer/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/ebuffer-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0",
       "tags": [
         "utility",
         "clipboard",
         "buffer",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0/ebuffer-1.0.0.zip"
     },
     {
       "id": "eslice",
@@ -1466,13 +1503,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eslice/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/eslice-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0",
       "tags": [
         "utility",
         "screenshot",
         "capture",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0/eslice-1.0.0.zip"
     },
     {
       "id": "esession",
@@ -1486,13 +1524,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esession/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/esession-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0",
       "tags": [
         "system",
         "session",
         "desktop",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0/esession-1.0.0.zip"
     },
     {
       "id": "suite",
@@ -1511,13 +1550,14 @@
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/suite/",
       "version": "1.0.0",
-      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/tag/suite-v1.0.0",
+      "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0",
       "tags": [
         "launcher",
         "suite",
         "hub",
         "lvgl"
-      ]
+      ],
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0/suite-1.0.0.zip"
     },
     {
       "id": "eosim-desktop",
