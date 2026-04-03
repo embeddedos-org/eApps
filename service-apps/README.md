@@ -36,4 +36,20 @@ cd eoffice-server && docker-compose up -d
 - `firestore.indexes.json` — Firestore indexes
 - `docker-compose.yml` — Docker Compose for eOffice Server
 
-All service endpoints and versions registered in `data/apps.json`.
+All service endpoints and versions registered in `data/apps.json` and listed on the **[EoS App Store](https://embeddedos-org.github.io/eApps/)**.
+
+## CI/CD
+
+- **Firebase backend:** Deploy via `firebase deploy`
+- **eOffice Server:** Docker build/push via CI
+- **Mobile apps:** See `.github/workflows/build-mobile.yml`
+
+```bash
+# Tag to release mobile apps
+git tag eride-v2.0.0 && git push origin eride-v2.0.0
+git tag esocial-v1.1.0 && git push origin esocial-v1.1.0
+```
+
+Builds produce:
+- `.apk` + `.aab` (Android — signed if `ANDROID_KEYSTORE` secret configured)
+- `.ipa` (iOS — uploaded to TestFlight if `IOS_CERTIFICATE` secret configured)

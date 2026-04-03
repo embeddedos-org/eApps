@@ -39,4 +39,22 @@ cmake --build build-android
 | `.aab` | Google Play Store (future) |
 | TestFlight | iOS beta distribution |
 
-All releases registered in `data/apps.json`.
+All releases registered in `data/apps.json` and listed on the **[EoS App Store](https://embeddedos-org.github.io/eApps/)**.
+
+## CI/CD
+
+Automated via `.github/workflows/build-mobile.yml`:
+
+```bash
+# Tag to release
+git tag eride-v2.0.0 && git push origin eride-v2.0.0
+git tag esocial-v1.1.0 && git push origin esocial-v1.1.0
+```
+
+This triggers:
+1. Flutter tests
+2. Android APK + AAB build (signed if `ANDROID_KEYSTORE` configured)
+3. iOS build + TestFlight upload (if `IOS_CERTIFICATE` configured)
+4. GitHub Release with all artifacts
+5. Auto-update `data/apps.json` with new version
+6. Redeploy App Store on GitHub Pages

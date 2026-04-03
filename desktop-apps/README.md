@@ -45,4 +45,20 @@ cd ebrowser && mkdir build && cd build && cmake .. && cmake --build .
 | EoSim | `.exe` installer | `.dmg` | `.AppImage` / Docker |
 | eBrowser | `.exe` installer | `.dmg` | `.AppImage` |
 
-All releases published to [GitHub Releases](https://github.com/embeddedos-org/eApps/releases) and registered in `data/apps.json`.
+All releases published to [GitHub Releases](https://github.com/embeddedos-org/eApps/releases), registered in `data/apps.json`, and listed on the **[EoS App Store](https://embeddedos-org.github.io/eApps/)**.
+
+## CI/CD
+
+Automated via `.github/workflows/build-desktop.yml`:
+- **eOffice:** Electron Builder → `.exe` `.dmg` `.AppImage` (signed if secrets configured)
+- **EoStudio:** PyInstaller → `.exe` `.dmg` `.AppImage`
+- **EoSim:** PyInstaller → `.exe` `.dmg` `.AppImage` + Docker image to Docker Hub
+- **eBrowser:** CMake → native binaries + WASM via Emscripten
+
+```bash
+# Tag to release
+git tag eoffice-desktop-v1.1.0 && git push origin eoffice-desktop-v1.1.0
+git tag eostudio-v1.2.0 && git push origin eostudio-v1.2.0
+git tag eosim-v1.0.0 && git push origin eosim-v1.0.0
+git tag ebrowser-v1.0.0 && git push origin ebrowser-v1.0.0
+```

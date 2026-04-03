@@ -5,9 +5,23 @@
 **eApps** is the unified hub for the entire EoS ecosystem. It merges content from
 [eOffice](https://github.com/embeddedos-org/eOffice),
 [EoStudio](https://github.com/embeddedos-org/EoStudio),
+[EoSim](https://github.com/embeddedos-org/EoSim),
 [eServiceApps](https://github.com/embeddedos-org/eServiceApps), and
 [eBrowser](https://github.com/embeddedos-org/eBrowser)
-into a single repository with a beautiful marketplace website served via GitHub Pages.
+into a single repository with a beautiful app store served via GitHub Pages at
+**[embeddedos-org.github.io/eApps](https://embeddedos-org.github.io/eApps/)**.
+
+### Hosting Model
+
+| Component | Hosted On |
+|---|---|
+| **App Store frontend** | GitHub Pages (`embeddedos-org.github.io/eApps/`) |
+| **App catalog** | `data/apps.json` in this repo (auto-updated by CI) |
+| **Binary releases** | GitHub Releases (`.exe` `.dmg` `.apk` `.zip` `.xpi` `.vsix` etc.) |
+| **Auto-update manifests** | GitHub Pages (`updates/chrome-updates.xml`, `updates/firefox-updates.json`) |
+| **Docker images** | Docker Hub (`embeddedos/eosim`) |
+| **VS Code extension** | VS Code Marketplace (optional, via `VSCE_PAT` secret) |
+| **iOS apps** | TestFlight (via `IOS_CERTIFICATE` secret) |
 
 ---
 
