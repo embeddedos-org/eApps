@@ -1,0 +1,16 @@
+name: "CodeQL — Custom Configuration"
+
+paths:
+  - core/
+  - apps/
+  - port/
+
+paths-ignore:
+  - extern/
+  - tests/
+  - docs/
+  - cmake/
+  - '**/*.md'
+
+queries:
+  - uses: security-and-quality

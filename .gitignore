@@ -1,101 +1,83 @@
-# Gradle
-.gradle/
+# Build directories
 build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+build-*/
+out/
+cmake-build-*/
 
-# IDE
-.idea/
-*.iml
-*.ipr
-*.iws
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+!cmake/*.cmake
+
+# Compiled objects
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Embedded firmware
+*.elf
+*.bin
+*.hex
+*.map
+*.srec
+
+# WASM output
+*.wasm
+*.js
+!port/web/shell.html
+
+# IDE and editor files
 .vscode/
+.idea/
 *.swp
 *.swo
 *~
+*.kate-swp
+.project
+.cproject
+.settings/
 
-# Kotlin
-*.class
-*.jar
-*.war
-*.ear
-
-# Android
-*.apk
-*.aab
-*.dex
-*.ap_
-local.properties
-captures/
-.externalNativeBuild/
-.cxx/
-
-# iOS
-*.xcworkspace
-*.xcuserdata
-Pods/
-DerivedData/
-*.ipa
-
-# macOS
+# OS files
 .DS_Store
-
-# Windows
 Thumbs.db
-ehthumbs.db
 Desktop.ini
 
-# Node (for web builds)
+# Debug
+*.dSYM/
+core
+vgcore.*
+
+# Test artifacts
+Testing/
+*.gcno
+*.gcda
+*.gcov
+coverage/
+lcov.info
+
+# Package artifacts
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# Dependency directories
 node_modules/
-dist/
 
-# Kotlin/Native
-*.klib
-*.knm
-
-# Test outputs
-test-results/
-test-reports/
-
-# Secrets
-*.keystore
-*.jks
-signing.properties
-google-services.json
-# Gradle
-.gradle/
-build/
-!gradle/wrapper/gradle-wrapper.jar
-
-# IDE
-.idea/
-*.iml
-.vscode/
-*.swp
-
-# Kotlin
-*.class
-*.jar
-*.war
-
-# Android
-local.properties
-*.apk
-*.aab
-*.keystore
-*.jks
-
-# iOS
-*.xcworkspace
-*.xcuserdata
-Pods/
-
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Build outputs
-out/
-dist/
+# SBOM output
+sbom/*.json
+!sbom/sbom-template.json

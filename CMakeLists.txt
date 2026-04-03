@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 project(eapps
-    VERSION 0.1.0
+    VERSION 2.0.0
     DESCRIPTION "EoS Application Suite — productivity, media, games, networking tools"
     LANGUAGES C
 )

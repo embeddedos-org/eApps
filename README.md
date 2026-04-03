@@ -3,7 +3,10 @@
 [![CI](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml)
 [![Nightly](https://github.com/embeddedos-org/eApps/actions/workflows/nightly.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/nightly.yml)
 [![Release](https://github.com/embeddedos-org/eApps/actions/workflows/release-suite.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/release-suite.yml)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)]()
+[![CodeQL](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml)
+[![OSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/embeddedos-org/eApps?label=scorecard)](https://securityscorecards.dev/viewer/?uri=github.com/embeddedos-org/eApps)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)]()
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 **38 apps. One C codebase. Every platform.**
 
@@ -243,6 +246,14 @@ ctest --test-dir build --output-on-failure
 ## Standards Compliance
 
 This project is part of the EoS ecosystem and aligns with international standards including ISO/IEC/IEEE 15288:2023, ISO/IEC 12207, ISO/IEC/IEEE 42010, ISO/IEC 25000, ISO/IEC 25010, ISO/IEC 27001, ISO/IEC 15408, IEC 61508, ISO 26262, DO-178C, FIPS 140-3, POSIX (IEEE 1003), WCAG 2.1, and more. See the [EoS Compliance Documentation](https://github.com/embeddedos-org/.github/tree/master/docs/compliance) for full details including NTIA SBOM, SPDX, CycloneDX, and OpenChain compliance.
+
+## 🤝 Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, coding guidelines, and PR process.
+
+## 🔒 Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md). **Do not open public issues for security bugs.**
 
 ## 📜 License
 
