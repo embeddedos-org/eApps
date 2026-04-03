@@ -1,0 +1,6 @@
+name: esp32s3-test
+platform: esp32s3
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

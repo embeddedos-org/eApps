@@ -1,0 +1,58 @@
+{
+  "name": "eoffice",
+  "version": "1.0.0",
+  "private": true,
+  "description": "eOffice Suite — AI-powered office productivity with eBot",
+  "workspaces": [
+    "packages/core",
+    "packages/ebot-client",
+    "packages/server",
+    "apps/edocs",
+    "apps/enotes",
+    "apps/esheets",
+    "apps/eslides",
+    "apps/email",
+    "apps/edb",
+    "apps/edrive",
+    "apps/econnect",
+    "apps/eforms",
+    "apps/esway",
+    "apps/eplanner",
+    "apps/launcher"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/launcher",
+    "dev:docs": "npm run dev --workspace=apps/edocs",
+    "dev:notes": "npm run dev --workspace=apps/enotes",
+    "dev:sheets": "npm run dev --workspace=apps/esheets",
+    "dev:slides": "npm run dev --workspace=apps/eslides",
+    "dev:email": "npm run dev --workspace=apps/email",
+    "dev:db": "npm run dev --workspace=apps/edb",
+    "dev:drive": "npm run dev --workspace=apps/edrive",
+    "dev:connect": "npm run dev --workspace=apps/econnect",
+    "dev:forms": "npm run dev --workspace=apps/eforms",
+    "dev:sway": "npm run dev --workspace=apps/esway",
+    "dev:planner": "npm run dev --workspace=apps/eplanner",
+    "dev:server": "npm run dev --workspace=packages/server",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "clean": "rm -rf node_modules packages/*/dist apps/*/dist"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.0"
+  },
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

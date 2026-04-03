@@ -1,0 +1,14 @@
+name: stm32l4
+display_name: ST STM32L476 (Low-Power)
+arch: arm
+engine: eosim
+class: mcu
+vendor: ST
+soc: STM32L476
+qemu:
+  machine: virt
+  cpu: cortex-m4
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0

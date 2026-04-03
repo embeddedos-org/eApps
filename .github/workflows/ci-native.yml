@@ -1,0 +1,60 @@
+name: CI — Native Apps
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'core/**'
+      - 'cmake/**'
+      - 'port/**'
+      - 'CMakeLists.txt'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/**'
+      - 'core/**'
+      - 'cmake/**'
+      - 'port/**'
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libsdl2-dev libsdl2-image-dev
+      - name: Build
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel
+      - name: Run tests
+        run: cd build && ctest --output-on-failure
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          cmake -B build
+          cmake --build build --config Release
+      - name: Run tests
+        run: cd build && ctest -C Release --output-on-failure
+
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: mymindstorm/setup-emsdk@v14
+      - name: Build WASM
+        run: |
+          cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
+          cmake --build build-web

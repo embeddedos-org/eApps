@@ -1,0 +1,15 @@
+name: android-x86
+display_name: "Android x86_64 (Emulator)"
+arch: x86_64
+engine: eosim
+class: mobile
+vendor: Google
+domain: consumer
+soc: "Generic x86_64 Android Emulator"
+runtime:
+  memory_mb: 2048
+  headless: true
+  display:
+    width: 1080
+    height: 1920
+    density: 420

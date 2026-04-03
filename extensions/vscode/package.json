@@ -1,0 +1,85 @@
+{
+  "name": "eoffice-vscode",
+  "displayName": "eOffice Suite",
+  "description": "Open Excel, CSV, database files with eDocs, eSheets, eNotes & eBot AI",
+  "version": "0.1.0",
+  "publisher": "embeddedos",
+  "license": "MIT",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other", "Visualization", "Data Science"],
+  "keywords": ["office", "excel", "csv", "spreadsheet", "document", "notes", "AI", "eBot"],
+  "icon": "assets/icon.png",
+  "activationEvents": [
+    "onCommand:eoffice.openDocs",
+    "onCommand:eoffice.openNotes",
+    "onCommand:eoffice.openSheets",
+    "onCommand:eoffice.ebotChat",
+    "onCustomEditor:eoffice.csvEditor",
+    "onCustomEditor:eoffice.docEditor"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "eoffice.openDocs", "title": "eOffice: Open eDocs", "icon": "$(file-text)" },
+      { "command": "eoffice.openNotes", "title": "eOffice: Open eNotes", "icon": "$(notebook)" },
+      { "command": "eoffice.openSheets", "title": "eOffice: Open eSheets", "icon": "$(table)" },
+      { "command": "eoffice.ebotChat", "title": "eOffice: Open eBot AI Chat", "icon": "$(hubot)" },
+      { "command": "eoffice.openLauncher", "title": "eOffice: Open Suite Launcher", "icon": "$(home)" },
+      { "command": "eoffice.summarizeSelection", "title": "eOffice: Summarize Selection with eBot" },
+      { "command": "eoffice.rewriteSelection", "title": "eOffice: Rewrite Selection with eBot" }
+    ],
+    "menus": {
+      "editor/context": [
+        { "command": "eoffice.summarizeSelection", "group": "eoffice", "when": "editorHasSelection" },
+        { "command": "eoffice.rewriteSelection", "group": "eoffice", "when": "editorHasSelection" }
+      ],
+      "editor/title": [
+        { "command": "eoffice.ebotChat", "group": "navigation" }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "eoffice-sidebar",
+          "title": "eOffice",
+          "icon": "assets/sidebar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "eoffice-sidebar": [
+        { "id": "eoffice-apps", "name": "Apps" },
+        { "id": "eoffice-recent", "name": "Recent Files" },
+        { "id": "eoffice-ebot", "name": "eBot AI" }
+      ]
+    },
+    "customEditors": [
+      {
+        "viewType": "eoffice.csvEditor",
+        "displayName": "eSheets CSV Editor",
+        "selector": [
+          { "filenamePattern": "*.csv" },
+          { "filenamePattern": "*.tsv" }
+        ],
+        "priority": "option"
+      }
+    ],
+    "keybindings": [
+      { "command": "eoffice.openDocs", "key": "ctrl+shift+d", "mac": "cmd+shift+d" },
+      { "command": "eoffice.openNotes", "key": "ctrl+shift+n", "mac": "cmd+shift+n" },
+      { "command": "eoffice.ebotChat", "key": "ctrl+shift+b", "mac": "cmd+shift+b" }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "@vscode/vsce": "^2.22.0"
+  }
+}

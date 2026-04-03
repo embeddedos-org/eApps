@@ -1,0 +1,6 @@
+name: vexpress-a15-test
+platform: vexpress-a15
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

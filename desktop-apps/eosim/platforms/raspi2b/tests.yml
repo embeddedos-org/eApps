@@ -1,0 +1,6 @@
+name: raspi2b-test
+platform: raspi2b
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

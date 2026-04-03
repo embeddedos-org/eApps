@@ -1,0 +1,14 @@
+name: arm64-eos
+display_name: ARM64 EoS RTOS
+arch: arm64
+engine: qemu
+qemu:
+  machine: virt
+  cpu: cortex-a53
+boot:
+  firmware: images/eos-arm64.bin
+  append: "console=ttyAMA0"
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

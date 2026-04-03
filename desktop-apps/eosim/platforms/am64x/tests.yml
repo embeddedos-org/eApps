@@ -1,0 +1,6 @@
+name: am64x-test
+platform: am64x
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

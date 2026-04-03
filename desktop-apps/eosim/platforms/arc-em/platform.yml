@@ -1,0 +1,14 @@
+name: arc-em
+display_name: Synopsys ARC EM (IoT)
+arch: arc
+engine: eosim
+class: mcu
+vendor: Synopsys
+soc: ARC-EM
+qemu:
+  machine: virt
+  cpu: em
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0

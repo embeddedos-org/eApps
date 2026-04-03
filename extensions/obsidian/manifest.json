@@ -1,0 +1,10 @@
+{
+  "id": "eoffice-sync",
+  "name": "eOffice Sync",
+  "version": "0.1.0",
+  "minAppVersion": "1.0.0",
+  "description": "Bidirectional sync with eOffice eNotes, eBot AI summarize & outline generation.",
+  "author": "embeddedos",
+  "authorUrl": "https://github.com/nicheOS/eOffice",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,7 @@
+name: mcu-boot-test
+platform: arm-mcu
+checks:
+  - type: timeout
+    seconds: 10
+  - type: serial_contains
+    value: "EoS"

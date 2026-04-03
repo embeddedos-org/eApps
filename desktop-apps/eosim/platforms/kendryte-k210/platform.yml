@@ -1,0 +1,14 @@
+name: kendryte-k210
+display_name: Kendryte K210 (AI RISC-V)
+arch: riscv64
+engine: eosim
+class: soc
+vendor: Kendryte
+soc: K210
+qemu:
+  machine: virt
+  cpu: rv64gc
+runtime:
+  memory_mb: 8192
+  headless: true
+  uart: sysbus.uart0

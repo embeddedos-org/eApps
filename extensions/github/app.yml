@@ -1,0 +1,35 @@
+# https://docs.github.com/en/apps/creating-github-apps/setting-up-a-github-app/creating-a-github-app-from-a-manifest
+name: eOffice GitHub Bot
+description: eBot AI-powered code review, issue tracking, and changelog generation for eOffice.
+url: http://localhost:3001
+
+# Webhook
+hook_attributes:
+  url: http://localhost:3001/api/github/webhook
+  active: true
+
+# Permissions
+default_permissions:
+  issues: write
+  pull_requests: write
+  contents: read
+  checks: write
+  statuses: write
+  metadata: read
+
+# Events
+default_events:
+  - issues
+  - issue_comment
+  - pull_request
+  - pull_request_review
+  - push
+  - create
+  - status
+  - check_run
+  - check_suite
+
+# OAuth
+callback_url: http://localhost:3001/api/github/callback
+setup_url: http://localhost:3001/api/github/setup
+public: false

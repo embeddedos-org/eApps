@@ -1,0 +1,14 @@
+name: beaglebone
+display_name: BeagleBone Black (AM335x)
+arch: arm
+engine: eosim
+class: sbc
+vendor: TI
+soc: AM335x
+qemu:
+  machine: virt
+  cpu: cortex-a8
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

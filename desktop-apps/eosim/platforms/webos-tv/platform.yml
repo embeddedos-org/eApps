@@ -1,0 +1,15 @@
+name: webos-tv
+display_name: "LG webOS Smart TV"
+arch: arm64
+engine: eosim
+class: tv
+vendor: LG
+domain: consumer
+soc: "LG webOS SoC"
+runtime:
+  memory_mb: 1536
+  headless: true
+  display:
+    width: 1920
+    height: 1080
+    density: 160

@@ -1,0 +1,21 @@
+name: automotive-demo
+description: Automotive ECU cluster — gateway + body controller + dashboard
+nodes:
+  - name: gateway-ecu
+    platform: arm64-eos
+    role: central-gateway
+  - name: body-ecu
+    platform: arm-mcu
+    role: body-controller
+  - name: dashboard
+    platform: arm-vexpress
+    role: instrument-cluster
+links:
+  - type: uart
+    from: gateway-ecu
+    to: body-ecu
+    config: { baud: 115200 }
+  - type: uart
+    from: gateway-ecu
+    to: dashboard
+    config: { baud: 115200 }

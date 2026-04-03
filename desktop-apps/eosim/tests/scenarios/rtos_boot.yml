@@ -1,0 +1,10 @@
+name: rtos-boot
+description: Validates RTOS firmware boot
+platform: arm-mcu
+steps:
+  - type: wait_for
+    pattern: "EoS"
+  - type: assert_no
+    pattern: "HardFault"
+  - type: timing
+    max_seconds: 10

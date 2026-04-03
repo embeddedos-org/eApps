@@ -1,0 +1,10 @@
+name: mipsel-linux
+display_name: MIPS Malta Linux
+arch: mipsel
+engine: qemu
+qemu:
+  machine: malta
+  cpu: 24Kf
+runtime:
+  memory_mb: 512
+  headless: true

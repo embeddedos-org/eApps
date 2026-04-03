@@ -1,0 +1,23 @@
+name: arm64-linux
+display_name: ARM64 Generic Linux
+arch: arm64
+engine: renode
+class: virtual
+vendor: ARM
+soc: Cortex-A57
+repl: arm64/generic_linux.repl
+resc: arm64/generic_linux.resc
+qemu:
+  machine: virt
+  cpu: cortex-a57
+boot:
+  kernel: images/arm64-Image
+  rootfs: images/arm64-rootfs.ext4
+  dtb: images/arm64-board.dtb
+runtime:
+  memory_mb: 2048
+  headless: true
+  uart: sysbus.uart0
+artifacts:
+  log_dir: out/logs
+  trace_dir: out/traces

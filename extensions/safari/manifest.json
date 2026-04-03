@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "eOffice Suite for Safari",
+  "version": "0.1.0",
+  "description": "AI-powered office suite — eDocs, eNotes, eSheets & more. Safari Web Extension.",
+  "permissions": ["storage", "contextMenus", "nativeMessaging"],
+  "host_permissions": ["http://localhost:3001/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "eOffice Suite"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "browser_specific_settings": {
+    "safari": {
+      "strict_min_version": "16.4"
+    }
+  }
+}

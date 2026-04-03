@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="90" fill="url(#bg)"/>
+  <text x="256" y="200" text-anchor="middle" font-size="120" font-family="Arial" font-weight="bold" fill="white">eO</text>
+  <text x="256" y="340" text-anchor="middle" font-size="72" font-family="Arial" fill="rgba(255,255,255,0.8)">Suite</text>
+  <circle cx="400" cy="400" r="60" fill="#22c55e"/>
+  <text x="400" y="418" text-anchor="middle" font-size="48" fill="white">⚡</text>
+</svg>

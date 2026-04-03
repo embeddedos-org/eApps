@@ -1,0 +1,6 @@
+name: raspi3-test
+platform: raspi3
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

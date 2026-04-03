@@ -1,0 +1,6 @@
+name: gaming-sim-test
+platform: gaming-sim
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

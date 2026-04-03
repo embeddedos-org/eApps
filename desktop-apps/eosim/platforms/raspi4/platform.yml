@@ -1,0 +1,16 @@
+name: raspi4
+display_name: Raspberry Pi 4 (BCM2711)
+arch: arm64
+engine: renode
+class: sbc
+vendor: Raspberry Pi
+soc: BCM2711
+domain: consumer
+modeling: deterministic
+qemu:
+  machine: raspi4b
+  cpu: cortex-a72
+runtime:
+  memory_mb: 4096
+  headless: true
+  uart: sysbus.uart0

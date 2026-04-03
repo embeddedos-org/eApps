@@ -1,0 +1,6 @@
+name: imx8m-test
+platform: imx8m
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

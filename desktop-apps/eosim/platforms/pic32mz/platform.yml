@@ -1,0 +1,26 @@
+name: pic32mz
+display_name: Microchip PIC32MZ (MIPS32)
+arch: mipsel
+engine: eosim
+class: mcu
+vendor: Microchip
+soc: PIC32MZ2048EFH144
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0
+name: pic32mz
+display_name: Microchip PIC32MZ (MIPS M-Class)
+arch: mips
+engine: eosim
+class: mcu
+vendor: Microchip
+soc: PIC32MZ2048EFH144
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

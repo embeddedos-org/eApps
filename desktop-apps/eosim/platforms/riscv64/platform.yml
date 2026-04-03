@@ -1,0 +1,14 @@
+name: riscv64-linux
+display_name: RISC-V 64 Linux
+arch: riscv64
+engine: renode
+class: virtual
+vendor: RISC-V
+soc: RV64GC
+qemu:
+  machine: virt
+  cpu: rv64
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

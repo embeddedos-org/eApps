@@ -1,0 +1,6 @@
+name: jetson-orin-test
+platform: jetson-orin
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>eMail — Email Client</title>
+<style>
+:root{--bg:#f5f6f8;--bg2:#fff;--bg3:#f8f9fa;--bgH:#e8eaed;--bgS:#e8f0fe;--bgI:#f0f2f5;--tx:#202124;--tx2:#5f6368;--tx3:#80868b;--bd:#e0e0e0;--ac:#1a73e8;--acL:#e8f0fe;--fn:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+[data-theme="dark"]{--bg:#1a1a2e;--bg2:#1e293b;--bg3:#0f172a;--bgH:#334155;--bgS:#1e3a5f;--bgI:#334155;--tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;--bd:#334155;--ac:#60a5fa;--acL:#1e3a5f}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}body{font-family:var(--fn);background:var(--bg);color:var(--tx)}
+.app{display:flex;flex-direction:column;height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.btn{padding:5px 10px;border:0;border-radius:4px;background:0;color:var(--tx2);font-size:12px;cursor:pointer;font-family:var(--fn)}a.btn{text-decoration:none}.btn:hover{background:var(--bgH)}
+.btn-p{background:var(--ac);color:#fff;border:0;padding:6px 16px;border-radius:4px;font-size:12px;cursor:pointer}.btn-p:hover{opacity:.9}
+.main{display:flex;flex:1;overflow:hidden}
+.folders{width:180px;background:var(--bg2);border-right:1px solid var(--bd);padding:8px;flex-shrink:0;overflow-y:auto}
+.folder{padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:2px}.folder:hover{background:var(--bgH)}.folder.sel{background:var(--bgS);color:var(--ac);font-weight:600}
+.fbadge{margin-left:auto;background:var(--ac);color:#fff;font-size:10px;padding:1px 7px;border-radius:10px}
+.list{width:300px;border-right:1px solid var(--bd);overflow-y:auto;background:var(--bg)}
+.mi{padding:10px 14px;border-bottom:1px solid var(--bd);cursor:pointer}.mi:hover{background:var(--bgH)}.mi.sel{background:var(--bgS)}.mi.unread .mi-f{font-weight:700}
+.mi-f{font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-s{font-size:12px;color:var(--tx2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-p{font-size:11px;color:var(--tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi-d{font-size:10px;color:var(--tx3);float:right}
+.view{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.v-e{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--tx3);font-size:14px;gap:8px}
+.v-s{font-size:20px;font-weight:700;margin-bottom:8px}.v-m{font-size:12px;color:var(--tx2);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.v-b{font-size:14px;line-height:1.7;white-space:pre-wrap}
+.comp{position:fixed;bottom:0;right:20px;width:440px;background:var(--bg2);border:1px solid var(--bd);border-bottom:0;border-radius:8px 8px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.15);z-index:100;display:none;flex-direction:column}.comp.open{display:flex}
+.ch{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ac);color:#fff;border-radius:8px 8px 0 0;cursor:pointer;font-size:13px;font-weight:600}
+.cb{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.cf{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx2)}.cf label{min-width:40px}
+.cf input{flex:1;border:none;border-bottom:1px solid var(--bd);padding:4px 0;font-size:13px;background:0;color:var(--tx);outline:0}
+.ca{min-height:120px;border:1px solid var(--bd);border-radius:4px;padding:8px;font-size:13px;font-family:var(--fn);color:var(--tx);background:var(--bg);outline:0;resize:vertical}
+.cact{display:flex;gap:6px;padding:8px 14px;border-top:1px solid var(--bd)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:150;display:none}
+.es{position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--bg2);border-left:1px solid var(--bd);box-shadow:-4px 0 16px rgba(0,0,0,.15);z-index:200;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s}.es.open{transform:translateX(0)}
+.esh{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--bd)}
+.esb{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--bg2);color:var(--tx);font-size:12px;cursor:pointer;text-align:left;width:100%;font-family:var(--fn);margin-bottom:4px}.esb:hover{background:var(--bgH);border-color:var(--ac)}
+.esr{flex:1;overflow-y:auto;padding:10px 14px}
+@media(max-width:768px){.es{width:100%}.folders{width:60px}.folder span{display:none}.list{width:100%}.comp{width:100%;right:0}}
+</style></head><body>
+<div class="app">
+<div class="top"><span style="font-size:17px;font-weight:700;color:var(--ac)">&#128231; eMail</span>
+<div style="display:flex;gap:4px"><button class="btn" id="thm">&#127769;</button><button class="btn" id="ebt">&#9889; eBot</button><a href="index.html" class="btn">&#8592; Back</a></div></div>
+<div class="main"><div class="folders" id="fld"></div><div class="list" id="mL"></div>
+<div class="view" id="mV"><div class="v-e">&#128231;<br>Select an email</div></div></div>
+<div class="comp" id="comp"><div class="ch" onclick="$('comp').classList.toggle('open')">New Message <span>&#8722;</span></div>
+<div class="cb"><div class="cf"><label>To:</label><input id="cTo"></div><div class="cf"><label>Subj:</label><input id="cSb"></div>
+<textarea class="ca" id="cBd" placeholder="Write your message..."></textarea></div>
+<div class="cact"><button class="btn-p" id="sndB">&#128228; Send</button><button class="btn" id="dscB">&#128465; Discard</button></div></div>
+<div class="ov" id="oV"></div>
+<aside class="es" id="eS"><div class="esh"><span style="font-size:14px;font-weight:600">&#129302; eBot AI</span><button style="border:0;background:0;color:var(--tx2);font-size:15px;cursor:pointer" id="sCl">&#10005;</button></div>
+<div style="padding:10px 14px;border-bottom:1px solid var(--bd)"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--tx3);font-weight:600;margin-bottom:6px">Email AI</div>
+<button class="esb" data-a="sr">&#128172; Smart Reply</button><button class="esb" data-a="dr">&#9999; Draft Email</button><button class="esb" data-a="sm">&#128203; Summarize</button><button class="esb" data-a="et">&#9989; Extract Tasks</button></div>
+<div class="esr" id="eR"><div style="color:var(--tx3);text-align:center;padding:40px;font-size:12px">&#129302; Choose an AI action</div></div></aside>
+</div>
+<script>
+(function(){
+var SK='email_data',emails=[],curF='inbox',curId=null,$=function(i){return document.getElementById(i);};
+var sample=[
+{id:'1',from:'Alice Johnson',to:'me',subject:'Q2 Planning Meeting',body:'Hi team,\n\nLet\'s schedule Q2 planning for Tuesday at 2 PM.\n\nTopics:\n- Budget review\n- Hiring plans\n- Product roadmap\n\nBest,\nAlice',date:'2026-04-03T10:30:00',folder:'inbox',read:false,starred:false},
+{id:'2',from:'Bob Smith',to:'me',subject:'Project Update: eOffice v2',body:'Hello,\n\nUpdate:\n1. Frontend: 85% complete\n2. Backend: 70% complete\n3. Testing: Started\n\nOn track for April 15.\n\nBob',date:'2026-04-02T15:20:00',folder:'inbox',read:false,starred:true},
+{id:'3',from:'Carol Davis',to:'me',subject:'Welcome aboard!',body:'Welcome to eOffice team!\nOnboarding materials in eDrive.\n\nCheers,\nCarol',date:'2026-04-01T09:00:00',folder:'inbox',read:true,starred:false},
+{id:'4',from:'me',to:'team',subject:'Re: Design Review',body:'Thanks for feedback. Updated version by Friday.\n\nBest,\nMe',date:'2026-03-31T14:00:00',folder:'sent',read:true,starred:false},
+{id:'5',from:'System',to:'me',subject:'Weekly digest',body:'Weekly summary:\n- 12 emails received\n- 5 tasks completed\n- 3 meetings attended',date:'2026-03-30T08:00:00',folder:'inbox',read:true,starred:false}
+];
+var flds=[{n:'inbox',i:'&#128229;',l:'Inbox'},{n:'sent',i:'&#128228;',l:'Sent'},{n:'starred',i:'&#11088;',l:'Starred'},{n:'drafts',i:'&#128196;',l:'Drafts'},{n:'trash',i:'&#128465;',l:'Trash'}];
+function load(){try{var d=JSON.parse(localStorage.getItem(SK));emails=d&&d.length?d:sample;}catch(e){emails=sample;}}
+function save(){localStorage.setItem(SK,JSON.stringify(emails));}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function render(){rF();rL();rV();}
+function rF(){var el=$('fld');el.innerHTML='<button class="btn-p" style="width:100%;margin-bottom:8px" onclick="document.getElementById(\'comp\').classList.add(\'open\')">&#9999; Compose</button>';
+flds.forEach(function(f){var cnt=0;if(f.n==='inbox')cnt=emails.filter(function(e){return e.folder==='inbox'&&!e.read;}).length;
+if(f.n==='starred')cnt=emails.filter(function(e){return e.starred;}).length;
+var d=document.createElement('div');d.className='folder'+(curF===f.n?' sel':'');d.innerHTML=f.i+' <span>'+f.l+'</span>'+(cnt?'<span class="fbadge">'+cnt+'</span>':'');d.onclick=function(){curF=f.n;curId=null;render();};el.appendChild(d);});}
+function rL(){var el=$('mL');el.innerHTML='';var fl=emails.filter(function(e){if(curF==='starred')return e.starred;return e.folder===curF;});
+fl.sort(function(a,b){return new Date(b.date)-new Date(a.date);});
+if(!fl.length){el.innerHTML='<div style="padding:40px;text-align:center;color:var(--tx3);font-size:13px">No emails</div>';return;}
+fl.forEach(function(e){var d=document.createElement('div');d.className='mi'+(e.id===curId?' sel':'')+(e.read?'':' unread');
+var dt=new Date(e.date),ds=dt.toLocaleDateString('en',{month:'short',day:'numeric'});
+d.innerHTML='<span class="mi-d">'+ds+'</span><div class="mi-f">'+esc(e.from)+'</div><div class="mi-s">'+esc(e.subject)+'</div><div class="mi-p">'+esc(e.body.substring(0,50))+'</div>';
+d.onclick=function(){curId=e.id;e.read=true;save();render();};el.appendChild(d);});}
+function rV(){var el=$('mV');if(!curId){el.innerHTML='<div class="v-e">&#128231;<br>Select an email</div>';return;}
+var e=emails.find(function(x){return x.id===curId;});if(!e)return;
+el.innerHTML='<div class="v-s">'+esc(e.subject)+'</div><div class="v-m">From: <b>'+esc(e.from)+'</b> &middot; To: '+esc(e.to)+' &middot; '+new Date(e.date).toLocaleString()+'</div><div class="v-b">'+esc(e.body)+'</div><div style="margin-top:20px;display:flex;gap:6px"><button class="btn" onclick="reply()">&#8617; Reply</button><button class="btn" onclick="star()">&#11088; Star</button><button class="btn" onclick="del()">&#128465; Delete</button></div>';}
+window.reply=function(){$('comp').classList.add('open');var e=emails.find(function(x){return x.id===curId;});if(e){$('cTo').value=e.from;$('cSb').value='Re: '+e.subject;$('cBd').value='\n\n---\n'+e.body;}};
+window.star=function(){var e=emails.find(function(x){return x.id===curId;});if(e){e.starred=!e.starred;save();render();}};
+window.del=function(){emails=emails.filter(function(x){return x.id!==curId;});curId=null;save();render();};
+$('sndB').onclick=function(){var to=$('cTo').value,sb=$('cSb').value,bd=$('cBd').value;if(!to||!sb)return;
+emails.unshift({id:Date.now().toString(),from:'me',to:to,subject:sb,body:bd,date:new Date().toISOString(),folder:'sent',read:true,starred:false});
+save();$('comp').classList.remove('open');$('cTo').value='';$('cSb').value='';$('cBd').value='';render();};
+$('dscB').onclick=function(){$('comp').classList.remove('open');$('cTo').value='';$('cSb').value='';$('cBd').value='';};
+function oS(){$('eS').classList.add('open');$('oV').style.display='block';}
+function cS(){$('eS').classList.remove('open');$('oV').style.display='none';}
+$('ebt').onclick=function(){$('eS').classList.contains('open')?cS():oS();};$('sCl').onclick=cS;$('oV').onclick=cS;
+async function eA(a){var rp=$('eR'),e=curId?emails.find(function(x){return x.id===curId;}):null,ctx=e?e.subject+'\n'+e.body:'No email selected';
+var pr={'sr':'Write a professional reply to:\n'+ctx,'dr':'Draft a professional email about: ','sm':'Summarize this email:\n'+ctx,'et':'Extract action items from:\n'+ctx};
+rp.innerHTML='<div style="padding:12px;color:var(--tx3)">\u23f3 Thinking...</div>';
+try{var r=await fetch('http://localhost:3001/api/ebot/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:pr[a]||ctx,context:'eMail'}),signal:AbortSignal.timeout(15000)});
+var d=await r.json(),t=d.reply||d.message||d.response||JSON.stringify(d);rp.innerHTML='<div style="padding:10px;background:var(--acL);border:1px solid var(--bd);border-radius:6px;font-size:11px;line-height:1.6;white-space:pre-wrap">'+t.replace(/</g,'&lt;')+'</div>';
+}catch(e2){rp.innerHTML='<div style="padding:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:11px;color:#991b1b">eBot offline. Start: npm run dev:server</div>';}}
+document.querySelectorAll('.esb').forEach(function(b){b.onclick=function(){eA(b.dataset.a);};});
+var t=localStorage.getItem('eo-theme')||'light';document.documentElement.setAttribute('data-theme',t);$('thm').textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';
+$('thm').onclick=function(){var c=document.documentElement.getAttribute('data-theme'),n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('eo-theme',n);$('thm').textContent=n==='dark'?'\u2600\ufe0f':'\ud83c\udf19';};
+load();render();
+})();
+</script></body></html>

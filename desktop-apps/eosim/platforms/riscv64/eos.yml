@@ -1,0 +1,13 @@
+name: riscv64-eos
+display_name: RISC-V 64 EoS RTOS
+arch: riscv64
+engine: qemu
+qemu:
+  machine: virt
+  cpu: rv64
+  extra_args: ["-bios", "none"]
+boot:
+  firmware: images/eos-riscv64.bin
+runtime:
+  memory_mb: 256
+  headless: true

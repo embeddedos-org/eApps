@@ -1,0 +1,19 @@
+name: sensor-gateway-demo
+description: IoT gateway with sensor node — demonstrates multi-node simulation
+nodes:
+  - name: gateway
+    platform: arm64-linux
+    role: aggregator
+  - name: sensor-1
+    platform: arm-mcu
+    role: sensor
+  - name: sensor-2
+    platform: arm-mcu
+    role: sensor
+links:
+  - type: uart
+    from: gateway
+    to: sensor-1
+  - type: uart
+    from: gateway
+    to: sensor-2

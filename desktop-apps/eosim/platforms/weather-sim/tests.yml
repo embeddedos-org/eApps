@@ -1,0 +1,6 @@
+name: weather-sim-test
+platform: weather-sim
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

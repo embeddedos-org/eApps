@@ -1,0 +1,14 @@
+name: am64x
+display_name: TI AM6442 (Cortex-A53)
+arch: arm64
+engine: eosim
+class: soc
+vendor: TI
+soc: AM6442
+qemu:
+  machine: virt
+  cpu: cortex-a53
+runtime:
+  memory_mb: 2048
+  headless: true
+  uart: sysbus.uart0

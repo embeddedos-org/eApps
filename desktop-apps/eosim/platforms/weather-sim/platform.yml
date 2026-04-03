@@ -1,0 +1,11 @@
+name: weather-sim
+display_name: Weather & Atmospheric Simulator
+arch: arm64
+engine: eosim
+class: sbc
+domain: weather
+modeling: continuous
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

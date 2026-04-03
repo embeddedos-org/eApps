@@ -1,0 +1,15 @@
+name: ios-arm64
+display_name: "iOS ARM64 (Apple A-series)"
+arch: arm64
+engine: eosim
+class: mobile
+vendor: Apple
+domain: consumer
+soc: "Apple A-series"
+runtime:
+  memory_mb: 6144
+  headless: true
+  display:
+    width: 1170
+    height: 2532
+    density: 460

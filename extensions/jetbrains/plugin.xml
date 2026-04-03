@@ -1,0 +1,87 @@
+<idea-plugin>
+    <id>org.embeddedos.eoffice</id>
+    <name>eOffice Suite</name>
+    <version>0.1.0</version>
+    <vendor email="dev@embeddedos.org" url="https://github.com/nicheOS/eOffice">EmbeddedOS</vendor>
+
+    <description><![CDATA[
+        <p>AI-powered office suite integration for JetBrains IDEs.</p>
+        <ul>
+            <li><b>eDocs</b> — Word processor</li>
+            <li><b>eNotes</b> — Digital notebooks</li>
+            <li><b>eSheets</b> — Spreadsheets</li>
+            <li><b>eBot AI</b> — Summarize, rewrite, and chat with AI</li>
+            <li><b>ePlanner</b> — Project planning</li>
+        </ul>
+        <p>Connects to eOffice backend at localhost:3001.</p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <p>0.1.0 — Initial release with sidebar, eBot actions, and file type associations.</p>
+    ]]></change-notes>
+
+    <idea-version since-build="231" until-build="243.*"/>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="eOffice"
+                    anchor="right"
+                    factoryClass="org.embeddedos.eoffice.EOfficeToolWindowFactory"
+                    icon="/icons/eoffice.svg"/>
+
+        <fileType name="eDoc"
+                  implementationClass="org.embeddedos.eoffice.EDocFileType"
+                  fieldName="INSTANCE"
+                  language=""
+                  extensions="edoc"/>
+        <fileType name="eNote"
+                  implementationClass="org.embeddedos.eoffice.ENoteFileType"
+                  fieldName="INSTANCE"
+                  language=""
+                  extensions="enote"/>
+        <fileType name="eSheet"
+                  implementationClass="org.embeddedos.eoffice.ESheetFileType"
+                  fieldName="INSTANCE"
+                  language=""
+                  extensions="esheet"/>
+    </extensions>
+
+    <actions>
+        <group id="eOffice.MainMenu" text="eOffice" description="eOffice Suite actions" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="eOffice.OpenDocs"
+                    class="org.embeddedos.eoffice.OpenEDocsAction"
+                    text="Open eDocs"
+                    description="Open the eDocs word processor"
+                    icon="/icons/edocs.svg"/>
+            <action id="eOffice.OpenNotes"
+                    class="org.embeddedos.eoffice.OpenENotesAction"
+                    text="Open eNotes"
+                    description="Open eNotes digital notebooks"
+                    icon="/icons/enotes.svg"/>
+            <action id="eOffice.OpenSheets"
+                    class="org.embeddedos.eoffice.OpenESheetsAction"
+                    text="Open eSheets"
+                    description="Open eSheets spreadsheets"
+                    icon="/icons/esheets.svg"/>
+            <action id="eOffice.EBotChat"
+                    class="org.embeddedos.eoffice.EBotChatAction"
+                    text="eBot Chat"
+                    description="Open eBot AI chat"
+                    icon="/icons/ebot.svg"/>
+        </group>
+
+        <group id="eOffice.EditorContextMenu" text="eOffice" popup="true">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <action id="eOffice.SummarizeWithEBot"
+                    class="org.embeddedos.eoffice.EBotAction"
+                    text="Summarize with eBot"
+                    description="Summarize selected text using eBot AI"/>
+            <action id="eOffice.RewriteWithEBot"
+                    class="org.embeddedos.eoffice.EBotRewriteAction"
+                    text="Rewrite with eBot"
+                    description="Rewrite selected text using eBot AI"/>
+        </group>
+    </actions>
+</idea-plugin>

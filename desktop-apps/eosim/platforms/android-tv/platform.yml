@@ -1,0 +1,15 @@
+name: android-tv
+display_name: "Android TV (ARM64)"
+arch: arm64
+engine: eosim
+class: tv
+vendor: Google
+domain: consumer
+soc: "Generic ARM64 Android TV"
+runtime:
+  memory_mb: 2048
+  headless: true
+  display:
+    width: 1920
+    height: 1080
+    density: 160

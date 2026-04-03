@@ -1,0 +1,6 @@
+name: raspi4-test
+platform: raspi4
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

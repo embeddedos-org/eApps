@@ -1,0 +1,26 @@
+name: renesas-ra6m5
+display_name: Renesas RA6M5 (Cortex-M33)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Renesas
+soc: R7FA6M5BH3CFC
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0
+name: renesas-ra6m5
+display_name: Renesas RA6M5 (Cortex-M33)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Renesas
+soc: RA6M5
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

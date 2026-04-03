@@ -1,0 +1,63 @@
+graph TB
+    %% ── Users ──
+    USR["👤 Users / Visitors<br/>Browser · Mobile · Desktop"]
+
+    %% ── Marketplace Hub ──
+    subgraph HUB["🏪 Marketplace Hub — GitHub Pages"]
+        PAGE["index.html + CSS/JS<br/>embeddedos-org.github.io/eApps/"]
+        JSON["📋 data/apps.json<br/>Single source of truth"]
+    end
+
+    USR --> PAGE
+    JSON --> PAGE
+
+    %% ── Source Categories ──
+    subgraph SRC["📦 Source Categories (inside eApps)"]
+        EXT["🧩 Extensions<br/>extensions/<br/>11 integrations"]
+        DSK["🖥️ Desktop Apps<br/>desktop-apps/<br/>eOffice · EoStudio · eBrowser"]
+        MOB["📱 Mobile Apps<br/>mobile-apps/<br/>eRide · eSocial · eTrack · eTravel · eWallet"]
+        SVC["☁️ Service Apps<br/>service-apps/<br/>Firebase · Docker"]
+        NAT["⚙️ Native Apps<br/>apps/<br/>40+ LVGL apps"]
+        WEB["🌐 Web Apps<br/>eOffice Web"]
+    end
+
+    %% ── Shared Code ──
+    SHR["🔗 Shared Code<br/>shared/<br/>js · flutter · libs · python"]
+
+    EXT -.-> SHR
+    DSK -.-> SHR
+    MOB -.-> SHR
+    SVC -.-> SHR
+    NAT -.-> SHR
+    WEB -.-> SHR
+
+    %% ── CI/CD ──
+    subgraph CI["🔄 CI/CD — GitHub Actions"]
+        BUILD["Build & Test"]
+        PACKAGE["Package Artifacts"]
+        RELEASE["Create GitHub Releases"]
+        UPDATE["Auto-update apps.json"]
+    end
+
+    SRC --> BUILD
+    BUILD --> PACKAGE --> RELEASE --> UPDATE
+    UPDATE --> JSON
+
+    %% ── Artifacts ──
+    subgraph ART["📦 Release Artifacts"]
+        A1[".zip/.crx/.xpi<br/>Extensions"]
+        A2[".exe/.dmg/.AppImage<br/>Desktop"]
+        A3[".apk/.aab<br/>Android"]
+        A4["TestFlight<br/>iOS"]
+        A5["Docker<br/>Services"]
+    end
+
+    RELEASE --> ART
+
+    %% ── Styles ──
+    style HUB fill:#3a2a4c,stroke:#bc8cff,color:#e6edf3
+    style SRC fill:#1a3a5c,stroke:#58a6ff,color:#e6edf3
+    style CI fill:#4a3a1c,stroke:#d29922,color:#e6edf3
+    style ART fill:#2a2a2a,stroke:#8b949e,color:#e6edf3
+    style SHR fill:#2a4a3c,stroke:#3fb950,color:#e6edf3
+    style USR fill:#1c3a2a,stroke:#3fb950,color:#e6edf3

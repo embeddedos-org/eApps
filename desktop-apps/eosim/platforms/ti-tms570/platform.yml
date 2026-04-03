@@ -1,0 +1,16 @@
+name: ti-tms570
+display_name: TI TMS570 (Cortex-R4F Safety MCU)
+arch: arm
+engine: eosim
+class: mcu
+vendor: TI
+soc: TMS570LS3137
+domain: automotive
+modeling: deterministic
+domain_config:
+  safety_level: ASIL-D
+  standards: [ISO 26262, IEC 61508]
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

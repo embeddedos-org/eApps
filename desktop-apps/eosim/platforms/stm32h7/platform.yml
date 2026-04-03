@@ -1,0 +1,13 @@
+name: stm32h7
+display_name: ST STM32H743 (Cortex-M7)
+arch: arm
+engine: eosim
+class: mcu
+vendor: ST
+soc: STM32H743
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

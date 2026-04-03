@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eDocs - Word Processor</title>
+<style>
+:root {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
+  --bg-toolbar: #ffffff;
+  --bg-sidebar: #ffffff;
+  --bg-statusbar: #f8f9fa;
+  --bg-input: #f0f2f5;
+  --bg-hover: #e8eaed;
+  --bg-active: #d2e3fc;
+  --bg-paper: #ffffff;
+  --bg-dropdown: #ffffff;
+  --text-primary: #202124;
+  --text-secondary: #5f6368;
+  --text-muted: #80868b;
+  --text-placeholder: #9aa0a6;
+  --border-color: #dadce0;
+  --border-light: #e8eaed;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
+  --shadow-md: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-paper: 0 1px 3px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08);
+  --accent-color: #1a73e8;
+  --accent-hover: #1557b0;
+  --accent-light: #e8f0fe;
+  --success-color: #34a853;
+  --error-color: #ea4335;
+  --warning-color: #fbbc04;
+  --sidebar-width: 360px;
+  --topbar-height: 56px;
+  --toolbar-height: 44px;
+  --statusbar-height: 32px;
+  --font-main: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-sidebar: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-track: transparent;
+  --ebot-bg: #f0fdf4;
+  --ebot-border: #bbf7d0;
+  --ebot-text: #166534;
+}
+[data-theme="dark"] {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-toolbar: #1e293b;
+  --bg-sidebar: #1e293b;
+  --bg-statusbar: #0f172a;
+  --bg-input: #334155;
+  --bg-hover: #334155;
+  --bg-active: #1e3a5f;
+  --bg-paper: #1e293b;
+  --bg-dropdown: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-placeholder: #475569;
+  --border-color: #334155;
+  --border-light: #1e293b;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-paper: 0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.3);
+  --accent-color: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-light: #1e3a5f;
+  --scrollbar-thumb: #475569;
+  --scrollbar-track: #1e293b;
+  --ebot-bg: #1a2e1a;
+  --ebot-border: #2d5a2d;
+  --ebot-text: #86efac;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font-main); background: var(--bg-primary); color: var(--text-primary);
+  line-height: 1.6; transition: background var(--transition-normal), color var(--transition-normal);
+}
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; min-height: 40px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+.app-container { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+/* TOP BAR */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--topbar-height); padding: 0 16px;
+  background: var(--bg-toolbar); border-bottom: 1px solid var(--border-color);
+  z-index: 100; flex-shrink: 0;
+  transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.logo {
+  font-size: 20px; font-weight: 700; color: var(--accent-color);
+  white-space: nowrap; display: flex; align-items: center; gap: 6px; user-select: none;
+}
+.logo-icon { font-size: 24px; }
+.topbar-center { flex: 1; display: flex; justify-content: center; padding: 0 20px; min-width: 0; }
+.doc-title-input {
+  font-family: var(--font-main); font-size: 16px; font-weight: 500;
+  color: var(--text-primary); background: transparent;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  padding: 6px 12px; text-align: center; width: 100%; max-width: 400px;
+  outline: none; transition: all var(--transition-fast);
+}
+.doc-title-input:hover { border-color: var(--border-color); }
+.doc-title-input:focus {
+  border-color: var(--accent-color); background: var(--bg-input);
+  box-shadow: 0 0 0 2px var(--accent-light);
+}
+.topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.topbar-btn {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 12px; border: none; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text-secondary); font-size: 14px;
+  font-family: var(--font-main); cursor: pointer;
+  transition: all var(--transition-fast); white-space: nowrap;
+}
+.topbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.topbar-btn.active { background: var(--accent-light); color: var(--accent-color); }
+.ebot-toggle { font-weight: 600; }
+.back-link {
+  color: var(--text-secondary); text-decoration: none; font-size: 14px;
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  transition: all var(--transition-fast); display: flex; align-items: center; gap: 4px;
+}
+.back-link:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+/* TOOLBAR */
+.toolbar {
+  display: flex; align-items: center; gap: 2px; padding: 4px 16px;
+  height: var(--toolbar-height); background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+  overflow-x: auto; overflow-y: hidden;
+  transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+.toolbar::-webkit-scrollbar { height: 3px; }
+.toolbar-group { display: flex; align-items: center; gap: 1px; padding: 0 4px; }
+.toolbar-group:not(:last-child) {
+  border-right: 1px solid var(--border-light); margin-right: 4px; padding-right: 8px;
+}
+.toolbar-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border: none; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text-secondary); font-size: 14px;
+  font-weight: 600; cursor: pointer; transition: all var(--transition-fast);
+  position: relative; font-family: var(--font-main);
+}
+.toolbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.toolbar-btn.active { background: var(--accent-light); color: var(--accent-color); }
+.toolbar-btn[title]:hover::after {
+  content: attr(title); position: absolute; top: 100%; left: 50%;
+  transform: translateX(-50%); padding: 4px 8px;
+  background: var(--text-primary); color: var(--bg-primary);
+  font-size: 11px; font-weight: 400; border-radius: var(--radius-sm);
+  white-space: nowrap; z-index: 200; pointer-events: none; margin-top: 4px;
+}
+.toolbar-select {
+  padding: 4px 8px; border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm); background: var(--bg-secondary);
+  color: var(--text-primary); font-size: 13px; font-family: var(--font-main);
+  cursor: pointer; outline: none; height: 32px; transition: all var(--transition-fast);
+}
+.toolbar-select:hover { border-color: var(--text-muted); }
+.toolbar-select:focus { border-color: var(--accent-color); box-shadow: 0 0 0 2px var(--accent-light); }
+.toolbar-btn.text-btn { width: auto; padding: 4px 10px; font-size: 12px; gap: 4px; }
+
+/* EDITOR */
+.main-area { display: flex; flex: 1; overflow: hidden; position: relative; }
+.editor-wrapper {
+  flex: 1; overflow-y: auto; padding: 32px 20px;
+  display: flex; justify-content: center; background: var(--bg-primary);
+  transition: background var(--transition-normal);
+}
+.editor-paper {
+  width: 100%; max-width: 800px;
+  min-height: calc(100vh - var(--topbar-height) - var(--toolbar-height) - var(--statusbar-height) - 96px);
+  background: var(--bg-paper); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-paper); padding: 48px 56px; outline: none;
+  font-size: 15px; line-height: 1.75; color: var(--text-primary);
+  position: relative; word-wrap: break-word; overflow-wrap: break-word;
+  transition: background var(--transition-normal), box-shadow var(--transition-normal);
+}
+.editor-paper:empty::before {
+  content: attr(data-placeholder); color: var(--text-placeholder);
+  pointer-events: none; position: absolute; font-style: italic;
+}
+.editor-paper:focus { box-shadow: var(--shadow-paper), 0 0 0 2px var(--accent-light); }
+.editor-paper h1 { font-size: 28px; font-weight: 700; margin: 24px 0 12px 0; line-height: 1.3; }
+.editor-paper h2 { font-size: 22px; font-weight: 600; margin: 20px 0 10px 0; line-height: 1.4; }
+.editor-paper h3 { font-size: 18px; font-weight: 600; margin: 16px 0 8px 0; line-height: 1.4; }
+.editor-paper p { margin: 8px 0; }
+.editor-paper ul, .editor-paper ol { margin: 8px 0; padding-left: 24px; }
+.editor-paper li { margin: 4px 0; }
+.editor-paper a { color: var(--accent-color); text-decoration: underline; }
+.editor-paper hr { border: none; border-top: 2px solid var(--border-color); margin: 20px 0; }
+.editor-paper blockquote {
+  border-left: 4px solid var(--accent-color); padding-left: 16px;
+  margin: 12px 0; color: var(--text-secondary); font-style: italic;
+}
+.editor-paper pre {
+  background: var(--bg-input); padding: 12px 16px; border-radius: var(--radius-sm);
+  font-family: var(--font-mono); font-size: 13px; overflow-x: auto; margin: 12px 0;
+}
+.editor-paper code {
+  background: var(--bg-input); padding: 2px 6px; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 13px;
+}
+.editor-paper img { max-width: 100%; height: auto; border-radius: var(--radius-sm); }
+
+/* SIDEBAR */
+.sidebar-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3); z-index: 150;
+  opacity: 0; pointer-events: none; transition: opacity var(--transition-sidebar);
+}
+.sidebar-overlay.visible { opacity: 1; pointer-events: auto; }
+.ebot-sidebar {
+  position: fixed; top: 0; right: 0; width: var(--sidebar-width); height: 100vh;
+  background: var(--bg-sidebar); border-left: 1px solid var(--border-color);
+  box-shadow: -4px 0 16px rgba(0,0,0,0.15); z-index: 200;
+  display: flex; flex-direction: column; transform: translateX(100%);
+  transition: transform var(--transition-sidebar), background var(--transition-normal);
+}
+.ebot-sidebar.open { transform: translateX(0); }
+.sidebar-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.sidebar-title { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.sidebar-close {
+  width: 32px; height: 32px; border: none; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text-secondary); font-size: 18px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast);
+}
+.sidebar-close:hover { background: var(--bg-hover); color: var(--text-primary); }
+.sidebar-status {
+  display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+  font-size: 12px; color: var(--text-secondary); background: var(--bg-input);
+  border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.online { background: var(--success-color); box-shadow: 0 0 6px var(--success-color); }
+.status-dot.offline { background: var(--error-color); box-shadow: 0 0 6px var(--error-color); }
+.status-dot.checking { background: var(--warning-color); animation: pulse 1s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.sidebar-actions {
+  padding: 16px 20px; display: flex; flex-direction: column; gap: 8px;
+  border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.sidebar-actions-label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+}
+.ebot-action-btn {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  border: 1px solid var(--border-color); border-radius: var(--radius-md);
+  background: var(--bg-secondary); color: var(--text-primary);
+  font-size: 13px; font-family: var(--font-main); cursor: pointer;
+  transition: all var(--transition-fast); text-align: left; width: 100%;
+}
+.ebot-action-btn:hover {
+  background: var(--bg-hover); border-color: var(--accent-color);
+  transform: translateY(-1px); box-shadow: var(--shadow-sm);
+}
+.ebot-action-btn:active { transform: translateY(0); }
+.ebot-action-btn .action-icon { font-size: 16px; flex-shrink: 0; }
+.ebot-action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.sidebar-response {
+  flex: 1; overflow-y: auto; padding: 16px 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.response-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; color: var(--text-muted); text-align: center; padding: 24px; gap: 8px;
+}
+.response-empty-icon { font-size: 40px; opacity: 0.5; }
+.response-empty-text { font-size: 13px; line-height: 1.5; }
+.response-card {
+  padding: 14px 16px; background: var(--ebot-bg); border: 1px solid var(--ebot-border);
+  border-radius: var(--radius-md); font-size: 13px; line-height: 1.65;
+  color: var(--text-primary); white-space: pre-wrap; word-wrap: break-word;
+  animation: fadeIn 0.3s ease;
+}
+.response-card.error { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+[data-theme="dark"] .response-card.error { background: #2e1a1a; border-color: #5a2d2d; color: #fca5a5; }
+.response-card .response-label {
+  font-weight: 600; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--accent-color); margin-bottom: 8px; display: block;
+}
+.response-loading {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  background: var(--bg-input); border-radius: var(--radius-md);
+  font-size: 13px; color: var(--text-secondary);
+}
+.loading-dots { display: flex; gap: 4px; }
+.loading-dots span {
+  width: 6px; height: 6px; background: var(--accent-color);
+  border-radius: 50%; animation: dotBounce 1.4s infinite;
+}
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce {
+  0%,80%,100%{transform:scale(0.6);opacity:0.4;}
+  40%{transform:scale(1);opacity:1;}
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+/* STATUS BAR */
+.statusbar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--statusbar-height); padding: 0 16px;
+  background: var(--bg-statusbar); border-top: 1px solid var(--border-color);
+  font-size: 12px; color: var(--text-secondary); flex-shrink: 0; z-index: 100;
+  transition: background var(--transition-normal), border-color var(--transition-normal);
+}
+.statusbar-section { display: flex; align-items: center; gap: 16px; }
+.status-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.save-indicator { display: flex; align-items: center; gap: 4px; }
+.save-indicator.saving { color: var(--warning-color); }
+.save-indicator.saved { color: var(--success-color); }
+.ebot-status { display: flex; align-items: center; gap: 6px; }
+
+/* RESPONSIVE */
+@media (max-width:1024px) { .ebot-sidebar{width:320px;} .editor-paper{padding:36px 40px;} }
+@media (max-width:768px) {
+  .topbar{padding:0 10px;} .topbar-center{padding:0 8px;} .doc-title-input{font-size:14px;}
+  .back-link span.back-text{display:none;} .toolbar{padding:4px 8px;}
+  .editor-wrapper{padding:16px 10px;} .editor-paper{padding:28px 24px;border-radius:var(--radius-sm);}
+  .ebot-sidebar{width:100%;} .statusbar{padding:0 10px;gap:8px;} .statusbar-section{gap:10px;}
+}
+@media (max-width:480px) {
+  .topbar{height:48px;padding:0 8px;} .logo span.logo-text{display:none;}
+  .toolbar-group:not(:last-child){border-right:none;margin-right:2px;padding-right:2px;}
+  .editor-wrapper{padding:8px 4px;} .editor-paper{padding:20px 16px;font-size:14px;}
+  .statusbar{font-size:11px;}
+}
+
+/* PRINT */
+@media print {
+  .topbar,.toolbar,.statusbar,.ebot-sidebar,.sidebar-overlay{display:none!important;}
+  body{background:white!important;color:black!important;}
+  .app-container{height:auto;} .main-area{overflow:visible;}
+  .editor-wrapper{padding:0;overflow:visible;background:white!important;}
+  .editor-paper{max-width:none;width:100%;box-shadow:none!important;border-radius:0;padding:0;background:white!important;color:black!important;min-height:auto;}
+  .editor-paper h1,.editor-paper h2,.editor-paper h3{color:black!important;}
+  .editor-paper a{color:blue!important;text-decoration:underline!important;}
+  @page{margin:2cm;}
+}
+.theme-toggle-icon { font-size: 16px; transition: transform 0.3s ease; }
+[data-theme="dark"] .theme-toggle-icon { transform: rotate(180deg); }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="logo"><span class="logo-icon">📝</span><span class="logo-text">eDocs</span></div>
+    </div>
+    <div class="topbar-center">
+      <input type="text" class="doc-title-input" id="docTitle" value="Untitled Document" spellcheck="false">
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" id="themeToggle" title="Toggle dark/light mode"><span class="theme-toggle-icon" id="themeIcon">🌙</span></button>
+      <button class="topbar-btn ebot-toggle" id="ebotToggle" title="Toggle eBot AI">⚡ eBot</button>
+      <a href="../index.html" class="back-link" title="Back to eOffice">← <span class="back-text">Back to eOffice</span></a>
+    </div>
+  </header>
+  <div class="toolbar" role="toolbar">
+    <div class="toolbar-group">
+      <button class="toolbar-btn" data-command="bold" title="Bold (Ctrl+B)"><b>B</b></button>
+      <button class="toolbar-btn" data-command="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+      <button class="toolbar-btn" data-command="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+      <button class="toolbar-btn" data-command="strikeThrough" title="Strikethrough"><s>S</s></button>
+    </div>
+    <div class="toolbar-group">
+      <select class="toolbar-select" id="headingSelect" title="Heading style">
+        <option value="p">Normal</option><option value="h1">Heading 1</option>
+        <option value="h2">Heading 2</option><option value="h3">Heading 3</option>
+      </select>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbar-btn" data-command="insertOrderedList" title="Ordered List">1.</button>
+      <button class="toolbar-btn" data-command="insertUnorderedList" title="Unordered List">•</button>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbar-btn" data-command="justifyLeft" title="Align Left">≡</button>
+      <button class="toolbar-btn" data-command="justifyCenter" title="Align Center">☰</button>
+      <button class="toolbar-btn" data-command="justifyRight" title="Align Right">⫸</button>
+      <button class="toolbar-btn" data-command="justifyFull" title="Justify">⊞</button>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbar-btn" id="insertHR" title="Horizontal Rule">―</button>
+      <button class="toolbar-btn" id="insertLink" title="Insert Link">🔗</button>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbar-btn" data-command="undo" title="Undo (Ctrl+Z)">↶</button>
+      <button class="toolbar-btn" data-command="redo" title="Redo (Ctrl+Y)">↷</button>
+    </div>
+    <div class="toolbar-group">
+      <button class="toolbar-btn text-btn" id="exportTxt" title="Export as Text">📄 Export</button>
+      <button class="toolbar-btn text-btn" id="printBtn" title="Print (Ctrl+P)">🖨️ Print</button>
+    </div>
+  </div>
+  <div class="main-area">
+    <div class="editor-wrapper">
+      <div class="editor-paper" id="editor" contenteditable="true" spellcheck="true" data-placeholder="Start typing your document..." role="textbox" aria-multiline="true"></div>
+    </div>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <aside class="ebot-sidebar" id="ebotSidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">🤖 eBot AI Assistant</div>
+      <button class="sidebar-close" id="sidebarClose">✕</button>
+    </div>
+    <div class="sidebar-status"><span class="status-dot checking" id="statusDot"></span><span id="statusText">Checking connection...</span></div>
+    <div class="sidebar-actions">
+      <div class="sidebar-actions-label">AI Actions</div>
+      <button class="ebot-action-btn" data-action="summarize"><span class="action-icon">📋</span> Summarize</button>
+      <button class="ebot-action-btn" data-action="rewrite-formal"><span class="action-icon">🎩</span> Rewrite (Formal)</button>
+      <button class="ebot-action-btn" data-action="rewrite-casual"><span class="action-icon">😎</span> Rewrite (Casual)</button>
+      <button class="ebot-action-btn" data-action="grammar"><span class="action-icon">✏️</span> Grammar Check</button>
+      <button class="ebot-action-btn" data-action="translate-es"><span class="action-icon">🌐</span> Translate to Spanish</button>
+    </div>
+    <div class="sidebar-response" id="ebotResponse">
+      <div class="response-empty">
+        <div class="response-empty-icon">🤖</div>
+        <div class="response-empty-text">Select text in your document and choose an action, or use an action on the entire document.</div>
+      </div>
+    </div>
+  </aside>
+  <footer class="statusbar">
+    <div class="statusbar-section"><span class="status-item" id="wordCount">Words: 0</span><span class="status-item" id="charCount">Characters: 0</span></div>
+    <div class="statusbar-section"><span class="save-indicator saved" id="saveIndicator">✓ Saved</span></div>
+    <div class="statusbar-section"><span class="ebot-status"><span id="ebotStatusDot">🔴</span><span id="ebotStatusText">eBot Offline</span></span></div>
+  </footer>
+</div>
+<script>
+(function(){
+'use strict';
+var editor=document.getElementById('editor');
+var docTitle=document.getElementById('docTitle');
+var themeIcon=document.getElementById('themeIcon');
+var ebotToggle=document.getElementById('ebotToggle');
+var ebotSidebar=document.getElementById('ebotSidebar');
+var sidebarOverlay=document.getElementById('sidebarOverlay');
+var headingSelect=document.getElementById('headingSelect');
+var wordCountEl=document.getElementById('wordCount');
+var charCountEl=document.getElementById('charCount');
+var saveIndicator=document.getElementById('saveIndicator');
+var statusDot=document.getElementById('statusDot');
+var statusText=document.getElementById('statusText');
+var ebotStatusDot=document.getElementById('ebotStatusDot');
+var ebotStatusText=document.getElementById('ebotStatusText');
+var ebotResponse=document.getElementById('ebotResponse');
+var STORAGE_KEY='edocs_data';
+var EBOT_API='http://localhost:3001/api/ebot/chat';
+var ebotOnline=false;
+var saveTimeout=null;
+var isDirty=false;
+
+function initTheme(){
+  var s=localStorage.getItem('edocs_theme')||'light';
+  document.documentElement.setAttribute('data-theme',s);
+  themeIcon.textContent=(s==='dark')?'☀️':'🌙';
+}
+
+function toggleTheme(){
+  var c=document.documentElement.getAttribute('data-theme');
+  var n=(c==='dark')?'light':'dark';
+  document.documentElement.setAttribute('data-theme',n);
+  localStorage.setItem('edocs_theme',n);
+  themeIcon.textContent=(n==='dark')?'☀️':'🌙';
+}
+
+function saveDocument(){
+  try{
+    localStorage.setItem(STORAGE_KEY,JSON.stringify({
+      title:docTitle.value,content:editor.innerHTML,timestamp:Date.now()
+    }));
+    saveIndicator.textContent='✓ Saved';
+    saveIndicator.className='save-indicator saved';
+    isDirty=false;
+  }catch(e){
+    saveIndicator.textContent='⚠ Save failed';
+    saveIndicator.className='save-indicator';
+  }
+}
+
+function markDirty(){
+  if(!isDirty){
+    isDirty=true;
+    saveIndicator.textContent='⏳ Saving...';
+    saveIndicator.className='save-indicator saving';
+  }
+  clearTimeout(saveTimeout);
+  saveTimeout=setTimeout(saveDocument,2000);
+}
+
+function loadDocument(){
+  try{
+    var raw=localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      var d=JSON.parse(raw);
+      if(d.title) docTitle.value=d.title;
+      if(d.content) editor.innerHTML=d.content;
+    }
+  }catch(e){console.warn('Load failed:',e);}
+}
+
+function updateCounts(){
+  var text=editor.innerText||'';
+  var trimmed=text.trim();
+  var words=(trimmed==='')?0:trimmed.split(/\s+/).length;
+  wordCountEl.textContent='Words: '+words;
+  charCountEl.textContent='Characters: '+text.length;
+}
+
+function execCmd(command,value){
+  editor.focus();
+  document.execCommand(command,false,value||null);
+  updateCounts();
+  markDirty();
+}
+
+function getSelectedText(){
+  var s=window.getSelection();
+  return(s&&s.toString().trim().length>0)?s.toString():'';
+}
+
+function getDocumentText(){
+  return(editor.innerText||'').trim();
+}
+
+function escapeHtml(str){
+  var d=document.createElement('div');
+  d.textContent=str;
+  return d.innerHTML;
+}
+
+function openSidebar(){
+  ebotSidebar.classList.add('open');
+  sidebarOverlay.classList.add('visible');
+  ebotToggle.classList.add('active');
+  checkEbotConnection();
+}
+
+function closeSidebar(){
+  ebotSidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('visible');
+  ebotToggle.classList.remove('active');
+}
+
+function setEbotOnline(online){
+  ebotOnline=online;
+  statusDot.className=online?'status-dot online':'status-dot offline';
+  statusText.textContent=online?'Connected to eBot server':'eBot server unavailable';
+  ebotStatusDot.textContent=online?'🟢':'🔴';
+  ebotStatusText.textContent=online?'eBot Connected':'eBot Offline';
+}
+
+async function checkEbotConnection(){
+  statusDot.className='status-dot checking';
+  statusText.textContent='Checking connection...';
+  try{
+    var ctrl=new AbortController();
+    var tid=setTimeout(function(){ctrl.abort();},3000);
+    var res=await fetch(EBOT_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:'ping',context:''}),
+      signal:ctrl.signal
+    });
+    clearTimeout(tid);
+    setEbotOnline(res.ok);
+  }catch(e){
+    setEbotOnline(false);
+  }
+}
+
+function getPromptForAction(action,text){
+  var map={
+    'summarize':'Please provide a concise summary of the following text:\n\n'+text,
+    'rewrite-formal':'Please rewrite the following text in a formal, professional tone:\n\n'+text,
+    'rewrite-casual':'Please rewrite the following text in a casual, friendly tone:\n\n'+text,
+    'grammar':'Please check the following text for grammar and spelling errors. Provide the corrected version with a list of changes:\n\n'+text,
+    'translate-es':'Please translate the following text to Spanish:\n\n'+text
+  };
+  return map[action]||text;
+}
+
+function getActionLabel(action){
+  var map={
+    'summarize':'Summary',
+    'rewrite-formal':'Formal Rewrite',
+    'rewrite-casual':'Casual Rewrite',
+    'grammar':'Grammar Check',
+    'translate-es':'Spanish Translation'
+  };
+  return map[action]||'Response';
+}
+
+function showLoading(){
+  var el=document.createElement('div');
+  el.className='response-loading';
+  el.id='ebotLoading';
+  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div> Processing...';
+  var empty=ebotResponse.querySelector('.response-empty');
+  if(empty) empty.remove();
+  ebotResponse.appendChild(el);
+  ebotResponse.scrollTop=ebotResponse.scrollHeight;
+}
+
+function hideLoading(){
+  var el=document.getElementById('ebotLoading');
+  if(el) el.remove();
+}
+
+function showResponse(label,text){
+  hideLoading();
+  var card=document.createElement('div');
+  card.className='response-card';
+  card.innerHTML='<span class="response-label">'+label+'</span>'+escapeHtml(text);
+  ebotResponse.appendChild(card);
+  ebotResponse.scrollTop=ebotResponse.scrollHeight;
+}
+
+function showError(message){
+  hideLoading();
+  var card=document.createElement('div');
+  card.className='response-card error';
+  card.innerHTML='<span class="response-label">Error</span>'+escapeHtml(message);
+  ebotResponse.appendChild(card);
+  ebotResponse.scrollTop=ebotResponse.scrollHeight;
+}
+
+async function sendToEbot(action){
+  var selected=getSelectedText();
+  var text=selected||getDocumentText();
+  if(!text){
+    showError('No text found. Type something in the document or select text first.');
+    return;
+  }
+  var prompt=getPromptForAction(action,text);
+  var label=getActionLabel(action);
+  showLoading();
+  var btns=document.querySelectorAll('.ebot-action-btn');
+  btns.forEach(function(b){b.disabled=true;});
+  try{
+    var ctrl=new AbortController();
+    var tid=setTimeout(function(){ctrl.abort();},30000);
+    var res=await fetch(EBOT_API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:prompt,context:'eDocs word processor'}),
+      signal:ctrl.signal
+    });
+    clearTimeout(tid);
+    if(!res.ok) throw new Error('Server returned '+res.status);
+    var data=await res.json();
+    var reply=data.reply||data.message||data.response||JSON.stringify(data);
+    showResponse(label,reply);
+    setEbotOnline(true);
+  }catch(e){
+    if(e.name==='AbortError'){
+      showError('Request timed out. The eBot server may be slow or unresponsive.');
+    }else{
+      setEbotOnline(false);
+      showError('eBot is offline. Start the server with: npm run dev:server');
+    }
+  }finally{
+    btns.forEach(function(b){b.disabled=false;});
+  }
+}
+
+function handleInsertLink(){
+  var url=prompt('Enter URL:','https://');
+  if(url&&url!=='https://'){
+    editor.focus();
+    if(getSelectedText()){
+      document.execCommand('createLink',false,url);
+    }else{
+      document.execCommand('insertHTML',false,
+        '<a href="'+url+'" target="_blank">'+escapeHtml(url)+'</a>');
+    }
+    markDirty();
+  }
+}
+
+function handleExport(){
+  var text=editor.innerText||'';
+  var title=docTitle.value||'document';
+  var blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download=title.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function handleKeyDown(e){
+  if(e.ctrlKey||e.metaKey){
+    switch(e.key.toLowerCase()){
+      case 'b': e.preventDefault(); execCmd('bold'); break;
+      case 'i': e.preventDefault(); execCmd('italic'); break;
+      case 'u': e.preventDefault(); execCmd('underline'); break;
+      case 's': e.preventDefault(); saveDocument(); break;
+      case 'z': if(e.shiftKey){e.preventDefault();execCmd('redo');} break;
+    }
+  }
+}
+
+// Toolbar command buttons
+document.querySelectorAll('.toolbar-btn[data-command]').forEach(function(btn){
+  btn.addEventListener('click',function(e){
+    e.preventDefault();
+    execCmd(this.dataset.command);
+  });
+});
+
+// Heading select
+headingSelect.addEventListener('change',function(){
+  editor.focus();
+  document.execCommand('formatBlock',false,this.value);
+  markDirty();
+});
+
+// Insert actions
+document.getElementById('insertHR').addEventListener('click',function(){
+  editor.focus();
+  document.execCommand('insertHorizontalRule',false,null);
+  markDirty();
+});
+document.getElementById('insertLink').addEventListener('click',handleInsertLink);
+document.getElementById('exportTxt').addEventListener('click',handleExport);
+document.getElementById('printBtn').addEventListener('click',function(){window.print();});
+
+// Theme toggle
+document.getElementById('themeToggle').addEventListener('click',toggleTheme);
+
+// Sidebar
+ebotToggle.addEventListener('click',function(){
+  ebotSidebar.classList.contains('open')?closeSidebar():openSidebar();
+});
+document.getElementById('sidebarClose').addEventListener('click',closeSidebar);
+sidebarOverlay.addEventListener('click',closeSidebar);
+
+// eBot action buttons
+document.querySelectorAll('.ebot-action-btn[data-action]').forEach(function(btn){
+  btn.addEventListener('click',function(){sendToEbot(this.dataset.action);});
+});
+
+// Editor events
+editor.addEventListener('input',function(){updateCounts();markDirty();});
+docTitle.addEventListener('input',markDirty);
+document.addEventListener('keydown',handleKeyDown);
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&ebotSidebar.classList.contains('open')) closeSidebar();
+});
+
+// Init
+initTheme();
+loadDocument();
+updateCounts();
+checkEbotConnection();
+setInterval(checkEbotConnection,30000);
+})();
+</script>
+</body>
+</html>

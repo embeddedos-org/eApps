@@ -1,0 +1,16 @@
+name: jetson-orin
+display_name: NVIDIA Jetson Orin (Cortex-A78AE)
+arch: arm64
+engine: qemu
+class: soc
+vendor: NVIDIA
+soc: Orin
+domain: robotics
+modeling: deterministic
+qemu:
+  machine: virt
+  cpu: cortex-a78ae
+runtime:
+  memory_mb: 8192
+  headless: true
+  uart: sysbus.uart0

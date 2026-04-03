@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  eoffice-server:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - EBOT_HOST=192.168.1.100
+      - EBOT_PORT=8420
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

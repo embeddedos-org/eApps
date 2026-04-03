@@ -1,0 +1,16 @@
+name: imx8m
+display_name: NXP i.MX 8M (Cortex-A53 + M4)
+arch: arm64
+engine: qemu
+class: soc
+vendor: NXP
+soc: iMX8MQ
+domain: industrial
+modeling: deterministic
+qemu:
+  machine: virt
+  cpu: cortex-a53
+runtime:
+  memory_mb: 4096
+  headless: true
+  uart: sysbus.uart0

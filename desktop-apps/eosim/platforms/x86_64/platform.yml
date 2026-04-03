@@ -1,0 +1,13 @@
+name: x86_64-linux
+display_name: x86_64 Generic Linux
+arch: x86_64
+engine: qemu
+class: virtual
+vendor: Generic
+soc: x86_64
+qemu:
+  machine: q35
+  cpu: qemu64
+runtime:
+  memory_mb: 2048
+  headless: true

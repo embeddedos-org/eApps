@@ -1,0 +1,14 @@
+name: esp32s3
+display_name: Espressif ESP32-S3 (AI+WiFi)
+arch: xtensa
+engine: eosim
+class: mcu
+vendor: Espressif
+soc: ESP32-S3
+qemu:
+  machine: virt
+  cpu: lx7
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

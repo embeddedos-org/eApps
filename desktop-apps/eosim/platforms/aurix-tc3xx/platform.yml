@@ -1,0 +1,14 @@
+name: aurix-tc3xx
+display_name: Infineon AURIX TC3xx (Auto)
+arch: tricore
+engine: eosim
+class: automotive
+vendor: Infineon
+soc: TC397
+qemu:
+  machine: virt
+  cpu: tc3xx
+runtime:
+  memory_mb: 4096
+  headless: true
+  uart: sysbus.uart0

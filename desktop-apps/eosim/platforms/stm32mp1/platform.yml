@@ -1,0 +1,14 @@
+name: stm32mp1
+display_name: ST STM32MP157 (MPU+MCU)
+arch: arm
+engine: eosim
+class: mpu
+vendor: ST
+soc: STM32MP157
+qemu:
+  machine: virt
+  cpu: cortex-a7
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

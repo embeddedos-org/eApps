@@ -1,0 +1,14 @@
+name: vexpress-a9
+display_name: ARM Versatile Express A9
+arch: arm
+engine: eosim
+class: devboard
+vendor: ARM
+soc: VExpress
+qemu:
+  machine: vexpress-a9
+  cpu: cortex-a9
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

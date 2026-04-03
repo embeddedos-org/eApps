@@ -1,0 +1,80 @@
+{
+  "name": "eoffice-desktop",
+  "version": "0.1.0",
+  "description": "eOffice Suite — Desktop App for Windows, macOS, Linux",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:all": "electron-builder --win --mac --linux",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "org.embeddedos.eoffice",
+    "productName": "eOffice Suite",
+    "copyright": "Copyright © 2026 EoS Project",
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*",
+      "../browser/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../browser",
+        "to": "browser",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm"
+      ],
+      "icon": "assets/icon.png",
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    }
+  },
+  "dependencies": {
+    "electron-is-dev": "^2.0.0"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "author": {
+    "name": "EoS Project",
+    "email": "eos@embeddedos.org"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/embeddedos-org/eOffice"
+}

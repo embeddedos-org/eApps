@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#93c5fd;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect x="8" y="8" width="112" height="112" rx="24" ry="24" fill="url(#bg)"/>
+  <!-- Document icon -->
+  <rect x="36" y="28" width="56" height="72" rx="6" ry="6" fill="#ffffff" opacity="0.95"/>
+  <!-- Fold corner -->
+  <path d="M72 28 L92 48 L72 48 Z" fill="#dbeafe"/>
+  <!-- Text lines -->
+  <rect x="46" y="56" width="36" height="4" rx="2" fill="url(#accent)"/>
+  <rect x="46" y="66" width="28" height="4" rx="2" fill="url(#accent)" opacity="0.7"/>
+  <rect x="46" y="76" width="32" height="4" rx="2" fill="url(#accent)" opacity="0.5"/>
+  <rect x="46" y="86" width="20" height="4" rx="2" fill="url(#accent)" opacity="0.3"/>
+  <!-- Small 'e' badge -->
+  <circle cx="96" cy="92" r="16" fill="#1e40af"/>
+  <text x="96" y="98" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">e</text>
+</svg>

@@ -1,0 +1,14 @@
+name: generic-mcu-board
+display_name: Generic MCU Board Template
+arch: arm
+engine: renode
+peripherals:
+  - uart
+  - spi
+  - i2c
+  - gpio
+  - timer
+  - flash
+runtime:
+  memory_mb: 128
+  headless: true

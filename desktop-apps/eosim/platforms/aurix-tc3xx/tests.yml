@@ -1,0 +1,6 @@
+name: aurix-tc3xx-test
+platform: aurix-tc3xx
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

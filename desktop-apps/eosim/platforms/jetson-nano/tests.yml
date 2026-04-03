@@ -1,0 +1,6 @@
+name: jetson-nano-test
+platform: jetson-nano
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

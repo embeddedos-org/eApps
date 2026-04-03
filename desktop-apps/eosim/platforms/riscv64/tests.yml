@@ -1,0 +1,7 @@
+name: riscv64-boot-test
+platform: riscv64-linux
+checks:
+  - type: timeout
+    seconds: 30
+  - type: serial_contains
+    value: "login:"

@@ -1,0 +1,26 @@
+name: ti-msp432
+display_name: TI MSP432P401R (Cortex-M4F)
+arch: arm
+engine: eosim
+class: mcu
+vendor: TI
+soc: MSP432P401R
+domain: consumer
+modeling: deterministic
+runtime:
+  memory_mb: 64
+  headless: true
+  uart: sysbus.uart0
+name: ti-msp432
+display_name: TI MSP432P401R (Cortex-M4F)
+arch: arm
+engine: eosim
+class: mcu
+vendor: TI
+soc: MSP432P401R
+domain: iot
+modeling: deterministic
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,13 @@
+name: samc21
+display_name: Microchip SAMC21 (Cortex-M0+)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Microchip
+soc: ATSAMC21J18A
+domain: industrial
+modeling: deterministic
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

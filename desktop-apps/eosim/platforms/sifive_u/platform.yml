@@ -1,0 +1,14 @@
+name: sifive_u
+display_name: SiFive Unleashed (FU740)
+arch: riscv64
+engine: eosim
+class: sbc
+vendor: SiFive
+soc: FU740
+qemu:
+  machine: sifive_u
+  cpu: u74
+runtime:
+  memory_mb: 2048
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,6 @@
+name: rp2040-test
+platform: rp2040
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

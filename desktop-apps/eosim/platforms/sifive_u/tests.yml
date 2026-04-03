@@ -1,0 +1,6 @@
+name: sifive_u-test
+platform: sifive_u
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

@@ -1,0 +1,6 @@
+name: xtensa-esp-test
+platform: xtensa-esp
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

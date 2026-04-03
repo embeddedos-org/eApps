@@ -1,0 +1,10 @@
+name: arm-vexpress
+display_name: ARM Versatile Express A15
+arch: arm
+engine: qemu
+qemu:
+  machine: vexpress-a15
+  cpu: cortex-a15
+runtime:
+  memory_mb: 1024
+  headless: true

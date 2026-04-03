@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>eForms — Forms & Surveys</title>
+<style>:root{--bg:#f5f6f8;--bg2:#fff;--bg3:#f8f9fa;--bgH:#e8eaed;--bgS:#e8f0fe;--bgI:#f0f2f5;--tx:#202124;--tx2:#5f6368;--tx3:#80868b;--bd:#e0e0e0;--ac:#1a73e8;--acL:#e8f0fe;--fn:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;--mo:'Consolas',monospace}
+[data-theme="dark"]{--bg:#1a1a2e;--bg2:#1e293b;--bg3:#0f172a;--bgH:#334155;--bgS:#1e3a5f;--bgI:#334155;--tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;--bd:#334155;--ac:#60a5fa;--acL:#1e3a5f}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}body{font-family:var(--fn);background:var(--bg);color:var(--tx)}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:4px}
+.app{display:flex;flex-direction:column;height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.btn{padding:5px 10px;border:0;border-radius:4px;background:0;color:var(--tx2);font-size:12px;cursor:pointer;font-family:var(--fn)}a.btn{text-decoration:none}.btn:hover{background:var(--bgH)}
+.bp{background:var(--ac);color:#fff;border:0;padding:6px 16px;border-radius:4px;font-size:12px;cursor:pointer;width:100%}.bp:hover{opacity:.9}
+.main{display:flex;flex:1;overflow:hidden}
+.pn{width:260px;background:var(--bg2);border-right:1px solid var(--bd);display:flex;flex-direction:column;flex-shrink:0}
+.ph{padding:12px;border-bottom:1px solid var(--bd);display:flex;flex-direction:column;gap:8px}
+.sr{width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font-size:13px;outline:0}.sr:focus{border-color:var(--ac)}
+.il{flex:1;overflow-y:auto;padding:4px 8px}
+.it{padding:10px 12px;border-radius:6px;cursor:pointer;border-left:3px solid transparent;margin-bottom:2px}.it:hover{background:var(--bgH)}.it.sel{background:var(--bgS);border-left-color:var(--ac)}
+.it-t{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it-m{font-size:11px;color:var(--tx3)}
+.det{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+.de{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--tx3);font-size:14px;gap:8px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:150;display:none}
+.es{position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--bg2);border-left:1px solid var(--bd);box-shadow:-4px 0 16px rgba(0,0,0,.15);z-index:200;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s}.es.open{transform:translateX(0)}
+.esh{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--bd)}
+.esb{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--bg2);color:var(--tx);font-size:12px;cursor:pointer;text-align:left;width:100%;font-family:var(--fn);margin-bottom:4px}.esb:hover{background:var(--bgH);border-color:var(--ac)}
+.esr{flex:1;overflow-y:auto;padding:10px 14px}
+
+@media(max-width:768px){.es{width:100%}.pn{width:100%}}
+</style></head><body>
+<div class="app">
+<div class="top"><span style="font-size:17px;font-weight:700;color:var(--ac)">&#128203; eForms</span>
+<div style="display:flex;gap:4px"><button class="btn" id="thm">&#127769;</button><button class="btn" id="ebt">&#9889; eBot</button><a href="index.html" class="btn">&#8592; Back</a></div></div>
+<div class="main"><div class="pn"><div class="ph"><button class="bp" id="aB">+ New Form</button><input class="sr" id="sr" placeholder="Search..."></div><div class="il" id="il"></div></div>
+<div class="det" id="det"><div class="de">&#128203;<br>Select or create a form</div></div></div>
+<div class="ov" id="oV"></div>
+<aside class="es" id="eS"><div class="esh"><span style="font-size:14px;font-weight:600">&#129302; eBot AI</span><button style="border:0;background:0;color:var(--tx2);font-size:15px;cursor:pointer" id="sCl">&#10005;</button></div>
+<div style="padding:10px 14px;border-bottom:1px solid var(--bd)"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--tx3);font-weight:600;margin-bottom:6px">eForms AI</div><button class="esb" data-a="gq">&#128172; Generate Questions</button><button class="esb" data-a="sr">&#128202; Summarize Responses</button><button class="esb" data-a="sg">&#128161; Improvements</button></div>
+<div class="esr" id="eR"><div style="color:var(--tx3);text-align:center;padding:40px;font-size:12px">&#129302; Choose an AI action</div></div></aside></div>
+<script>
+(function(){var SK='eforms_data',items=[],curId=null,$=function(i){return document.getElementById(i);};
+function uid(){return Math.random().toString(36).substr(2,9);}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function save(){localStorage.setItem(SK,JSON.stringify(items));}
+function load(){try{var d=JSON.parse(localStorage.getItem(SK));items=d&&d.length?d:[{id:uid(),title:'Employee Survey',meta:'3 questions',qs:[{q:'How satisfied are you?',ty:'rating'},{q:'What could improve?',ty:'text'},{q:'Recommend?',ty:'yes/no'}]},{id:uid(),title:'Event Feedback',meta:'2 questions',qs:[{q:'Rate the event',ty:'rating'},{q:'Best part?',ty:'text'}]}];}catch(e){items=[{id:uid(),title:'Employee Survey',meta:'3 questions',qs:[{q:'How satisfied are you?',ty:'rating'},{q:'What could improve?',ty:'text'},{q:'Recommend?',ty:'yes/no'}]},{id:uid(),title:'Event Feedback',meta:'2 questions',qs:[{q:'Rate the event',ty:'rating'},{q:'Best part?',ty:'text'}]}];}}
+function render(){rL();rD();}
+function rL(){var el=$('il'),q=$('sr').value.toLowerCase();el.innerHTML='';
+var fl=items.filter(function(x){return!q||JSON.stringify(x).toLowerCase().indexOf(q)>=0;});
+if(!fl.length){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--tx3);font-size:12px">No items</div>';return;}
+fl.forEach(function(item){var d=document.createElement('div');d.className='it'+(item.id===curId?' sel':'');
+d.innerHTML='<div class="it-t">'+esc(item.title||'Untitled')+'</div><div class="it-m">'+(item.meta||'')+'</div>';
+d.onclick=function(){curId=item.id;render();};el.appendChild(d);});}
+function rD(){var el=$('det');if(!curId){el.innerHTML='<div class="de">&#128203;<br>Select a form</div>';return;}
+var f=items.find(function(x){return x.id===curId;});if(!f)return;if(!f.qs)f.qs=[];
+var q=f.qs.map(function(q,i){return'<div style="padding:12px;background:var(--bg2);border:1px solid var(--bd);border-radius:6px;margin-bottom:8px"><div style="font-size:13px;font-weight:600;margin-bottom:4px">Q'+(i+1)+': '+esc(q.q)+'</div><div style="font-size:11px;color:var(--tx3)">Type: '+q.ty+'</div></div>';}).join('');
+el.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h2>'+esc(f.title)+'</h2><button class="btn" onclick="addQ()">+ Add Question</button></div>'+q;}
+window.addQ=function(){var f=items.find(function(x){return x.id===curId;});if(!f)return;var q=prompt('Question:');if(!q)return;if(!f.qs)f.qs=[];f.qs.push({q:q,ty:'text'});f.meta=f.qs.length+' questions';save();render();};
+$('aB').onclick=function(){var n=prompt('Form title:');if(!n)return;items.push({id:uid(),title:n,meta:'0 questions',qs:[]});save();render();};
+$('sr').oninput=function(){rL();};
+function oS(){$('eS').classList.add('open');$('oV').style.display='block';}
+function cS(){$('eS').classList.remove('open');$('oV').style.display='none';}
+$('ebt').onclick=function(){$('eS').classList.contains('open')?cS():oS();};$('sCl').onclick=cS;$('oV').onclick=cS;
+async function eA(a){var rp=$('eR'),it=curId?items.find(function(x){return x.id===curId;}):null,ctx=it?JSON.stringify(it):'';
+rp.innerHTML='<div style="padding:12px;color:var(--tx3)">\u23f3 Thinking...</div>';
+try{var r=await fetch('http://localhost:3001/api/ebot/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:a+'\n'+ctx,context:'eForms'}),signal:AbortSignal.timeout(15000)});
+var d=await r.json(),t=d.reply||d.message||d.response||JSON.stringify(d);
+rp.innerHTML='<div style="padding:10px;background:var(--acL);border:1px solid var(--bd);border-radius:6px;font-size:11px;line-height:1.6;white-space:pre-wrap">'+t.replace(/</g,'&lt;')+'</div>';
+}catch(e){rp.innerHTML='<div style="padding:10px;background:#fef2f2;border:1px solid #fecaca;border-radius:6px;font-size:11px;color:#991b1b">eBot offline. Start: npm run dev:server</div>';}}
+document.querySelectorAll('.esb').forEach(function(b){b.onclick=function(){eA(b.dataset.a);};});
+var t=localStorage.getItem('eo-theme')||'light';document.documentElement.setAttribute('data-theme',t);$('thm').textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';
+$('thm').onclick=function(){var c=document.documentElement.getAttribute('data-theme'),n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('eo-theme',n);$('thm').textContent=n==='dark'?'\u2600\ufe0f':'\ud83c\udf19';};
+load();render();
+})();
+</script></body></html>

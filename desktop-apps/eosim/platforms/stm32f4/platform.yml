@@ -1,0 +1,16 @@
+name: stm32f4
+display_name: ST STM32F407 (Cortex-M4)
+arch: arm
+engine: eosim
+class: mcu
+vendor: ST
+soc: STM32F407
+domain: industrial
+modeling: deterministic
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m4
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,6 @@
+name: raspi-zero2w-test
+platform: raspi-zero2w
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

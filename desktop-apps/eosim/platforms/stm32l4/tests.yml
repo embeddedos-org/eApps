@@ -1,0 +1,6 @@
+name: stm32l4-test
+platform: stm32l4
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

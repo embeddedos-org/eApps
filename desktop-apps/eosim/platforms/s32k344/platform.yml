@@ -1,0 +1,16 @@
+name: s32k344
+display_name: NXP S32K344 (Cortex-M7 Automotive)
+arch: arm
+engine: eosim
+class: mcu
+vendor: NXP
+soc: S32K344
+domain: automotive
+modeling: deterministic
+domain_config:
+  safety_level: ASIL-B
+  standards: [ISO 26262, AUTOSAR]
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

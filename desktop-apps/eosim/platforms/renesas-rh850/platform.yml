@@ -1,0 +1,16 @@
+name: renesas-rh850
+display_name: Renesas RH850 (Automotive MCU)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Renesas
+soc: RH850
+domain: automotive
+modeling: deterministic
+domain_config:
+  safety_level: ASIL-D
+  standards: [ISO 26262]
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,14 @@
+name: jetson-nano
+display_name: NVIDIA Jetson Nano (Tegra X1)
+arch: arm64
+engine: eosim
+class: sbc
+vendor: NVIDIA
+soc: Tegra-X1
+qemu:
+  machine: virt
+  cpu: cortex-a57
+runtime:
+  memory_mb: 4096
+  headless: true
+  uart: sysbus.uart0

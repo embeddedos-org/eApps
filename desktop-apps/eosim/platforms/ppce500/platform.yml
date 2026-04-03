@@ -1,0 +1,14 @@
+name: ppce500
+display_name: PowerPC e500mc (Industrial)
+arch: powerpc
+engine: eosim
+class: industrial
+vendor: NXP
+soc: e500
+qemu:
+  machine: ppce500
+  cpu: e500mc
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

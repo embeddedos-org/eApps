@@ -1,0 +1,14 @@
+name: xtensa-esp
+display_name: Xtensa LX7 Generic (ESP)
+arch: xtensa
+engine: eosim
+class: mcu
+vendor: Espressif
+soc: Xtensa
+qemu:
+  machine: virt
+  cpu: lx7
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,16 @@
+name: k64f
+display_name: NXP FRDM-K64F (Cortex-M4)
+arch: arm
+engine: eosim
+class: mcu
+vendor: NXP
+soc: MK64FN1M0VLL12
+domain: consumer
+modeling: deterministic
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m4
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

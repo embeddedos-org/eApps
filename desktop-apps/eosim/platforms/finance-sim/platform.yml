@@ -1,0 +1,11 @@
+name: finance-sim
+display_name: Financial Market Simulator
+arch: x86_64
+engine: eosim
+class: desktop
+domain: finance
+modeling: monte-carlo
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,14 @@
+name: samd51
+display_name: Microchip SAMD51 (Arduino)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Microchip
+soc: SAMD51
+qemu:
+  machine: virt
+  cpu: cortex-m4
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

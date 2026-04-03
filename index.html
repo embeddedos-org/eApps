@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EoS Marketplace — eApps</title>
+  <meta name="description" content="The unified marketplace for all EoS applications — browser extensions, desktop apps, mobile apps, and cloud services." />
+  <link rel="stylesheet" href="css/marketplace.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+
+  <header class="header">
+    <h1>⚡ EoS Marketplace</h1>
+    <p>One place for every EoS app — extensions, desktop, mobile, services, and embedded-native apps.</p>
+    <div class="stats-bar" id="stats">
+      <!-- populated by JS -->
+    </div>
+  </header>
+
+  <nav class="toolbar">
+    <div class="search-box">
+      <input id="search" type="text" placeholder="Search apps, tags, platforms…" />
+    </div>
+    <div class="filter-pills" id="filters">
+      <!-- populated by JS -->
+    </div>
+  </nav>
+
+  <main class="grid" id="app-grid">
+    <div class="empty-state">
+      <div class="icon">⏳</div>
+      <p>Loading app catalog…</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      &copy; 2026 <a href="https://github.com/embeddedos-org">embeddedos-org</a> &middot;
+      <a href="https://github.com/embeddedos-org/eApps">GitHub</a> &middot;
+      <a href="docs/architecture.md">Architecture</a> &middot;
+      <a href="CONTRIBUTING.md">Contribute</a>
+    </p>
+  </footer>
+
+  <script src="js/marketplace.js"></script>
+</body>
+</html>

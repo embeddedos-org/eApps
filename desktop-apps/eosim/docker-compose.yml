@@ -1,0 +1,16 @@
+services:
+  eosim:
+    build: .
+    volumes:
+      - ./platforms:/opt/eosim/platforms:ro
+      - ./examples:/opt/eosim/examples:ro
+      - ./out:/opt/eosim/out
+    entrypoint: ["eosim"]
+    command: ["--help"]
+
+  test:
+    build: .
+    entrypoint: ["eosim"]
+    command: ["validate", "--all"]
+    volumes:
+      - ./platforms:/opt/eosim/platforms:ro

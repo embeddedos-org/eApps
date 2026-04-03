@@ -1,0 +1,6 @@
+name: nrf52-test
+platform: nrf52
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eNotes — Digital Notebook</title>
+<style>
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f6f8;
+  --bg-tertiary: #ebedf0;
+  --bg-hover: #e4e6ea;
+  --bg-selected: #e7f3ff;
+  --text-primary: #1c1e21;
+  --text-secondary: #606770;
+  --text-muted: #8a8d91;
+  --border-color: #dadde1;
+  --accent: #1877f2;
+  --accent-hover: #166fe5;
+  --accent-light: #e7f3ff;
+  --danger: #e4405f;
+  --danger-hover: #d0294e;
+  --success: #42b72a;
+  --warning: #f7b928;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.15);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.2);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --panel-width: 300px;
+  --divider-width: 4px;
+  --ebot-height: 280px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --scrollbar-thumb: #c1c1c1;
+  --scrollbar-track: transparent;
+  --tag-opacity: 0.15;
+}
+[data-theme="dark"] {
+  --bg-primary: #18191a;
+  --bg-secondary: #242526;
+  --bg-tertiary: #3a3b3c;
+  --bg-hover: #3a3b3c;
+  --bg-selected: #263951;
+  --text-primary: #e4e6eb;
+  --text-secondary: #b0b3b8;
+  --text-muted: #8a8d91;
+  --border-color: #3e4042;
+  --accent: #2d88ff;
+  --accent-hover: #1a7aff;
+  --accent-light: #263951;
+  --danger: #f3425f;
+  --danger-hover: #e4405f;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.4);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.5);
+  --scrollbar-thumb: #4e4f50;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);transition:background var(--transition-normal),color var(--transition-normal);}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--scrollbar-track);}
+::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text-muted);}
+.app-container{display:flex;height:100vh;width:100vw;overflow:hidden;}
+.left-panel{width:var(--panel-width);min-width:240px;max-width:500px;background:var(--bg-secondary);border-right:1px solid var(--border-color);display:flex;flex-direction:column;transition:width var(--transition-normal);position:relative;z-index:10;}
+.panel-header{padding:16px;border-bottom:1px solid var(--border-color);flex-shrink:0;}
+.panel-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.app-title{font-size:20px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:6px;user-select:none;}
+.header-actions{display:flex;align-items:center;gap:6px;}
+.icon-btn{width:32px;height:32px;border:none;background:transparent;border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:16px;transition:all var(--transition-fast);}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text-primary);}
+.icon-btn.accent{background:var(--accent);color:#fff;}
+.icon-btn.accent:hover{background:var(--accent-hover);}
+.search-container{position:relative;}
+.search-container input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--border-color);border-radius:var(--radius-md);background:var(--bg-primary);color:var(--text-primary);font-size:13px;outline:none;transition:border-color var(--transition-fast);}
+.search-container input:focus{border-color:var(--accent);}
+.search-container .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px;pointer-events:none;}
+.note-count{padding:8px 16px 4px;font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;flex-shrink:0;}
+.note-list{flex:1;overflow-y:auto;padding:4px 8px;}
+.note-item{padding:10px 12px;border-radius:var(--radius-md);cursor:pointer;border-left:3px solid transparent;margin-bottom:2px;transition:all var(--transition-fast);position:relative;}
+.note-item:hover{background:var(--bg-hover);}
+.note-item.selected{background:var(--bg-selected);border-left-color:var(--accent);}
+.note-item-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:2px;display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.note-item-title .pin-icon{font-size:12px;flex-shrink:0;}
+.note-item-preview{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;}
+.note-item-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.note-item-date{font-size:11px;color:var(--text-muted);}
+.note-item-tags{display:flex;gap:4px;flex-wrap:wrap;}
+.tag-pill{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:600;cursor:pointer;transition:opacity var(--transition-fast);white-space:nowrap;}
+.tag-pill:hover{opacity:0.8;}
+.tag-pill .tag-remove{font-size:12px;line-height:1;cursor:pointer;margin-left:2px;opacity:0.6;}
+.tag-pill .tag-remove:hover{opacity:1;}
+.panel-footer{padding:12px 16px;border-top:1px solid var(--border-color);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.panel-footer a{color:var(--text-muted);text-decoration:none;font-size:12px;transition:color var(--transition-fast);}
+.panel-footer a:hover{color:var(--accent);}
+.footer-actions{display:flex;gap:4px;}
+.panel-divider{width:var(--divider-width);background:var(--border-color);cursor:col-resize;flex-shrink:0;transition:background var(--transition-fast);position:relative;z-index:11;}
+.panel-divider:hover,.panel-divider.dragging{background:var(--accent);}
+.right-panel{flex:1;display:flex;flex-direction:column;background:var(--bg-primary);min-width:0;position:relative;}
+.editor-container{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.editor-header{padding:20px 28px 0;flex-shrink:0;}
+.title-input{width:100%;border:none;background:transparent;font-size:28px;font-weight:700;color:var(--text-primary);outline:none;padding:0;margin-bottom:12px;}
+.title-input::placeholder{color:var(--text-muted);}
+.tag-bar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding-bottom:12px;border-bottom:1px solid var(--border-color);min-height:32px;}
+.tag-input{border:none;background:transparent;font-size:13px;color:var(--text-primary);outline:none;min-width:80px;flex:1;}
+.tag-input::placeholder{color:var(--text-muted);}
+.editor-toolbar{display:flex;align-items:center;justify-content:space-between;padding:8px 28px;border-bottom:1px solid var(--border-color);flex-shrink:0;}
+.toolbar-left{display:flex;align-items:center;gap:8px;}
+.toolbar-right{display:flex;align-items:center;gap:4px;}
+.toolbar-btn{padding:4px 10px;border:1px solid var(--border-color);border-radius:var(--radius-sm);background:var(--bg-secondary);color:var(--text-secondary);font-size:12px;cursor:pointer;transition:all var(--transition-fast);}
+.toolbar-btn:hover{background:var(--bg-hover);color:var(--text-primary);}
+.toolbar-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.last-modified{font-size:11px;color:var(--text-muted);}
+.editor-content{flex:1;overflow-y:auto;padding:16px 28px 20px;}
+.content-textarea{width:100%;min-height:200px;border:none;background:transparent;color:var(--text-primary);font-size:15px;line-height:1.7;resize:none;outline:none;font-family:var(--font-sans);}
+.content-textarea.monospace{font-family:var(--font-mono);font-size:14px;}
+.content-textarea::placeholder{color:var(--text-muted);}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text-muted);gap:12px;padding:40px;}
+.empty-state .empty-icon{font-size:48px;opacity:0.5;}
+.empty-state p{font-size:14px;text-align:center;}
+.ebot-panel{border-top:1px solid var(--border-color);background:var(--bg-secondary);flex-shrink:0;transition:max-height 0.3s ease;overflow:hidden;max-height:40px;}
+.ebot-panel.expanded{max-height:400px;}
+.ebot-toggle{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;cursor:pointer;user-select:none;font-size:13px;font-weight:600;color:var(--text-secondary);transition:background var(--transition-fast);}
+.ebot-toggle:hover{background:var(--bg-hover);}
+.ebot-toggle .chevron{transition:transform 0.3s ease;font-size:12px;}
+.ebot-panel.expanded .ebot-toggle .chevron{transform:rotate(180deg);}
+.ebot-body{padding:12px 16px;}
+.ebot-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.ebot-btn{padding:6px 14px;border:1px solid var(--border-color);border-radius:var(--radius-md);background:var(--bg-primary);color:var(--text-primary);font-size:12px;cursor:pointer;transition:all var(--transition-fast);display:flex;align-items:center;gap:4px;}
+.ebot-btn:hover{border-color:var(--accent);background:var(--accent-light);color:var(--accent);}
+.ebot-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.ebot-response{background:var(--bg-primary);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:12px;font-size:13px;line-height:1.6;color:var(--text-secondary);max-height:180px;overflow-y:auto;white-space:pre-wrap;}
+.ebot-response.empty{color:var(--text-muted);font-style:italic;}
+.context-menu{position:fixed;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:var(--radius-md);box-shadow:var(--shadow-lg);z-index:1000;min-width:160px;padding:4px;display:none;}
+.context-menu.visible{display:block;}
+.context-menu-item{padding:8px 12px;font-size:13px;cursor:pointer;border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;color:var(--text-primary);transition:background var(--transition-fast);}
+.context-menu-item:hover{background:var(--bg-hover);}
+.context-menu-item.danger{color:var(--danger);}
+.context-menu-item.danger:hover{background:rgba(228,64,95,0.1);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;visibility:hidden;transition:all var(--transition-normal);}
+.modal-overlay.visible{opacity:1;visibility:visible;}
+.modal{background:var(--bg-primary);border-radius:var(--radius-lg);padding:24px;min-width:320px;max-width:420px;box-shadow:var(--shadow-lg);transform:scale(0.95);transition:transform var(--transition-normal);}
+.modal-overlay.visible .modal{transform:scale(1);}
+.modal h3{font-size:16px;margin-bottom:8px;}
+.modal p{font-size:14px;color:var(--text-secondary);margin-bottom:20px;}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;}
+.modal-btn{padding:8px 18px;border:1px solid var(--border-color);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;transition:all var(--transition-fast);background:var(--bg-secondary);color:var(--text-primary);}
+.modal-btn:hover{background:var(--bg-hover);}
+.modal-btn.danger{background:var(--danger);color:#fff;border-color:var(--danger);}
+.modal-btn.danger:hover{background:var(--danger-hover);}
+.mobile-back-btn{display:none;padding:8px 12px;background:var(--bg-secondary);border:none;border-bottom:1px solid var(--border-color);color:var(--accent);font-size:13px;cursor:pointer;width:100%;text-align:left;}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--text-primary);color:var(--bg-primary);padding:10px 18px;border-radius:var(--radius-md);font-size:13px;box-shadow:var(--shadow-md);z-index:3000;opacity:0;transform:translateY(10px);transition:all 0.3s ease;pointer-events:none;}
+.toast.visible{opacity:1;transform:translateY(0);}
+mark.search-highlight{background:var(--warning);color:#000;padding:0 2px;border-radius:2px;}
+.import-input{display:none;}
+@media (max-width:768px){
+  .left-panel{position:absolute;left:0;top:0;bottom:0;width:100%!important;max-width:100%!important;z-index:20;transition:transform 0.3s ease;}
+  .left-panel.hidden-mobile{transform:translateX(-100%);}
+  .panel-divider{display:none;}
+  .mobile-back-btn{display:block;}
+  .right-panel{width:100%;}
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+.note-item{animation:fadeIn 0.2s ease;}
+.shortcut-hint{font-size:10px;color:var(--text-muted);background:var(--bg-tertiary);padding:1px 5px;border-radius:3px;margin-left:auto;font-family:var(--font-mono);}
+</style>
+</head>
+<body>
+<div class="app-container" id="app">
+  <div class="left-panel" id="leftPanel">
+    <div class="panel-header">
+      <div class="panel-header-top">
+        <div class="app-title">📒 eNotes</div>
+        <div class="header-actions">
+          <button class="icon-btn" id="themeToggle" title="Toggle dark/light mode">🌙</button>
+          <button class="icon-btn accent" id="newNoteBtn" title="New Note (Ctrl+N)">+</button>
+        </div>
+      </div>
+      <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search notes..." autocomplete="off">
+      </div>
+    </div>
+    <div class="note-count" id="noteCount">0 notes</div>
+    <div class="note-list" id="noteList"></div>
+    <div class="panel-footer">
+      <span style="font-size:12px;color:var(--text-muted)">eNotes — eOffice Suite</span>
+      <div class="footer-actions">
+        <button class="icon-btn" id="importBtn" title="Import notes">📥</button>
+        <button class="icon-btn" id="exportBtn" title="Export notes">📤</button>
+      </div>
+    </div>
+    <input type="file" class="import-input" id="importInput" accept=".json">
+  </div>
+  <div class="panel-divider" id="panelDivider"></div>
+  <div class="right-panel" id="rightPanel">
+    <button class="mobile-back-btn" id="mobileBackBtn">← Back to notes</button>
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">📝</div>
+      <p>Select a note or create a new one<br><small>Ctrl+N to create</small></p>
+    </div>
+    <div class="editor-container" id="editorContainer" style="display:none;">
+      <div class="editor-header">
+        <input type="text" class="title-input" id="titleInput" placeholder="Note title...">
+        <div class="tag-bar" id="tagBar">
+          <input type="text" class="tag-input" id="tagInput" placeholder="Add tag...">
+        </div>
+      </div>
+      <div class="editor-toolbar">
+        <div class="toolbar-left">
+          <span class="last-modified" id="lastModified"></span>
+        </div>
+        <div class="toolbar-right">
+          <button class="toolbar-btn" id="monoToggle" title="Toggle monospace">Mono</button>
+        </div>
+      </div>
+      <div class="editor-content">
+        <textarea class="content-textarea" id="contentTextarea" placeholder="Start writing..."></textarea>
+      </div>
+      <div class="ebot-panel" id="ebotPanel">
+        <div class="ebot-toggle" id="ebotToggle">
+          <span>🤖 eBot AI</span>
+          <span class="chevron">▲</span>
+        </div>
+        <div class="ebot-body">
+          <div class="ebot-actions">
+            <button class="ebot-btn" data-action="summarize">📝 Summarize</button>
+            <button class="ebot-btn" data-action="auto-tag">🏷️ Auto-Tag</button>
+            <button class="ebot-btn" data-action="extract-tasks">✅ Extract Tasks</button>
+            <button class="ebot-btn" data-action="find-related">🔗 Find Related</button>
+          </div>
+          <div class="ebot-response empty" id="ebotResponse">eBot responses will appear here...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="context-menu" id="contextMenu">
+  <div class="context-menu-item" data-action="pin"><span>📌</span> Pin/Unpin</div>
+  <div class="context-menu-item danger" data-action="delete"><span>🗑️</span> Delete</div>
+</div>
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal">
+    <h3>Delete Note</h3>
+    <p>Are you sure you want to delete this note? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-btn" id="cancelDelete">Cancel</button>
+      <button class="modal-btn danger" id="confirmDelete">Delete</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="enotes-app.js"></script>
+</body>
+</html>

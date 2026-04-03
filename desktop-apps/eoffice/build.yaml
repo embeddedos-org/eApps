@@ -1,0 +1,29 @@
+name: eoffice
+version: 0.1.0
+description: eOffice Suite — AI-powered office productivity with eBot
+
+build:
+  type: node
+  node_version: "20"
+
+  steps:
+    - name: install
+      command: npm ci
+    - name: lint
+      command: npm run lint
+    - name: typecheck
+      command: npx tsc --noEmit
+    - name: test
+      command: npm test
+    - name: build
+      command: npm run build
+
+  artifacts:
+    - packages/*/dist/
+    - apps/*/dist/
+
+platforms:
+  - linux-x64
+  - windows-x64
+  - darwin-arm64
+  - web

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eOffice Suite</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bg-hover:#2d3a4f;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#60a5fa;--accent2:#3b82f6;--accent-dim:#1e3a5f;
+  --green:#34d399;--green-dim:#064e3b;--orange:#fbbf24;--orange-dim:#78350f;
+  --red:#f87171;--border:#334155;
+  --radius:8px;--radius-sm:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+body{
+  width:380px;height:480px;overflow-y:auto;overflow-x:hidden;
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  font-size:13px;line-height:1.5;
+}
+body::-webkit-scrollbar{width:5px;}
+body::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px;}
+
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  background:var(--bg2);position:sticky;top:0;z-index:10;
+}
+.header-left{display:flex;align-items:center;gap:10px;}
+.logo{font-size:18px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:6px;}
+.logo-icon{font-size:22px;}
+.ebot-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;
+  background:var(--green-dim);color:var(--green);
+}
+.ebot-badge.offline{background:rgba(248,113,113,0.15);color:var(--red);}
+.header-right{display:flex;align-items:center;gap:6px;}
+.icon-btn{
+  width:28px;height:28px;border:none;border-radius:var(--radius-sm);
+  background:transparent;color:var(--text2);font-size:14px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.15s;
+}
+.icon-btn:hover{background:var(--bg3);color:var(--text);}
+
+.search-bar{padding:10px 16px;}
+.search-input{
+  width:100%;padding:8px 12px 8px 32px;
+  border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg2);color:var(--text);font-size:13px;
+  outline:none;transition:border-color 0.15s;
+}
+.search-input:focus{border-color:var(--accent);}
+.search-wrap{position:relative;}
+.search-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  color:var(--text3);font-size:13px;pointer-events:none;
+}
+
+.app-list{padding:4px 12px 8px;}
+.app-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:var(--radius);
+  cursor:pointer;transition:all 0.15s;border:1px solid transparent;
+}
+.app-item:hover{background:var(--bg-hover);border-color:var(--border);}
+.app-item:active{transform:scale(0.99);}
+.app-icon{
+  width:36px;height:36px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.app-info{flex:1;min-width:0;}
+.app-name{font-size:13px;font-weight:600;color:var(--text);}
+.app-desc{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.app-badge{
+  padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0;
+}
+.badge-server{background:var(--orange-dim);color:var(--orange);}
+
+.section-label{
+  padding:8px 16px 4px;font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.8px;color:var(--text3);
+}
+
+.quick-actions{
+  padding:8px 12px 12px;display:flex;gap:8px;
+  border-top:1px solid var(--border);margin-top:4px;
+}
+.quick-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);
+  background:var(--bg2);color:var(--text);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.15s;font-family:var(--font);
+}
+.quick-btn:hover{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+
+.footer{
+  padding:8px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:10px;color:var(--text3);
+}
+.footer a{color:var(--text3);text-decoration:none;}
+.footer a:hover{color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo"><span class="logo-icon">📎</span> eOffice</div>
+    <span class="ebot-badge" id="ebotBadge">🤖 eBot</span>
+  </div>
+  <div class="header-right">
+    <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+  </div>
+</div>
+
+<div class="search-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search apps..." autocomplete="off">
+  </div>
+</div>
+
+<div class="section-label">Applications</div>
+<div class="app-list" id="appList"></div>
+
+<div class="quick-actions">
+  <button class="quick-btn" id="newDoc">📝 New Document</button>
+  <button class="quick-btn" id="newNote">📒 New Note</button>
+</div>
+
+<div class="footer">
+  <span>eOffice Suite v0.1.0 — Safari</span>
+  <a href="#" id="helpLink">Help & Docs</a>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

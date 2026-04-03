@@ -1,0 +1,6 @@
+name: stm32h7-test
+platform: stm32h7
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

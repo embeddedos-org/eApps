@@ -1,0 +1,107 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eosim"
+version = "0.1.0"
+description = "Multi-architecture embedded simulation platform for EoS"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "EoS Project", email = "team@embeddedos.org"},
+]
+maintainers = [
+    {name = "EoS Project", email = "team@embeddedos.org"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Embedded Systems",
+    "Topic :: Software Development :: Testing",
+    "Topic :: System :: Emulators",
+]
+dependencies = [
+    "click>=8.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0", "ruff>=0.4.0"]
+viz = ["matplotlib>=3.5"]
+elf = ["pyelftools>=0.29"]
+hil = ["pyserial>=3.5"]
+all = [
+    "matplotlib>=3.5",
+    "pyelftools>=0.29",
+    "pyserial>=3.5",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/embeddedos-org/eosim"
+Repository = "https://github.com/embeddedos-org/eosim"
+Documentation = "https://github.com/embeddedos-org/eosim/tree/main/docs"
+"Bug Tracker" = "https://github.com/embeddedos-org/eosim/issues"
+Changelog = "https://github.com/embeddedos-org/eosim/blob/main/CHANGELOG.md"
+
+[project.scripts]
+eosim = "eosim.cli.main:cli"
+
+[tool.setuptools.packages.find]
+include = ["eosim*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "unit: Unit tests (fast, no external dependencies)",
+    "integration: Integration tests (may require engines or fixtures)",
+    "gui: GUI tests (require display or headless mode)",
+    "slow: Tests that take more than a few seconds",
+]
+addopts = "-v --tb=short --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["eosim"]
+omit = [
+    "eosim/gui/*",
+    "eosim/tests/*",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+fail_under = 70
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "if TYPE_CHECKING:",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["N802", "N803"]

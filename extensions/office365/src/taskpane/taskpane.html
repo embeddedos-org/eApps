@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eOffice — Task Pane</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <style>
+    :root {
+      --eo-primary: #4f46e5;
+      --eo-primary-hover: #4338ca;
+      --eo-bg: #f8fafc;
+      --eo-surface: #ffffff;
+      --eo-text: #1e293b;
+      --eo-text-muted: #64748b;
+      --eo-border: #e2e8f0;
+      --eo-radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--eo-bg);
+      color: var(--eo-text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .taskpane {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--eo-primary);
+      color: #fff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header h1 { font-size: 16px; font-weight: 600; }
+    .header .logo { width: 24px; height: 24px; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--eo-border);
+      background: var(--eo-surface);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--eo-text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab.active {
+      color: var(--eo-primary);
+      border-bottom-color: var(--eo-primary);
+    }
+    .tab:hover { color: var(--eo-primary); }
+
+    /* Panels */
+    .panel { display: none; flex: 1; overflow-y: auto; }
+    .panel.active { display: flex; flex-direction: column; }
+
+    /* eBot Chat Panel */
+    .chat-container { flex: 1; display: flex; flex-direction: column; }
+    .chat-messages {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .message {
+      padding: 8px 12px;
+      border-radius: var(--eo-radius);
+      max-width: 90%;
+      font-size: 13px;
+    }
+    .message.user {
+      background: var(--eo-primary);
+      color: #fff;
+      align-self: flex-end;
+    }
+    .message.bot {
+      background: var(--eo-surface);
+      border: 1px solid var(--eo-border);
+      align-self: flex-start;
+    }
+    .chat-input-area {
+      padding: 12px;
+      border-top: 1px solid var(--eo-border);
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input-area input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--eo-border);
+      border-radius: var(--eo-radius);
+      font-size: 13px;
+      outline: none;
+    }
+    .chat-input-area input:focus { border-color: var(--eo-primary); }
+
+    /* Quick Actions */
+    .quick-actions {
+      padding: 8px 12px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .quick-action {
+      padding: 4px 10px;
+      border-radius: 16px;
+      border: 1px solid var(--eo-border);
+      background: var(--eo-surface);
+      font-size: 11px;
+      cursor: pointer;
+      color: var(--eo-text-muted);
+      transition: all 0.2s;
+    }
+    .quick-action:hover {
+      border-color: var(--eo-primary);
+      color: var(--eo-primary);
+    }
+
+    /* App Launcher */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 12px;
+    }
+    .app-tile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      border-radius: var(--eo-radius);
+      border: 1px solid var(--eo-border);
+      background: var(--eo-surface);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--eo-text);
+      transition: all 0.2s;
+    }
+    .app-tile:hover {
+      border-color: var(--eo-primary);
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.1);
+    }
+    .app-tile .icon { font-size: 24px; }
+    .app-tile .label { font-size: 11px; font-weight: 500; }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--eo-radius);
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--eo-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--eo-primary-hover); }
+
+    /* Status */
+    .status-bar {
+      padding: 6px 12px;
+      font-size: 11px;
+      color: var(--eo-text-muted);
+      border-top: 1px solid var(--eo-border);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="taskpane">
+    <!-- Header -->
+    <div class="header">
+      <span class="logo">📎</span>
+      <h1>eOffice</h1>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-panel="chat">💬 eBot</button>
+      <button class="tab" data-panel="apps">🚀 Apps</button>
+    </div>
+
+    <!-- eBot Chat Panel -->
+    <div id="chat" class="panel active">
+      <div class="quick-actions">
+        <button class="quick-action" data-action="summarize">📝 Summarize</button>
+        <button class="quick-action" data-action="rewrite">✍️ Rewrite</button>
+        <button class="quick-action" data-action="translate">🌐 Translate</button>
+        <button class="quick-action" data-action="fix-grammar">🔤 Fix Grammar</button>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot">
+            👋 Hi! I'm <strong>eBot</strong>, your AI assistant. Select text in your document and ask me anything, or use the quick actions above.
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Ask eBot anything..." />
+          <button class="btn btn-primary" id="sendBtn">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apps Panel -->
+    <div id="apps" class="panel">
+      <div class="app-grid">
+        <a class="app-tile" data-app="edocs">
+          <span class="icon">📄</span>
+          <span class="label">eDocs</span>
+        </a>
+        <a class="app-tile" data-app="enotes">
+          <span class="icon">📝</span>
+          <span class="label">eNotes</span>
+        </a>
+        <a class="app-tile" data-app="esheets">
+          <span class="icon">📊</span>
+          <span class="label">eSheets</span>
+        </a>
+        <a class="app-tile" data-app="eslides">
+          <span class="icon">📽️</span>
+          <span class="label">eSlides</span>
+        </a>
+        <a class="app-tile" data-app="email">
+          <span class="icon">✉️</span>
+          <span class="label">eMail</span>
+        </a>
+        <a class="app-tile" data-app="edrive">
+          <span class="icon">☁️</span>
+          <span class="label">eDrive</span>
+        </a>
+        <a class="app-tile" data-app="econnect">
+          <span class="icon">💬</span>
+          <span class="label">eConnect</span>
+        </a>
+        <a class="app-tile" data-app="eforms">
+          <span class="icon">📋</span>
+          <span class="label">eForms</span>
+        </a>
+        <a class="app-tile" data-app="eplanner">
+          <span class="icon">📅</span>
+          <span class="label">ePlanner</span>
+        </a>
+        <a class="app-tile" data-app="ebot">
+          <span class="icon">🤖</span>
+          <span class="label">eBot</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="status-bar" id="statusBar">Connected to eOffice · localhost:3001</div>
+  </div>
+
+  <script src="taskpane.js"></script>
+</body>
+</html>

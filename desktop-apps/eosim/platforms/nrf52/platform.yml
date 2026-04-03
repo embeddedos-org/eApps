@@ -1,0 +1,16 @@
+name: nrf52
+display_name: Nordic nRF52840 (Cortex-M4)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Nordic
+soc: nRF52840
+domain: iot
+modeling: deterministic
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m4
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

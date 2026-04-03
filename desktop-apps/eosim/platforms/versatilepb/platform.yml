@@ -1,0 +1,14 @@
+name: versatilepb
+display_name: ARM VersatilePB (ARM1176)
+arch: arm
+engine: eosim
+class: devboard
+vendor: ARM
+soc: VersatilePB
+qemu:
+  machine: versatilepb
+  cpu: arm1176
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,14 @@
+name: cortex-r52
+display_name: ARM Cortex-R52 (ASIL-D)
+arch: arm
+engine: eosim
+class: safety
+vendor: ARM
+soc: Cortex-R52
+qemu:
+  machine: virt
+  cpu: cortex-r52
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

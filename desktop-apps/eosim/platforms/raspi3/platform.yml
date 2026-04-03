@@ -1,0 +1,14 @@
+name: raspi3
+display_name: Raspberry Pi 3 (BCM2837)
+arch: arm64
+engine: eosim
+class: sbc
+vendor: Broadcom
+soc: BCM2837
+qemu:
+  machine: raspi3b
+  cpu: cortex-a53
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

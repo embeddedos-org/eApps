@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eOffice Suite — Settings</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--bg-hover:#2d3a4f;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#60a5fa;--accent2:#3b82f6;--accent-dim:#1e3a5f;
+  --green:#34d399;--red:#f87171;--border:#334155;
+  --radius:8px;--radius-sm:6px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f0f2f5;--bg2:#ffffff;--bg3:#e8eaed;--bg-hover:#d2d5da;
+  --text:#202124;--text2:#5f6368;--text3:#80868b;
+  --accent:#1a73e8;--accent2:#1557b0;--accent-dim:#e8f0fe;
+  --border:#dadce0;
+}
+body{
+  font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;justify-content:center;padding:40px 20px;
+  transition:background 0.25s,color 0.25s;
+}
+.settings-container{width:100%;max-width:560px;}
+.settings-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:32px;
+}
+.settings-header h1{font-size:24px;font-weight:700;}
+.settings-header .logo{font-size:28px;}
+
+.section{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;
+  transition:background 0.25s,border-color 0.25s;
+}
+.section-title{
+  font-size:14px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.5px;color:var(--text2);margin-bottom:16px;
+}
+.field{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.field:last-child{border-bottom:none;}
+.field-label{display:flex;flex-direction:column;gap:2px;}
+.field-label span{font-size:14px;font-weight:500;}
+.field-label small{font-size:11px;color:var(--text3);}
+.field input[type="text"],
+.field input[type="number"],
+.field select{
+  padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--bg);color:var(--text);font-size:13px;
+  outline:none;width:180px;transition:border-color 0.15s;
+}
+.field input:focus,.field select:focus{border-color:var(--accent);}
+
+.toggle{
+  position:relative;width:44px;height:24px;cursor:pointer;
+}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle .slider{
+  position:absolute;inset:0;background:var(--bg3);
+  border-radius:12px;transition:background 0.25s;
+}
+.toggle .slider::before{
+  content:'';position:absolute;width:18px;height:18px;
+  left:3px;bottom:3px;background:#fff;border-radius:50%;
+  transition:transform 0.25s;
+}
+.toggle input:checked+.slider{background:var(--accent);}
+.toggle input:checked+.slider::before{transform:translateX(20px);}
+
+.btn{
+  padding:8px 18px;border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--bg2);color:var(--text);font-size:13px;font-weight:500;
+  cursor:pointer;transition:all 0.15s;font-family:var(--font);
+}
+.btn:hover{background:var(--bg-hover);}
+.btn-danger{border-color:#f87171;color:#f87171;}
+.btn-danger:hover{background:rgba(248,113,113,0.15);}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-accent:hover{opacity:0.9;}
+
+.about{
+  text-align:center;padding:16px;color:var(--text3);font-size:12px;
+  line-height:1.6;
+}
+.about a{color:var(--accent);text-decoration:none;}
+
+.toast{
+  position:fixed;bottom:20px;right:20px;background:var(--accent);
+  color:#fff;padding:10px 18px;border-radius:var(--radius);
+  font-size:13px;opacity:0;transform:translateY(10px);
+  transition:all 0.3s;pointer-events:none;z-index:100;
+}
+.toast.visible{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+<div class="settings-container">
+  <div class="settings-header">
+    <span class="logo">📎</span>
+    <h1>eOffice Settings</h1>
+  </div>
+
+  <div class="section">
+    <div class="section-title">eBot Server</div>
+    <div class="field">
+      <div class="field-label">
+        <span>Host</span>
+        <small>eBot AI server hostname</small>
+      </div>
+      <input type="text" id="ebotHost" value="localhost" placeholder="localhost">
+    </div>
+    <div class="field">
+      <div class="field-label">
+        <span>Port</span>
+        <small>eBot AI server port</small>
+      </div>
+      <input type="number" id="ebotPort" value="3001" min="1" max="65535">
+    </div>
+    <div class="field">
+      <div class="field-label">
+        <span>Connection Status</span>
+        <small id="connStatus">Checking...</small>
+      </div>
+      <button class="btn" id="testConnBtn">Test Connection</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Appearance</div>
+    <div class="field">
+      <div class="field-label">
+        <span>Dark Mode</span>
+        <small>Switch between dark and light themes</small>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="darkToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Behavior</div>
+    <div class="field">
+      <div class="field-label">
+        <span>Auto-Save</span>
+        <small>Automatically save documents while editing</small>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="autoSaveToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="field">
+      <div class="field-label">
+        <span>Default App</span>
+        <small>App to open on startup actions</small>
+      </div>
+      <select id="defaultApp">
+        <option value="edocs">eDocs</option>
+        <option value="enotes">eNotes</option>
+        <option value="esheets">eSheets</option>
+        <option value="eslides">eSlides</option>
+        <option value="email">eMail</option>
+        <option value="edb">eDB</option>
+        <option value="edrive">eDrive</option>
+        <option value="econnect">eConnect</option>
+        <option value="eforms">eForms</option>
+        <option value="esway">eSway</option>
+        <option value="eplanner">ePlanner</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Data</div>
+    <div class="field">
+      <div class="field-label">
+        <span>Clear All Data</span>
+        <small>Remove all saved documents, notes, and settings</small>
+      </div>
+      <button class="btn btn-danger" id="clearDataBtn">Clear Data</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Save</div>
+    <div class="field" style="justify-content:center;border-bottom:none;">
+      <button class="btn btn-accent" id="saveBtn" style="width:100%;">💾 Save Settings</button>
+    </div>
+  </div>
+
+  <div class="about">
+    <strong>eOffice Suite</strong> v0.1.0<br>
+    AI-powered office suite for the browser.<br>
+    Part of <a href="https://github.com/nicheOS/EmbeddedOS" target="_blank">EmbeddedOS</a> by nicheOS.<br>
+    &copy; 2025 nicheOS Project
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+  'use strict';
+
+  const ebotHost = document.getElementById('ebotHost');
+  const ebotPort = document.getElementById('ebotPort');
+  const darkToggle = document.getElementById('darkToggle');
+  const autoSaveToggle = document.getElementById('autoSaveToggle');
+  const defaultApp = document.getElementById('defaultApp');
+  const connStatus = document.getElementById('connStatus');
+  const toast = document.getElementById('toast');
+
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 2000);
+  }
+
+  function applyTheme(dark) {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  }
+
+  function loadSettings() {
+    chrome.storage.local.get(null, (data) => {
+      if (data.ebotHost) ebotHost.value = data.ebotHost;
+      if (data.ebotPort) ebotPort.value = data.ebotPort;
+      if (typeof data.autoSave === 'boolean') autoSaveToggle.checked = data.autoSave;
+      if (data.defaultApp) defaultApp.value = data.defaultApp;
+      if (data.theme) {
+        const isDark = data.theme === 'dark';
+        darkToggle.checked = isDark;
+        applyTheme(isDark);
+      }
+    });
+  }
+
+  function saveSettings() {
+    const settings = {
+      ebotHost: ebotHost.value || 'localhost',
+      ebotPort: parseInt(ebotPort.value) || 3001,
+      theme: darkToggle.checked ? 'dark' : 'light',
+      autoSave: autoSaveToggle.checked,
+      defaultApp: defaultApp.value
+    };
+    chrome.storage.local.set(settings, () => {
+      showToast('Settings saved');
+    });
+  }
+
+  async function testConnection() {
+    const host = ebotHost.value || 'localhost';
+    const port = ebotPort.value || 3001;
+    connStatus.textContent = 'Testing...';
+    try {
+      const ctrl = new AbortController();
+      const tid = setTimeout(() => ctrl.abort(), 3000);
+      const res = await fetch(`http://${host}:${port}/api/ebot/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'ping', context: '' }),
+        signal: ctrl.signal
+      });
+      clearTimeout(tid);
+      connStatus.textContent = res.ok ? '✅ Connected' : `❌ HTTP ${res.status}`;
+    } catch {
+      connStatus.textContent = '❌ Server unreachable';
+    }
+  }
+
+  darkToggle.addEventListener('change', () => applyTheme(darkToggle.checked));
+
+  document.getElementById('saveBtn').addEventListener('click', saveSettings);
+  document.getElementById('testConnBtn').addEventListener('click', testConnection);
+
+  document.getElementById('clearDataBtn').addEventListener('click', () => {
+    if (confirm('Are you sure? This will delete all saved documents, notes, and settings.')) {
+      chrome.storage.local.clear(() => {
+        showToast('All data cleared');
+        loadSettings();
+      });
+    }
+  });
+
+  loadSettings();
+  testConnection();
+})();
+</script>
+</body>
+</html>

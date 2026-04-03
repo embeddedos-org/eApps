@@ -1,0 +1,16 @@
+name: esp32
+display_name: Espressif ESP32 (WiFi+BLE)
+arch: xtensa
+engine: eosim
+class: mcu
+vendor: Espressif
+soc: ESP32
+domain: iot
+modeling: deterministic
+qemu:
+  machine: virt
+  cpu: lx6
+runtime:
+  memory_mb: 520
+  headless: true
+  uart: sysbus.uart0

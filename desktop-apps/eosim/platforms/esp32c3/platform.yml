@@ -1,0 +1,14 @@
+name: esp32c3
+display_name: Espressif ESP32-C3 (RISC-V WiFi)
+arch: riscv32
+engine: eosim
+class: mcu
+vendor: Espressif
+soc: ESP32-C3
+qemu:
+  machine: virt
+  cpu: rv32imc
+runtime:
+  memory_mb: 400
+  headless: true
+  uart: sysbus.uart0

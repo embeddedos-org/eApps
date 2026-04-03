@@ -1,0 +1,11 @@
+name: gaming-sim
+display_name: Game World Physics Simulator
+arch: x86_64
+engine: eosim
+class: desktop
+domain: gaming
+modeling: agent-based
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,6 @@
+name: x86_64-boot-test
+platform: x86_64-linux
+checks:
+  - type: timeout
+    seconds: 30
+  - type: boot_success

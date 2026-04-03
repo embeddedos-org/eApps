@@ -1,0 +1,12 @@
+name: boot-validation
+platform: arm64-linux
+checks:
+  - type: serial_contains
+    value: "login:"
+  - type: timeout
+    seconds: 60
+  - type: serial_contains
+    value: "EoS booted"
+artifacts:
+  save_log: true
+  junit: true

@@ -1,0 +1,11 @@
+name: aerodynamics-sim
+display_name: Aerodynamics CFD Simulator
+arch: x86_64
+engine: eosim
+class: desktop
+domain: aerodynamics
+modeling: cfd
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

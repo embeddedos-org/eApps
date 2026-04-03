@@ -1,0 +1,6 @@
+name: k64f-test
+platform: k64f
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

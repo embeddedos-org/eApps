@@ -1,0 +1,14 @@
+name: raspi5
+display_name: Raspberry Pi 5 (BCM2712)
+arch: arm64
+engine: eosim
+class: sbc
+vendor: Broadcom
+soc: BCM2712
+qemu:
+  machine: virt
+  cpu: cortex-a76
+runtime:
+  memory_mb: 8192
+  headless: true
+  uart: sysbus.uart0

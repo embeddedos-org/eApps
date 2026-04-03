@@ -1,0 +1,75 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/documents",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/gmail.addons.execute",
+    "https://www.googleapis.com/auth/gmail.compose",
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email"
+  ],
+  "addOns": {
+    "common": {
+      "name": "eOffice",
+      "logoUrl": "https://localhost:3001/assets/eoffice-logo.png",
+      "layoutProperties": {
+        "primaryColor": "#4f46e5",
+        "secondaryColor": "#818cf8"
+      },
+      "homepageTrigger": {
+        "runFunction": "onHomepage"
+      },
+      "universalActions": [
+        {
+          "label": "Open eOffice",
+          "openLink": {
+            "url": "http://localhost:3001"
+          }
+        },
+        {
+          "label": "Settings",
+          "runFunction": "onSettings"
+        }
+      ]
+    },
+    "docs": {
+      "homepageTrigger": {
+        "runFunction": "onDocsOpen"
+      },
+      "onFileScopeGrantedTrigger": {
+        "runFunction": "onDocsOpen"
+      }
+    },
+    "sheets": {
+      "homepageTrigger": {
+        "runFunction": "onSheetsOpen"
+      },
+      "onFileScopeGrantedTrigger": {
+        "runFunction": "onSheetsOpen"
+      }
+    },
+    "gmail": {
+      "homepageTrigger": {
+        "runFunction": "onHomepage"
+      },
+      "composeTrigger": {
+        "selectActions": [
+          {
+            "text": "Ask eBot",
+            "runFunction": "onGmailCompose"
+          }
+        ],
+        "draftAccess": "METADATA"
+      }
+    }
+  },
+  "urlFetchWhitelist": [
+    "http://localhost:3001/",
+    "http://localhost:3001/api/"
+  ]
+}

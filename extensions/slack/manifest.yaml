@@ -1,0 +1,72 @@
+display_information:
+  name: eOffice Suite
+  description: AI-powered office suite — eDocs, eNotes, eSheets, eBot & more
+  long_description: |
+    eOffice Suite brings your office productivity tools into Slack.
+    Create documents, save notes, ask eBot AI questions, manage tasks,
+    and auto-import files — all without leaving Slack.
+  background_color: "#0f172a"
+
+features:
+  app_home:
+    home_tab_enabled: true
+    messages_tab_enabled: false
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: eOffice
+    always_online: true
+  shortcuts:
+    - name: Summarize with eBot
+      type: message
+      callback_id: ebot_summarize
+      description: Summarize the selected message using eBot AI
+  slash_commands:
+    - command: /edocs
+      description: Create a new eDocs document
+      usage_hint: "create <title>"
+      should_escape: false
+    - command: /enotes
+      description: Add a quick note to eNotes
+      usage_hint: "add <text>"
+      should_escape: false
+    - command: /ebot
+      description: Ask eBot AI a question
+      usage_hint: "ask <question>"
+      should_escape: false
+    - command: /esheets
+      description: Import files to eSheets
+      usage_hint: "import"
+      should_escape: false
+    - command: /eplanner
+      description: Create a task in ePlanner
+      usage_hint: "task <title>"
+      should_escape: false
+  unfurl_domains:
+    - localhost:3001
+
+oauth_config:
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:history
+      - channels:read
+      - chat:write
+      - commands
+      - files:read
+      - links:read
+      - links:write
+      - users:read
+
+settings:
+  event_subscriptions:
+    bot_events:
+      - app_home_opened
+      - app_mention
+      - file_shared
+      - link_shared
+      - message.channels
+  interactivity:
+    is_enabled: true
+  org_deploy_enabled: false
+  socket_mode_enabled: true
+  token_rotation_enabled: false

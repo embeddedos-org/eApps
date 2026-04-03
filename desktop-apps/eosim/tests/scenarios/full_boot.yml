@@ -1,0 +1,18 @@
+name: full-boot-validation
+description: Validates complete Linux boot sequence
+platform: arm64-linux
+steps:
+  - type: wait_for
+    pattern: "Booting Linux"
+  - type: wait_for
+    pattern: "login:"
+  - type: assert_no
+    pattern: "kernel panic"
+  - type: assert_no
+    pattern: "Oops"
+  - type: timing
+    max_seconds: 60
+  - type: count_matches
+    pattern: "[    0."
+    min_count: 5
+    description: "At least 5 kernel log lines"

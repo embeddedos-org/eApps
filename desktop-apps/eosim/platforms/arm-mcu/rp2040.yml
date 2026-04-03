@@ -1,0 +1,10 @@
+name: arm-mcu-rp2040
+display_name: Raspberry Pi Pico RP2040
+arch: arm
+engine: renode
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m0
+runtime:
+  memory_mb: 32
+  headless: true

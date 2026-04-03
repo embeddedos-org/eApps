@@ -1,0 +1,12 @@
+name: arm-mcu
+display_name: ARM Cortex-M MCU (STM32F4)
+arch: arm
+engine: renode
+repl: arm-mcu/stm32f4.repl
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m3
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0

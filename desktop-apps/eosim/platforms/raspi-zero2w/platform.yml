@@ -1,0 +1,14 @@
+name: raspi-zero2w
+display_name: Raspberry Pi Zero 2W
+arch: arm64
+engine: eosim
+class: sbc
+vendor: Broadcom
+soc: BCM2710A1
+qemu:
+  machine: virt
+  cpu: cortex-a53
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

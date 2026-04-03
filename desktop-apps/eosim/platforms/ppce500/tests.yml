@@ -1,0 +1,6 @@
+name: ppce500-test
+platform: ppce500
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

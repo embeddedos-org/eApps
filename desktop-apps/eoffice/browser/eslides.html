@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>eSlides — Presentations</title>
+<style>
+:root{--bg:#f5f6f8;--bg2:#fff;--bg3:#f8f9fa;--bgH:#e8eaed;--bgS:#e8f0fe;--bgI:#f0f2f5;--tx:#202124;--tx2:#5f6368;--tx3:#80868b;--bd:#e0e0e0;--ac:#1a73e8;--acL:#e8f0fe;--fn:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+[data-theme="dark"]{--bg:#1a1a2e;--bg2:#1e293b;--bg3:#0f172a;--bgH:#334155;--bgS:#1e3a5f;--bgI:#334155;--tx:#e2e8f0;--tx2:#94a3b8;--tx3:#64748b;--bd:#334155;--ac:#60a5fa;--acL:#1e3a5f}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}body{font-family:var(--fn);background:var(--bg);color:var(--tx)}
+.app{display:flex;flex-direction:column;height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;height:44px;padding:0 12px;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.btn{padding:5px 10px;border:0;border-radius:4px;background:0;color:var(--tx2);font-size:12px;cursor:pointer;font-family:var(--fn)}a.btn{text-decoration:none}.btn:hover{background:var(--bgH)}
+.bar{display:flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd)}
+.tb{padding:6px 12px;border:1px solid var(--bd);border-radius:4px;background:var(--bg2);color:var(--tx);font-size:12px;cursor:pointer;font-family:var(--fn)}.tb:hover{background:var(--bgH)}
+.main{display:flex;flex:1;overflow:hidden}
+.panel{width:180px;background:var(--bg2);border-right:1px solid var(--bd);overflow-y:auto;padding:8px;flex-shrink:0}
+.thumb{background:var(--bg3);border:2px solid var(--bd);border-radius:6px;padding:8px;margin-bottom:6px;cursor:pointer;font-size:10px;min-height:70px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;transition:all .2s}
+.thumb:hover{border-color:var(--ac)}.thumb.sel{border-color:var(--ac);background:var(--bgS)}
+.thumb-n{position:absolute;top:3px;left:5px;font-size:9px;color:var(--tx3)}
+.thumb-x{position:absolute;top:2px;right:4px;font-size:11px;color:var(--tx3);cursor:pointer;display:none}.thumb:hover .thumb-x{display:block}
+.stage{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.slide-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}
+.slide{width:100%;max-width:800px;aspect-ratio:16/9;background:var(--bg2);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;position:relative}
+.sl-t{font-size:28px;font-weight:700;text-align:center;width:100%;border:none;background:0;color:var(--tx);outline:0;margin-bottom:12px}.sl-t::placeholder{color:var(--tx3)}
+.sl-b{font-size:16px;text-align:center;width:100%;flex:1;border:none;background:0;color:var(--tx2);outline:0;resize:none;font-family:var(--fn);line-height:1.6}.sl-b::placeholder{color:var(--tx3)}
+.sl-n{position:absolute;bottom:8px;right:14px;font-size:11px;color:var(--tx3)}
+.notes{height:70px;background:var(--bg2);border-top:1px solid var(--bd);padding:6px 16px}
+.notes textarea{width:100%;height:100%;border:none;background:0;color:var(--tx2);font-size:12px;outline:0;resize:none;font-family:var(--fn)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:150;display:none}
+.es{position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--bg2);border-left:1px solid var(--bd);box-shadow:-4px 0 16px rgba(0,0,0,.15);z-index:200;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s}.es.open{transform:translateX(0)}
+.esh{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid var(--bd)}
+.esb{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--bd);border-radius:6px;background:var(--bg2);color:var(--tx);font-size:12px;cursor:pointer;text-align:left;width:100%;font-family:var(--fn);margin-bottom:4px}.esb:hover{background:var(--bgH);border-color:var(--ac)}
+.esr{flex:1;overflow-y:auto;padding:10px 14px}
+.erc{padding:10px;background:var(--acL);border:1px solid var(--bd);border-radius:6px;font-size:11px;line-height:1.6;white-space:pre-wrap;margin-bottom:8px}
+@media(max-width:768px){.es{width:100%}.panel{width:60px}.thumb{font-size:8px;min-height:40px}}
+</style></head><body>
+<div class="app">
+<div class="top"><span style="font-size:17px;font-weight:700;color:var(--ac)">&#128253; eSlides</span>
+<div style="display:flex;gap:4px"><button class="btn" id="thm">&#127769;</button><button class="btn" id="ebt">&#9889; eBot</button><a href="index.html" class="btn">&#8592; Back</a></div></div>
+<div class="bar"><button class="tb" id="addS">+ Add Slide</button><button class="tb" id="dupS">&#128203; Duplicate</button><button class="tb" id="pres">&#9654; Present</button><button class="tb" id="expS">&#128228; Export</button>
+<select class="tb" id="bgSel"><option value="">Default</option><option value="#1a1a2e">Dark</option><option value="#e8f0fe">Blue</option><option value="#fef2f2">Rose</option><option value="#f0fdf4">Green</option><option value="#fefce8">Yellow</option></select></div>
+<div class="main">
+<div class="panel" id="tP"></div>
+<div class="stage">
+<div class="slide-area"><div class="slide" id="sV"><input class="sl-t" id="sT" placeholder="Click to add title"><textarea class="sl-b" id="sB" placeholder="Click to add content"></textarea><div class="sl-n" id="sN">1/1</div></div></div>
+<div class="notes"><textarea id="sNt" placeholder="Speaker notes..."></textarea></div>
+</div></div>
+<div class="ov" id="oV"></div>
+<aside class="es" id="eS"><div class="esh"><span style="font-size:14px;font-weight:600">&#129302; eBot AI</span><button style="border:0;background:0;color:var(--tx2);font-size:15px;cursor:pointer" id="sCl">&#10005;</button></div>
+<div style="padding:10px 14px;border-bottom:1px solid var(--bd)"><div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--tx3);font-weight:600;margin-bottom:6px">Presentation AI</div>
+<button class="esb" data-a="gc">&#128172; Generate Content</button><button class="esb" data-a="tp">&#128218; Talking Points</button><button class="esb" data-a="ol">&#128196; Create Outline</button><button class="esb" data-a="sl">&#127912; Suggest Layout</button></div>
+<div class="esr" id="eR"><div style="color:var(--tx3);text-align:center;padding:40px;font-size:12px">&#129302; Choose an AI action</div></div></aside>
+</div>
+<script>
+(function(){
+var SK='eslides_data',slides=[],cur=0,$=function(i){return document.getElementById(i);};
+function uid(){return Math.random().toString(36).substr(2,9);}
+function ns(t,b,n){return{id:uid(),title:t||'',body:b||'',notes:n||'',bg:''};}
+function save(){localStorage.setItem(SK,JSON.stringify({s:slides,c:cur}));}
+function load(){try{var d=JSON.parse(localStorage.getItem(SK));if(d&&d.s){slides=d.s;cur=d.c||0;}else throw 0;}catch(e){slides=[ns('Welcome to eSlides','Create beautiful presentations\nwith eBot AI assistance','')];}}
+function render(){rT();rS();}
+function rT(){var p=$('tP');p.innerHTML='';slides.forEach(function(s,i){var d=document.createElement('div');d.className='thumb'+(i===cur?' sel':'');d.innerHTML='<span class="thumb-n">'+(i+1)+'</span><span class="thumb-x" data-i="'+i+'">&#10005;</span>'+(s.title||'Untitled');d.onclick=function(e){if(e.target.classList.contains('thumb-x')){if(slides.length>1){slides.splice(i,1);if(cur>=slides.length)cur=slides.length-1;save();render();}return;}cur=i;save();render();};p.appendChild(d);});}
+function rS(){var s=slides[cur];$('sT').value=s.title;$('sB').value=s.body;$('sNt').value=s.notes;$('sN').textContent=(cur+1)+'/'+slides.length;$('sV').style.backgroundColor=s.bg||'';}
+$('sT').oninput=function(){slides[cur].title=this.value;save();rT();};
+$('sB').oninput=function(){slides[cur].body=this.value;save();};
+$('sNt').oninput=function(){slides[cur].notes=this.value;save();};
+$('addS').onclick=function(){slides.splice(cur+1,0,ns());cur++;save();render();};
+$('dupS').onclick=function(){var s=slides[cur];slides.splice(cur+1,0,ns(s.title,s.body,s.notes));cur++;save();render();};
+$('bgSel').onchange=function(){slides[cur].bg=this.value;save();rS();};
+$('expS').onclick=function(){var t=slides.map(function(s,i){return'--- Slide '+(i+1)+' ---\n'+s.title+'\n\n'+s.body+(s.notes?'\n\nNotes: '+s.notes:'');}).join('\n\n');var b=new Blob([t],{type:'text/plain'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='presentation.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);};
+$('pres').onclick=function(){var w=window.open('','_blank');if(!w)return;var h='<!DOCTYPE html><html><head><style>*{margin:0;padding:0;box-sizing:border-box}body{background:#000;display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#fff;overflow:hidden}.s{width:100vw;height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px}.s.a{display:flex}.s h1{font-size:4vw;margin-bottom:2vh}.s p{font-size:2vw;white-space:pre-wrap;line-height:1.6;opacity:.8}.nv{position:fixed;bottom:10px;right:20px;color:#666;font-size:14px}</style></head><body>';
+slides.forEach(function(s,i){h+='<div class="s'+(i===0?' a':'')+'"'+(s.bg?' style="background:'+s.bg+'"':'')+'><h1>'+esc(s.title)+'</h1><p>'+esc(s.body)+'</p></div>';});
+h+='<div class="nv" id="nv">1/'+slides.length+'</div><script>var c=0,t='+slides.length+';document.onkeydown=function(e){if(e.key==="ArrowRight"||e.key===" "){if(c<t-1){document.querySelectorAll(".s")[c].classList.remove("a");c++;document.querySelectorAll(".s")[c].classList.add("a");document.getElementById("nv").textContent=(c+1)+"/"+t;}}if(e.key==="ArrowLeft"){if(c>0){document.querySelectorAll(".s")[c].classList.remove("a");c--;document.querySelectorAll(".s")[c].classList.add("a");document.getElementById("nv").textContent=(c+1)+"/"+t;}}if(e.key==="Escape")window.close();};document.onclick=function(){var e=new KeyboardEvent("keydown",{key:"ArrowRight"});document.dispatchEvent(e);};</'+'script></body></html>';
+w.document.write(h);w.document.close();};
+function esc(s){return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;'):'';}
+document.onkeydown=function(e){if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;if(e.key==='ArrowLeft'&&cur>0){cur--;save();render();}if(e.key==='ArrowRight'&&cur<slides.length-1){cur++;save();render();}};
+function oS(){$('eS').classList.add('open');$('oV').style.display='block';}
+function cS(){$('eS').classList.remove('open');$('oV').style.display='none';}
+$('ebt').onclick=function(){$('eS').classList.contains('open')?cS():oS();};
+$('sCl').onclick=cS;$('oV').onclick=cS;
+async function eA(a){var rp=$('eR'),s=slides[cur],ctx='Slide '+(cur+1)+': '+s.title+'\n'+s.body;
+var pr={'gc':'Generate slide content about: '+s.title,'tp':'Generate speaker talking points for: '+ctx,'ol':'Create a 5-slide presentation outline','sl':'Suggest creative slide layout for: '+ctx};
+rp.innerHTML='<div style="padding:12px;color:var(--tx3)">\u23f3 Thinking...</div>';
+try{var r=await fetch('http://localhost:3001/api/ebot/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:pr[a]||ctx,context:'eSlides'}),signal:AbortSignal.timeout(15000)});
+var d=await r.json(),t=d.reply||d.message||d.response||JSON.stringify(d);rp.innerHTML='<div class="erc">'+t.replace(/</g,'&lt;')+'</div>';
+}catch(e){rp.innerHTML='<div class="erc" style="background:#fef2f2;border-color:#fecaca;color:#991b1b">eBot offline. Start: npm run dev:server</div>';}}
+document.querySelectorAll('.esb').forEach(function(b){b.onclick=function(){eA(b.dataset.a);};});
+var t=localStorage.getItem('eo-theme')||'light';document.documentElement.setAttribute('data-theme',t);$('thm').textContent=t==='dark'?'\u2600\ufe0f':'\ud83c\udf19';
+$('thm').onclick=function(){var c=document.documentElement.getAttribute('data-theme'),n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('eo-theme',n);$('thm').textContent=n==='dark'?'\u2600\ufe0f':'\ud83c\udf19';};
+load();render();
+})();
+</script></body></html>

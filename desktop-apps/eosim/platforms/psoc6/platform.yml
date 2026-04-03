@@ -1,0 +1,26 @@
+name: psoc6
+display_name: Infineon PSoC 6 (Dual Cortex-M4/M0+)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Infineon
+soc: CY8C6247BZI-D54
+domain: iot
+modeling: deterministic
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0
+name: psoc6
+display_name: Infineon PSoC 6 (Cortex-M4 + M0+)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Infineon
+soc: CY8C6247BZI-D54
+domain: iot
+modeling: deterministic
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

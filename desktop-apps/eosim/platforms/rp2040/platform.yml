@@ -1,0 +1,14 @@
+name: rp2040
+display_name: RPi Pico RP2040 (Cortex-M0+)
+arch: arm
+engine: eosim
+class: mcu
+vendor: RPi
+soc: RP2040
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m0+
+runtime:
+  memory_mb: 32
+  headless: true
+  uart: sysbus.uart0

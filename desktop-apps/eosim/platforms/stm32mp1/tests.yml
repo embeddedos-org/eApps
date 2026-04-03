@@ -1,0 +1,6 @@
+name: stm32mp1-test
+platform: stm32mp1
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

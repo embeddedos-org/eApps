@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eOffice Suite — Launcher</title>
+  <style>
+    /* ===== CSS RESET & BASE ===== */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0f0f1a;
+      --bg-secondary: #1a1a2e;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(255, 255, 255, 0.08);
+      --bg-glass: rgba(255, 255, 255, 0.06);
+      --border-glass: rgba(255, 255, 255, 0.1);
+      --border-glass-hover: rgba(255, 255, 255, 0.2);
+      --text-primary: #f0f0f5;
+      --text-secondary: #a0a0b8;
+      --text-muted: #6b6b80;
+      --accent-primary: #6c63ff;
+      --accent-secondary: #ff6584;
+      --accent-gradient: linear-gradient(135deg, #6c63ff 0%, #ff6584 100%);
+      --success: #2ecc71;
+      --success-bg: rgba(46, 204, 113, 0.15);
+      --warning: #f39c12;
+      --warning-bg: rgba(243, 156, 18, 0.15);
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-card-hover: 0 16px 48px rgba(108, 99, 255, 0.2);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition-fast: 0.2s ease;
+      --transition-normal: 0.3s ease;
+      --transition-slow: 0.5s ease;
+      --header-height: 80px;
+    }
+
+    [data-theme="light"] {
+      --bg-primary: #f5f5fa;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(0, 0, 0, 0.03);
+      --bg-card-hover: rgba(0, 0, 0, 0.06);
+      --bg-glass: rgba(255, 255, 255, 0.7);
+      --border-glass: rgba(0, 0, 0, 0.08);
+      --border-glass-hover: rgba(0, 0, 0, 0.15);
+      --text-primary: #1a1a2e;
+      --text-secondary: #555570;
+      --text-muted: #8888a0;
+      --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --shadow-card-hover: 0 16px 48px rgba(108, 99, 255, 0.12);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color var(--transition-normal), color var(--transition-normal);
+      overflow-x: hidden;
+    }
+
+    /* ===== ANIMATED BACKGROUND ===== */
+    .bg-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-gradient .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.15;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .bg-gradient .orb:nth-child(1) {
+      width: 600px;
+      height: 600px;
+      background: #6c63ff;
+      top: -200px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .bg-gradient .orb:nth-child(2) {
+      width: 500px;
+      height: 500px;
+      background: #ff6584;
+      bottom: -150px;
+      right: -100px;
+      animation-delay: -7s;
+    }
+
+    .bg-gradient .orb:nth-child(3) {
+      width: 400px;
+      height: 400px;
+      background: #43e97b;
+      top: 50%;
+      left: 50%;
+      animation-delay: -14s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, -30px) scale(1.05); }
+      50% { transform: translate(-30px, 50px) scale(0.95); }
+      75% { transform: translate(30px, 30px) scale(1.02); }
+    }
+
+    [data-theme="light"] .bg-gradient .orb {
+      opacity: 0.08;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 0 2rem;
+      height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* ===== THEME TOGGLE ===== */
+    .theme-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 50px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: all var(--transition-normal);
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glass-hover);
+      transform: rotate(30deg) scale(1.1);
+    }
+
+    /* ===== SEARCH BAR ===== */
+    .search-container {
+      position: relative;
+      width: 280px;
+    }
+
+    .search-container .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: color var(--transition-fast);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      outline: none;
+      transition: all var(--transition-normal);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+      background: var(--bg-card-hover);
+    }
+
+    .search-input:focus ~ .search-icon {
+      color: var(--accent-primary);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* ===== CATEGORY TABS ===== */
+    .category-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 10px 22px;
+      border: 1px solid var(--border-glass);
+      border-radius: 50px;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+      user-select: none;
+    }
+
+    .tab-btn:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glass-hover);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-gradient);
+      border-color: transparent;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(108, 99, 255, 0.3);
+    }
+
+    .tab-btn.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(108, 99, 255, 0.4);
+    }
+
+    /* ===== APP GRID ===== */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    /* ===== APP CARD ===== */
+    .app-card {
+      position: relative;
+      background: var(--bg-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem 1.5rem;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      animation: cardFadeIn 0.5s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent-gradient);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+    }
+
+    .app-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: var(--shadow-card-hover);
+      border-color: var(--border-glass-hover);
+      background: var(--bg-card-hover);
+    }
+
+    .app-card:hover::before {
+      opacity: 1;
+    }
+
+    .app-card:active {
+      transform: translateY(-2px) scale(1.0);
+      transition-duration: 0.1s;
+    }
+
+    .app-card.hidden {
+      display: none;
+    }
+
+    @keyframes cardFadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .app-card:nth-child(1) { animation-delay: 0.05s; }
+    .app-card:nth-child(2) { animation-delay: 0.1s; }
+    .app-card:nth-child(3) { animation-delay: 0.15s; }
+    .app-card:nth-child(4) { animation-delay: 0.2s; }
+    .app-card:nth-child(5) { animation-delay: 0.25s; }
+    .app-card:nth-child(6) { animation-delay: 0.3s; }
+    .app-card:nth-child(7) { animation-delay: 0.35s; }
+    .app-card:nth-child(8) { animation-delay: 0.4s; }
+    .app-card:nth-child(9) { animation-delay: 0.45s; }
+    .app-card:nth-child(10) { animation-delay: 0.5s; }
+    .app-card:nth-child(11) { animation-delay: 0.55s; }
+
+    .card-icon {
+      font-size: 2.8rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+      transition: transform var(--transition-normal);
+    }
+
+    .app-card:hover .card-icon {
+      transform: scale(1.15) rotate(-5deg);
+    }
+
+    .card-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.25rem;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-version {
+      background: rgba(108, 99, 255, 0.15);
+      color: var(--accent-primary);
+      border: 1px solid rgba(108, 99, 255, 0.25);
+    }
+
+    .badge-ready {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid rgba(46, 204, 113, 0.3);
+    }
+
+    .badge-coming {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid rgba(243, 156, 18, 0.3);
+    }
+
+    .badge-category {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-muted);
+      border: 1px solid var(--border-glass);
+    }
+
+    [data-theme="light"] .badge-version {
+      background: rgba(108, 99, 255, 0.1);
+    }
+
+    [data-theme="light"] .badge-category {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* ===== NO RESULTS ===== */
+    .no-results {
+      display: none;
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .no-results.visible {
+      display: block;
+    }
+
+    .no-results .no-results-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .no-results p {
+      font-size: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      line-height: 1.6;
+      letter-spacing: 0.3px;
+      transition: background var(--transition-normal), border-color var(--transition-normal);
+    }
+
+    footer span {
+      opacity: 0.6;
+    }
+
+    /* ===== RESPONSIVE: TABLET ===== */
+    @media (max-width: 1024px) {
+      .app-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 0 1rem;
+        height: 70px;
+      }
+
+      .header-title {
+        font-size: 1.25rem;
+      }
+
+      .header-subtitle {
+        font-size: 0.65rem;
+      }
+
+      .search-container {
+        width: 180px;
+      }
+
+      .search-input {
+        font-size: 0.8rem;
+        padding: 8px 12px 8px 36px;
+      }
+
+      main {
+        padding: 1.5rem 1rem;
+      }
+
+      .app-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .category-tabs {
+        gap: 0.4rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .tab-btn {
+        padding: 8px 16px;
+        font-size: 0.78rem;
+      }
+
+      .app-card {
+        padding: 1.4rem 1.2rem;
+      }
+
+      .card-icon {
+        font-size: 2.2rem;
+      }
+
+      .card-name {
+        font-size: 1rem;
+      }
+    }
+
+    /* ===== RESPONSIVE: MOBILE ===== */
+    @media (max-width: 480px) {
+      header {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 0.8rem 1rem;
+        gap: 0.6rem;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .search-container {
+        flex: 1;
+      }
+
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .category-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .category-tabs::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-glass);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    /* ===== ACCESSIBILITY ===== */
+    .app-card:focus-visible,
+    .tab-btn:focus-visible,
+    .theme-toggle:focus-visible,
+    .search-input:focus-visible {
+      outline: 2px solid var(--accent-primary);
+      outline-offset: 2px;
+    }
+
+    /* ===== SELECTION ===== */
+    ::selection {
+      background: rgba(108, 99, 255, 0.3);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <header>
+    <div class="header-left">
+      <div class="header-title">eOffice Suite</div>
+      <div class="header-subtitle">Powered by eBot AI ⚡</div>
+    </div>
+    <div class="header-right">
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search apps…" autocomplete="off" />
+        <span class="search-icon">🔍</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark/light mode" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="category-tabs" id="categoryTabs">
+      <button class="tab-btn active" data-category="all">All</button>
+      <button class="tab-btn" data-category="documents">Documents</button>
+      <button class="tab-btn" data-category="communication">Communication</button>
+      <button class="tab-btn" data-category="storage">Storage</button>
+      <button class="tab-btn" data-category="collaboration">Collaboration</button>
+    </div>
+
+    <div class="app-grid" id="appGrid"></div>
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">🔎</div>
+      <p>No apps match your search.</p>
+    </div>
+  </main>
+
+  <footer>
+    eOffice v1.0.0 — Part of the EoS Ecosystem <span>|</span> © 2026 EoS Project
+  </footer>
+
+  <script>
+    const apps = [
+      { id: "edocs",     icon: "📝", name: "eDocs",     desc: "Word processing & document editing",   version: "1.0.0", category: "documents",     status: "ready",  file: "edocs.html" },
+      { id: "enotes",    icon: "📒", name: "eNotes",    desc: "Digital notebooks & quick notes",      version: "1.0.0", category: "documents",     status: "ready",  file: "enotes.html" },
+      { id: "esheets",   icon: "📊", name: "eSheets",   desc: "Spreadsheets & data analysis",         version: "1.0.0", category: "documents",     status: "ready", file: "esheets.html" },
+      { id: "eslides",   icon: "📽️", name: "eSlides",   desc: "Presentations & slide decks",          version: "1.0.0", category: "documents",     status: "ready", file: "eslides.html" },
+      { id: "email",     icon: "📧", name: "eMail",     desc: "Email client & calendar integration",  version: "1.0.0", category: "communication", status: "ready", file: "email.html" },
+      { id: "edb",       icon: "🗄️", name: "eDB",       desc: "Lightweight database management",      version: "1.0.0", category: "storage",       status: "ready", file: "edb.html" },
+      { id: "edrive",    icon: "☁️", name: "eDrive",    desc: "Cloud storage & file sync",            version: "1.0.0", category: "storage",       status: "ready", file: "edrive.html" },
+      { id: "econnect",  icon: "👥", name: "eConnect",  desc: "Collaboration & messaging",            version: "1.0.0", category: "collaboration", status: "ready", file: "econnect.html" },
+      { id: "eforms",    icon: "📋", name: "eForms",    desc: "Forms, surveys & data collection",     version: "1.0.0", category: "collaboration", status: "ready", file: "eforms.html" },
+      { id: "esway",     icon: "🎭", name: "eSway",     desc: "Interactive presentations & stories",  version: "1.0.0", category: "documents",     status: "ready", file: "esway.html" },
+      { id: "eplanner",  icon: "✅", name: "ePlanner",  desc: "Task management & project planning",   version: "1.0.0", category: "collaboration", status: "ready", file: "eplanner.html" },
+    ];
+
+    const grid = document.getElementById("appGrid");
+    const searchInput = document.getElementById("searchInput");
+    const categoryTabs = document.getElementById("categoryTabs");
+    const noResults = document.getElementById("noResults");
+    const themeToggle = document.getElementById("themeToggle");
+    const html = document.documentElement;
+
+    let activeCategory = "all";
+
+    function renderCards() {
+      grid.innerHTML = "";
+      const query = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      apps.forEach((app, i) => {
+        const matchesCategory = activeCategory === "all" || app.category === activeCategory;
+        const matchesSearch = !query || app.name.toLowerCase().includes(query) || app.desc.toLowerCase().includes(query);
+
+        if (!matchesCategory || !matchesSearch) return;
+
+        visibleCount++;
+
+        const card = document.createElement("a");
+        card.className = "app-card";
+        card.href = app.file;
+        card.title = `Open ${app.name}`;
+        card.style.animationDelay = `${i * 0.05}s`;
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+
+        const statusBadge = app.status === "ready"
+          ? `<span class="badge badge-ready">Ready</span>`
+          : `<span class="badge badge-coming">Coming Soon</span>`;
+
+        const categoryLabel = app.category.charAt(0).toUpperCase() + app.category.slice(1);
+
+        card.innerHTML = `
+          <div class="card-icon">${app.icon}</div>
+          <div class="card-name">${app.name}</div>
+          <div class="card-desc">${app.desc}</div>
+          <div class="card-badges">
+            <span class="badge badge-version">v${app.version}</span>
+            ${statusBadge}
+            <span class="badge badge-category">${categoryLabel}</span>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      noResults.classList.toggle("visible", visibleCount === 0);
+    }
+
+    categoryTabs.addEventListener("click", (e) => {
+      const btn = e.target.closest(".tab-btn");
+      if (!btn) return;
+      categoryTabs.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeCategory = btn.dataset.category;
+      renderCards();
+    });
+
+    searchInput.addEventListener("input", renderCards);
+
+    // Theme toggle
+    function setTheme(theme) {
+      html.setAttribute("data-theme", theme);
+      themeToggle.textContent = theme === "dark" ? "🌙" : "☀️";
+      try { localStorage.setItem("eo-theme", theme); } catch (_) {}
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      setTheme(next);
+    });
+
+    // Restore saved theme
+    try {
+      const saved = localStorage.getItem("eo-theme");
+      if (saved) setTheme(saved);
+    } catch (_) {}
+
+    // Initial render
+    renderCards();
+  </script>
+</body>
+</html>

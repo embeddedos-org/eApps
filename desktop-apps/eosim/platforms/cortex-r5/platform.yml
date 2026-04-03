@@ -1,0 +1,14 @@
+name: cortex-r5
+display_name: TI TMS570 (Safety Cortex-R5)
+arch: arm
+engine: eosim
+class: safety
+vendor: TI
+soc: TMS570
+qemu:
+  machine: virt
+  cpu: cortex-r5
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

@@ -1,152 +1,118 @@
-name: Release Individual App
-
+name: Release App
 on:
-  workflow_dispatch:
-    inputs:
-      app:
-        description: "App to release"
-        required: true
-        type: choice
-        options:
-          - ecal
-          - enote
-          - econverter
-          - ebuffer
-          - efiles
-          - ecleaner
-          - eclock
-          - etools
-          - etimer
-          - epdf
-          - ezip
-          - eviewer
-          - esession
-          - emusic
-          - evideo
-          - egallery
-          - eplay
-          - epaint
-          - snake
-          - tetris
-          - minesweeper
-          - dice
-          - erunner
-          - esurfer
-          - echess
-          - ebirds
-          - eslice
-          - eblocks
-          - ecrush
-          - eftp
-          - eserial
-          - essh
-          - evnc
-          - etunnel
-          - echat
-          - evpn
-          - eguard
-          - evirustower
-          - eweb
-          - esettings
-          - ehmi
-      version:
-        description: "Version tag (e.g. 1.0.0)"
-        required: true
-        default: "1.0.0"
+  push:
+    tags:
+      - '*-v*'   # e.g. eoffice-desktop-v1.0.0, ebrowser-v1.2.0, eride-v2.0.0
 
 permissions:
   contents: write
 
 jobs:
-  build:
-    name: ${{ inputs.app }} (${{ matrix.platform }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            platform: linux-x64
-          - os: windows-latest
-            platform: windows-x64
-          - os: macos-latest
-            platform: macos-x64
+  parse-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      app_id: ${{ steps.parse.outputs.app_id }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag
+        id: parse
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          APP_ID="${TAG%-v*}"
+          VERSION="${TAG#*-v}"
+          echo "app_id=${APP_ID}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "App: ${APP_ID}, Version: ${VERSION}"
 
+  build-desktop:
+    needs: parse-tag
+    if: contains(needs.parse-tag.outputs.app_id, 'desktop') || contains(needs.parse-tag.outputs.app_id, 'ebrowser') || contains(needs.parse-tag.outputs.app_id, 'eostudio')
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
+      - name: Build desktop app
+        run: echo "Building ${{ needs.parse-tag.outputs.app_id }} v${{ needs.parse-tag.outputs.version }} on ${{ matrix.os }}"
+      # Add real build steps per app
 
-      - name: Install SDL2 (Linux)
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y cmake libsdl2-dev
-
-      - name: Install SDL2 (macOS)
-        if: runner.os == 'macOS'
-        run: brew install sdl2
-
-      - name: Configure & Build
-        run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release -DEAPPS_BUILD_STANDALONE=ON
-          cmake --build build --config Release
-
-      - name: Package (Unix)
-        if: runner.os != 'Windows'
-        run: |
-          APP="${{ inputs.app }}"
-          VER="${{ inputs.version }}"
-          PKG="eapps-${APP}-v${VER}-${{ matrix.platform }}"
-          mkdir -p ${PKG}
-          BIN=$(find build/apps/${APP} -name "${APP}_standalone" -type f 2>/dev/null | head -1)
-          if [ -n "$BIN" ]; then
-            cp "$BIN" ${PKG}/${APP}
-            chmod +x ${PKG}/${APP}
-          fi
-          tar czf ${PKG}.tar.gz ${PKG}/
-
-      - name: Package (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $APP = "${{ inputs.app }}"
-          $VER = "${{ inputs.version }}"
-          $PKG = "eapps-${APP}-v${VER}-${{ matrix.platform }}"
-          New-Item -ItemType Directory -Force $PKG
-          $bin = Get-ChildItem -Path "build/apps/${APP}" -Recurse -Filter "${APP}_standalone.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
-          if ($bin) { Copy-Item $bin.FullName "${PKG}/${APP}.exe" }
-          Compress-Archive -Path "${PKG}/*" -DestinationPath "${PKG}.zip"
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ inputs.app }}-${{ matrix.platform }}
-          path: eapps-${{ inputs.app }}-*
-          retention-days: 90
-
-  release:
-    name: Create Release
-    needs: build
+  build-mobile:
+    needs: parse-tag
+    if: contains(needs.parse-tag.outputs.app_id, 'eride') || contains(needs.parse-tag.outputs.app_id, 'esocial') || contains(needs.parse-tag.outputs.app_id, 'etrack') || contains(needs.parse-tag.outputs.app_id, 'etravel') || contains(needs.parse-tag.outputs.app_id, 'ewallet')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          path: artifacts
-          merge-multiple: true
-
-      - name: Generate SHA256SUMS
+          flutter-version: '3.x'
+      - name: Build APK
         run: |
-          find artifacts -type f \( -name "*.zip" -o -name "*.tar.gz" \) | while read f; do
-            sha256sum "$f"
-          done > SHA256SUMS.txt
-          mv artifacts/* . 2>/dev/null || true
+          cd mobile-apps/${{ needs.parse-tag.outputs.app_id }}
+          flutter pub get
+          flutter build apk --release
 
-      - name: Create Release
+  build-extension:
+    needs: parse-tag
+    if: contains(needs.parse-tag.outputs.app_id, 'chrome') || contains(needs.parse-tag.outputs.app_id, 'firefox') || contains(needs.parse-tag.outputs.app_id, 'vscode')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build extension
+        run: |
+          cd extensions/${{ needs.parse-tag.outputs.app_id }}
+          npm ci
+          npm run build
+
+  create-release:
+    needs: [parse-tag, build-desktop, build-mobile, build-extension]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "${{ inputs.app }}-v${{ inputs.version }}"
-          name: "${{ inputs.app }} v${{ inputs.version }}"
-          body: "Individual release of **${{ inputs.app }}** v${{ inputs.version }} for Linux, Windows, and macOS."
-          files: |
-            eapps-${{ inputs.app }}-*.tar.gz
-            eapps-${{ inputs.app }}-*.zip
-            SHA256SUMS.txt
+          tag_name: ${{ github.ref_name }}
+          name: "${{ needs.parse-tag.outputs.app_id }} v${{ needs.parse-tag.outputs.version }}"
+          body: "Automated release of **${{ needs.parse-tag.outputs.app_id }}** version `${{ needs.parse-tag.outputs.version }}`."
+          draft: false
+          prerelease: false
+          # files: build/artifacts/*
+
+  update-catalog:
+    needs: [parse-tag, create-release]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update apps.json version
+        run: |
+          APP_ID="${{ needs.parse-tag.outputs.app_id }}"
+          VERSION="${{ needs.parse-tag.outputs.version }}"
+          python3 -c "
+          import json, sys
+          with open('data/apps.json', 'r') as f:
+              data = json.load(f)
+          for app in data['apps']:
+              if app['id'] == '${APP_ID}':
+                  app['version'] = '${VERSION}'
+                  break
+          data['meta']['lastUpdated'] = '$(date +%Y-%m-%d)'
+          with open('data/apps.json', 'w') as f:
+              json.dump(data, f, indent=2)
+          "
+
+      - name: Commit updated catalog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/apps.json
+          git diff --cached --quiet || git commit -m "chore: update ${{ needs.parse-tag.outputs.app_id }} to v${{ needs.parse-tag.outputs.version }}"
+          git push

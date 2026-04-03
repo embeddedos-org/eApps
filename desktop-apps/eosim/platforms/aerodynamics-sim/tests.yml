@@ -1,0 +1,6 @@
+name: aerodynamics-sim-test
+platform: aerodynamics-sim
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

@@ -1,0 +1,15 @@
+name: android-arm64
+display_name: "Android ARM64 (Snapdragon-class)"
+arch: arm64
+engine: eosim
+class: mobile
+vendor: Google
+domain: consumer
+soc: "Generic ARM64 Android"
+runtime:
+  memory_mb: 4096
+  headless: true
+  display:
+    width: 1080
+    height: 2400
+    density: 420

@@ -1,0 +1,26 @@
+name: nrf9160
+display_name: Nordic nRF9160 (Cortex-M33 LTE)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Nordic
+soc: nRF9160
+domain: iot
+modeling: deterministic
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0
+name: nrf9160
+display_name: Nordic nRF9160 (Cortex-M33 Cellular IoT)
+arch: arm
+engine: eosim
+class: mcu
+vendor: Nordic
+soc: nRF9160
+domain: telecom
+modeling: deterministic
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

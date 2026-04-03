@@ -1,0 +1,14 @@
+name: gd32vf103
+display_name: GigaDevice GD32VF103 (Longan)
+arch: riscv32
+engine: eosim
+class: mcu
+vendor: GigaDevice
+soc: GD32VF103
+qemu:
+  machine: virt
+  cpu: rv32imac
+runtime:
+  memory_mb: 128
+  headless: true
+  uart: sysbus.uart0

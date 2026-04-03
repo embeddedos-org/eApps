@@ -1,0 +1,11 @@
+name: physiology-sim
+display_name: Patient Physiology Simulator
+arch: arm64
+engine: eosim
+class: soc
+domain: physiology
+modeling: continuous
+runtime:
+  memory_mb: 256
+  headless: true
+  uart: sysbus.uart0

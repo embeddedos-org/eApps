@@ -1,0 +1,14 @@
+name: qemu-q35
+display_name: QEMU q35 (x86_64 UEFI)
+arch: x86_64
+engine: eosim
+class: virtual
+vendor: QEMU
+soc: q35
+qemu:
+  machine: q35
+  cpu: qemu64
+runtime:
+  memory_mb: 2048
+  headless: true
+  uart: sysbus.uart0

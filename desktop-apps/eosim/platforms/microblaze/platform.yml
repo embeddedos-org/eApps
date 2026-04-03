@@ -1,0 +1,14 @@
+name: microblaze
+display_name: Xilinx MicroBlaze (FPGA)
+arch: microblaze
+engine: eosim
+class: fpga
+vendor: Xilinx
+soc: MicroBlaze
+qemu:
+  machine: virt
+  cpu: v11
+runtime:
+  memory_mb: 512
+  headless: true
+  uart: sysbus.uart0

@@ -1,0 +1,18 @@
+name: generic-arm64-board
+display_name: Generic ARM64 Board Template
+arch: arm64
+engine: renode
+qemu:
+  machine: virt
+  cpu: cortex-a57
+peripherals:
+  - uart
+  - spi
+  - i2c
+  - gpio
+  - timer
+  - ethernet
+runtime:
+  memory_mb: 1024
+  headless: true
+  uart: sysbus.uart0

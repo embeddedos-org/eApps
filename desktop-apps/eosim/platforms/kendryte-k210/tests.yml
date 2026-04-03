@@ -1,0 +1,6 @@
+name: kendryte-k210-test
+platform: kendryte-k210
+checks:
+  - type: boot_success
+  - type: timeout
+    seconds: 30

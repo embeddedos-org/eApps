@@ -1,0 +1,26 @@
+{
+  "name": "eoffice-github-app",
+  "version": "1.0.0",
+  "description": "eOffice GitHub App — eBot AI code review, issue tracking, and changelog generation",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "probot run ./src/index.js",
+    "dev": "nodemon --exec 'probot run ./src/index.js'",
+    "lint": "eslint src/**/*.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "probot": "^13.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "nock": "^13.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

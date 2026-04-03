@@ -1,0 +1,13 @@
+name: arm-mcu-nrf52
+display_name: nRF52840 BLE MCU
+arch: arm
+engine: renode
+repl: arm-mcu/nrf52840.repl
+resc: arm-mcu/nrf52840.resc
+qemu:
+  machine: lm3s6965evb
+  cpu: cortex-m3
+runtime:
+  memory_mb: 64
+  headless: true
+  uart: sysbus.uart0
