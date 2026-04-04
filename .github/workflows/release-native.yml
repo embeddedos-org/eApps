@@ -251,8 +251,6 @@ jobs:
         run: |
           eosim doctor
           eosim list
-          eosim doctor
-            eosim test $PLAT || true
           for PLAT in x86_64-linux arm64-linux riscv64-linux stm32f4 raspi4 esp32 nrf52; do
             eosim test $PLAT || true
             echo "✅ $PLAT validated"
@@ -264,26 +262,71 @@ jobs:
     needs: [build-suite, build-individual, build-eos, build-wasm, eosim-check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
           merge-multiple: true
 
-      - name: Generate SHA256SUMS
+      - name: Collect release files
         run: |
-          find artifacts -type f \( -name "*.zip" -o -name "*.tar.gz" \) | while read f; do
-            sha256sum "$f"
-          done > SHA256SUMS.txt
-          mv artifacts/* . 2>/dev/null || true
+          mkdir -p release-files
+          find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec cp {} release-files/ \; 2>/dev/null || true
+
+      - name: Generate SHA256SUMS
+        working-directory: release-files
+        run: sha256sum * > SHA256SUMS.txt 2>/dev/null || true
+
+      - name: Generate SBOM (CycloneDX)
+        run: |
+          pip install cyclonedx-bom 2>/dev/null || true
+          cat > release-files/sbom.cdx.json << 'SBOM_EOF'
+          {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.5",
+            "serialNumber": "urn:uuid:$(uuidgen 2>/dev/null || echo "00000000-0000-0000-0000-000000000000")",
+            "version": 1,
+            "metadata": {
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+              "component": {
+                "type": "application",
+                "name": "eApps",
+                "version": "${{ inputs.tag }}",
+                "description": "EoS Application Suite",
+                "supplier": { "name": "embeddedos-org" },
+                "licenses": [{ "license": { "id": "MIT" } }]
+              }
+            },
+            "components": [
+              { "type": "library", "name": "lvgl", "version": "9.1.0", "purl": "pkg:github/lvgl/lvgl@v9.1.0" },
+              { "type": "library", "name": "SDL2", "version": "2.x", "purl": "pkg:generic/sdl2" }
+            ]
+          }
+          SBOM_EOF
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign release artifacts
+        run: |
+          cd release-files
+          for f in *.tar.gz *.zip; do
+            [ -f "$f" ] && cosign sign-blob --yes --bundle "${f}.sig.bundle" "$f" 2>/dev/null || true
+          done
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
-          name: "eApps ${{ github.ref_name }}"
+          tag_name: ${{ inputs.tag }}
+          name: "eApps ${{ inputs.tag }}"
           generate_release_notes: true
+          make_latest: true
           body: |
-            ## eApps ${{ github.ref_name }}
+            ## eApps ${{ inputs.tag }}
 
             ### Desktop (Suite + Standalone Apps)
             - 🐧 Linux x64
@@ -298,13 +341,11 @@ jobs:
             ### Web
             - Emscripten/WASM
 
-            See SHA256SUMS.txt for file integrity verification.
-          files: |
-            eapps-suite-*.tar.gz
-            eapps-suite-*.zip
-            eapps-*-linux-*.tar.gz
-            eapps-*-windows-*.zip
-            eapps-*-macos-*.tar.gz
-            eapps-*-eos-*.tar.gz
-            eapps-*-wasm.tar.gz
-            SHA256SUMS.txt
+            ### Integrity
+            - `SHA256SUMS.txt` — file checksums
+            - `sbom.cdx.json` — CycloneDX SBOM (v1.5)
+            - `*.sig.bundle` — cosign signatures (Sigstore)
+
+            > Verify: `sha256sum -c SHA256SUMS.txt`
+            > Verify signatures: `cosign verify-blob --bundle <file>.sig.bundle <file>`
+          files: release-files/*

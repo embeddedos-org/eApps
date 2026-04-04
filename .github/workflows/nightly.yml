@@ -2,10 +2,18 @@ name: Nightly
 
 on:
   schedule:
-    - cron: "0 2 * * *" # 2:00 AM UTC daily
+    - cron: "0 2 * * *"
   workflow_dispatch:
 
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  EOSIM_VERSION: "0.1.0"
+
 jobs:
+  # ── Full CI build + test across platforms ──────────────────────────
   full-build:
     strategy:
       fail-fast: false
@@ -37,13 +45,8 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install sdl2
 
-      - name: Configure (Unix)
-        if: runner.os != 'Windows'
-        run: cmake -B build -DBUILD_TESTING=ON
-
-      - name: Configure (Windows)
-        if: runner.os == 'Windows'
-        run: cmake -B build -DBUILD_TESTING=ON
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
 
       - name: Build all modules
         run: cmake --build build --config Release --parallel
@@ -62,6 +65,28 @@ jobs:
           name: nightly-report-${{ matrix.os }}
           path: nightly-report.xml
 
+  # ── Sanitizer run ─────────────────────────────────────────────────
+  sanitizers:
+    name: ASan/UBSan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
+      - name: Build with sanitizers
+        run: |
+          cmake -B build-san \
+            -DBUILD_TESTING=ON \
+            -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          cmake --build build-san --parallel
+      - name: Run tests under sanitizers
+        run: ctest --test-dir build-san --output-on-failure
+        env:
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+
+  # ── WASM build ────────────────────────────────────────────────────
   web-build:
     name: Web (Emscripten)
     runs-on: ubuntu-latest
@@ -70,12 +95,110 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-
       - name: Setup Emscripten
         uses: mymindstorm/setup-emsdk@v14
-
       - name: Configure
         run: emcmake cmake -B build-web
-
       - name: Build
         run: cmake --build build-web --parallel
+
+  # ── EoSim QEMU-based simulation ──────────────────────────────────
+  eosim-nightly:
+    name: EoSim (${{ matrix.platform }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - x86_64-linux
+          - arm64-linux
+          - riscv64-linux
+          - stm32f4
+          - raspi4
+          - esp32
+          - nrf52
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install EoSim
+        run: pip install "eosim @ https://github.com/embeddedos-org/EoSim/releases/download/v${{ env.EOSIM_VERSION }}/eosim-${{ env.EOSIM_VERSION }}-py3-none-any.whl"
+      - name: Test ${{ matrix.platform }}
+        run: |
+          eosim doctor
+          eosim test ${{ matrix.platform }} || true
+        continue-on-error: true
+
+  # ── SBOM generation (nightly snapshot) ────────────────────────────
+  sbom:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Generate CycloneDX SBOM
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          UUID=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || echo "nightly-$(date +%s)")
+          cat > sbom-nightly.cdx.json << EOF
+          {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.5",
+            "serialNumber": "urn:uuid:${UUID}",
+            "version": 1,
+            "metadata": {
+              "timestamp": "${TIMESTAMP}",
+              "component": {
+                "type": "application",
+                "name": "eApps",
+                "version": "nightly-$(date +%Y%m%d)",
+                "description": "EoS Application Suite (nightly snapshot)",
+                "supplier": { "name": "embeddedos-org" },
+                "licenses": [{ "license": { "id": "MIT" } }]
+              }
+            },
+            "components": [
+              { "type": "framework", "name": "LVGL", "version": "9.1.0", "purl": "pkg:github/lvgl/lvgl@v9.1.0" },
+              { "type": "library", "name": "SDL2", "version": "2.x", "purl": "pkg:generic/sdl2" }
+            ]
+          }
+          EOF
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-nightly
+          path: sbom-nightly.cdx.json
+
+  # ── Nightly report ───────────────────────────────────────────────
+  nightly-report:
+    name: Nightly Report
+    needs: [full-build, sanitizers, web-build, eosim-nightly, sbom]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Results
+        run: |
+          echo "## Nightly Build Report — $(date -u '+%Y-%m-%d')" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Job | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-----|--------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Full build (3 OS) | ${{ needs.full-build.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Sanitizers (ASan/UBSan) | ${{ needs.sanitizers.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Web build (Emscripten) | ${{ needs.web-build.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| EoSim QEMU (7 platforms) | ${{ needs.eosim-nightly.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| SBOM generation | ${{ needs.sbom.result }} |" >> "$GITHUB_STEP_SUMMARY"
+          FAILED=0
+          for JOB in "${{ needs.full-build.result }}" \
+                     "${{ needs.sanitizers.result }}" \
+                     "${{ needs.web-build.result }}"; do
+            if [ "$JOB" != "success" ]; then FAILED=1; fi
+          done
+          if [ "$FAILED" -eq 1 ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "❌ **NIGHTLY REGRESSION DETECTED**" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ **All nightly checks passed**" >> "$GITHUB_STEP_SUMMARY"

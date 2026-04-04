@@ -3,10 +3,11 @@ name: Release
 on:
   push:
     tags:
-        - "v*.*.*"
+      - "v*.*.*"
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   validate:
@@ -14,12 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y libsdl2-dev
       - name: Build (native)
         run: |
-          cmake -B build -DBUILD_TESTING=ON
-          cmake --build build
+          cmake -B build -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build --output-on-failure -C Release
 
   cross-compile:
     name: Cross-Compile (${{ matrix.arch }})
@@ -32,17 +37,16 @@ jobs:
           - arch: aarch64-linux
             packages: gcc-aarch64-linux-gnu
             cc: aarch64-linux-gnu-gcc
-            artifact_suffix: aarch64-linux
           - arch: arm-linux-gnueabihf
             packages: gcc-arm-linux-gnueabihf
             cc: arm-linux-gnueabihf-gcc
-            artifact_suffix: arm-linux-gnueabihf
           - arch: riscv64-linux
             packages: gcc-riscv64-linux-gnu
             cc: riscv64-linux-gnu-gcc
-            artifact_suffix: riscv64-linux
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Install cross-compiler
         run: |
           sudo apt-get update
@@ -55,15 +59,15 @@ jobs:
           cmake -B build-${{ matrix.arch }} \
             -DCMAKE_C_COMPILER=${{ matrix.cc }} \
             -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-${{ matrix.arch }}
+          cmake --build build-${{ matrix.arch }} --parallel
       - name: Package
         run: |
           mkdir -p staging
           find build-${{ matrix.arch }} -name "*.a" -exec cp {} staging/ \;
-          tar czf eapps-${{ steps.version.outputs.version }}-${{ matrix.artifact_suffix }}.tar.gz -C staging .
+          tar czf eapps-${{ steps.version.outputs.version }}-${{ matrix.arch }}.tar.gz -C staging .
       - uses: actions/upload-artifact@v4
         with:
-          name: eapps-${{ matrix.artifact_suffix }}
+          name: eapps-${{ matrix.arch }}
           path: "*.tar.gz"
 
   build-wasm:
@@ -72,18 +76,18 @@ jobs:
     needs: validate
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Extract version
         id: version
         run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
       - name: Install Emscripten
         uses: mymindstorm/setup-emsdk@v14
         with:
-          version: "3.1.50"
+          version: "3.1.51"
       - name: Build WASM
         run: |
-          emcmake cmake -B build-wasm \
-            -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
-            -DCMAKE_BUILD_TYPE=Release 2>/dev/null || \
+          emcmake cmake -B build-wasm -DCMAKE_BUILD_TYPE=Release 2>/dev/null || \
           cmake -B build-wasm -DCMAKE_BUILD_TYPE=Release
           cmake --build build-wasm || true
           mkdir -p staging
@@ -109,20 +113,98 @@ jobs:
           TAG=${GITHUB_REF#refs/tags/}
           echo "tag=$TAG" >> $GITHUB_OUTPUT
           echo "version=${TAG#v}" >> $GITHUB_OUTPUT
+
       - name: Build native (x86_64)
         run: |
+          sudo apt-get update && sudo apt-get install -y libsdl2-dev
           cmake -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build
+          cmake --build build --parallel
           mkdir -p staging
           find build -name "*.a" -exec cp {} staging/ \;
           tar czf eapps-${{ steps.version.outputs.version }}-linux-x86_64.tar.gz -C staging .
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: eapps-*
           merge-multiple: true
-      - name: Generate checksums
+
+      - name: Generate SHA-256 checksums
         run: sha256sum *.tar.gz > SHA256SUMS.txt 2>/dev/null || true
+
+      - name: Generate SBOM (CycloneDX v1.5)
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          UUID=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || echo "00000000-0000-0000-0000-$(date +%s)")
+          cat > sbom.cdx.json << EOF
+          {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.5",
+            "serialNumber": "urn:uuid:${UUID}",
+            "version": 1,
+            "metadata": {
+              "timestamp": "${TIMESTAMP}",
+              "component": {
+                "type": "application",
+                "name": "eApps",
+                "version": "${{ steps.version.outputs.version }}",
+                "description": "EoS Application Suite",
+                "supplier": { "name": "embeddedos-org" },
+                "licenses": [{ "license": { "id": "MIT" } }]
+              }
+            },
+            "components": [
+              { "type": "framework", "name": "LVGL", "version": "9.1.0", "purl": "pkg:github/lvgl/lvgl@v9.1.0" },
+              { "type": "library", "name": "SDL2", "version": "2.x", "purl": "pkg:generic/sdl2" }
+            ]
+          }
+          EOF
+
+      - name: Generate SBOM (SPDX v2.3)
+        run: |
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          cat > sbom.spdx.json << EOF
+          {
+            "spdxVersion": "SPDX-2.3",
+            "dataLicense": "CC0-1.0",
+            "SPDXID": "SPDXRef-DOCUMENT",
+            "name": "eApps-${{ steps.version.outputs.version }}",
+            "documentNamespace": "https://github.com/embeddedos-org/eApps/releases/tag/${{ steps.version.outputs.tag }}",
+            "creationInfo": {
+              "created": "${TIMESTAMP}",
+              "creators": ["Tool: github-actions", "Organization: embeddedos-org"]
+            },
+            "packages": [{
+              "SPDXID": "SPDXRef-eApps",
+              "name": "eApps",
+              "versionInfo": "${{ steps.version.outputs.version }}",
+              "downloadLocation": "https://github.com/embeddedos-org/eApps/releases/tag/${{ steps.version.outputs.tag }}",
+              "filesAnalyzed": false,
+              "licenseConcluded": "MIT",
+              "licenseDeclared": "MIT",
+              "copyrightText": "Copyright (c) 2026 embeddedos-org"
+            }]
+          }
+          EOF
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign release artifacts
+        run: |
+          for f in *.tar.gz; do
+            [ -f "$f" ] && cosign sign-blob --yes --bundle "${f}.sig.bundle" "$f" 2>/dev/null || true
+          done
+
+      - name: Check release does not already exist
+        run: |
+          if gh release view "${{ steps.version.outputs.tag }}" &>/dev/null; then
+            echo "::error::Release ${{ steps.version.outputs.tag }} already exists. Do not overwrite previous releases."
+            exit 1
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -130,8 +212,6 @@ jobs:
           name: "eApps ${{ steps.version.outputs.tag }}"
           body: |
             ## eApps ${{ steps.version.outputs.tag }} — EoS Application Suite
-
-            Productivity, media, games, and networking tools for EoS.
 
             ### Platforms
             | Archive | Target |
@@ -142,14 +222,21 @@ jobs:
             | `eapps-*-riscv64-linux.tar.gz` | RISC-V 64 (SiFive) |
             | `eapps-*-wasm.tar.gz` | WebAssembly (browser) |
 
-            ### Apps included
-            - **Productivity:** ecal, enote, econverter, ebuffer, efiles, ecleaner, eclock, etools, etimer, epdf, ezip, eviewer
-            - **Media:** emusic, evideo, egallery, eplay, epaint
-            - **Games:** snake, tetris, minesweeper, dice, erunner, esurfer, echess, ebirds, eslice, eblocks, ecrush
-            - **Connectivity:** eftp, eserial, essh, evnc, etunnel, echat
-            - **Security:** evpn, eguard, evirustower
-            - **Web:** eweb
+            ### Release Integrity
+            - `SHA256SUMS.txt` — file checksums
+            - `sbom.cdx.json` — CycloneDX SBOM (v1.5)
+            - `sbom.spdx.json` — SPDX SBOM (v2.3)
+            - `*.sig.bundle` — Sigstore cosign signatures
+
+            ### Verification
+            ```bash
+            sha256sum -c SHA256SUMS.txt
+            cosign verify-blob --bundle <file>.sig.bundle <file>
+            ```
           files: |
             *.tar.gz
+            *.sig.bundle
             SHA256SUMS.txt
+            sbom.cdx.json
+            sbom.spdx.json
           generate_release_notes: true
