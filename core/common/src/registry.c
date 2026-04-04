@@ -12,6 +12,7 @@ void eapps_registry_init(void) {
 }
 
 void eapps_registry_deinit(void) {
+    memset(s_entries, 0, sizeof(s_entries));
     s_count = 0;
 }
 

@@ -399,9 +399,9 @@ jobs:
                 "type": "operating-system",
                 "bom-ref": "eos",
                 "name": "EoS",
-                "version": "2.0.0",
+                "version": "0.1.0",
                 "description": "Embedded Operating System",
-                "purl": "pkg:github/embeddedos-org/eos@v2.0.0"
+                "purl": "pkg:github/embeddedos-org/eos@v0.1.0"
               }
             ],
             "dependencies": [

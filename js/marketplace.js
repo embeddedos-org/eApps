@@ -47,6 +47,9 @@
   async function init() {
     try {
       const res = await fetch(DATA_URL);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      }
       const data = await res.json();
       categories = data.categories || [];
       allApps = data.apps || [];

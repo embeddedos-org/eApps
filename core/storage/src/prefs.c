@@ -28,6 +28,7 @@ static pref_entry_t *find_entry(eapps_prefs_t *p, const char *key) {
 }
 
 eapps_prefs_t *eapps_prefs_init(const char *app_id) {
+    if (!app_id) return NULL;
     eapps_prefs_t *p = (eapps_prefs_t *)calloc(1, sizeof(eapps_prefs_t));
     if (!p) return NULL;
     snprintf(p->app_id, sizeof(p->app_id), "%s", app_id);
@@ -42,7 +43,8 @@ eapps_prefs_t *eapps_prefs_init(const char *app_id) {
             *eq = '\0';
             char *val = eq + 1;
             size_t vlen = strlen(val);
-            if (vlen > 0 && val[vlen - 1] == '\n') val[vlen - 1] = '\0';
+            if (vlen > 0 && val[vlen - 1] == '\n') val[--vlen] = '\0';
+            if (vlen > 0 && val[vlen - 1] == '\r') val[--vlen] = '\0';
             snprintf(p->entries[p->count].key, MAX_KEY_LEN, "%s", line);
             snprintf(p->entries[p->count].value, MAX_VAL_LEN, "%s", val);
             p->count++;

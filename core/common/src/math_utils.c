@@ -25,6 +25,8 @@ float eapps_lerp(float a, float b, float t) {
 }
 
 float eapps_map(float val, float in_min, float in_max, float out_min, float out_max) {
+    if (in_max == in_min) return out_min;
+    if (in_max == in_min) return out_min;
     return (val - in_min) / (in_max - in_min) * (out_max - out_min) + out_min;
 }
 

@@ -284,7 +284,7 @@ jobs:
       - name: Generate SBOM (CycloneDX)
         run: |
           pip install cyclonedx-bom 2>/dev/null || true
-          cat > release-files/sbom.cdx.json << 'SBOM_EOF'
+          cat > release-files/sbom.cdx.json << SBOM_EOF
           {
             "bomFormat": "CycloneDX",
             "specVersion": "1.5",

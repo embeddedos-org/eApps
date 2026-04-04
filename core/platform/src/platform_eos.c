@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 #include "eapps/platform.h"
 #include <string.h>
+#include <stdio.h>
+#include <stdio.h>
 
 int  eapps_clipboard_get(char *buf, int buf_len) { (void)buf; (void)buf_len; return -1; }
 int  eapps_clipboard_set(const char *text) { (void)text; return -1; }
