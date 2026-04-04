@@ -1,0 +1,25 @@
+replicaCount: 2
+image:
+  repository: embeddedos/eosim
+  tag: enterprise-latest
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+ingress:
+  enabled: true
+  hosts:
+    - host: eosim.eos.local
+      paths: ["/"]
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70

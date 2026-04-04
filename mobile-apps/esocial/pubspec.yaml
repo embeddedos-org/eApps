@@ -1,0 +1,68 @@
+name: esocial
+description: eSocial - Social networking, dating & messaging app
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  flutter_riverpod: ^2.5.1
+
+  # Navigation
+  go_router: ^14.2.0
+
+  # Firebase
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.0
+  cloud_firestore: ^4.15.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.0
+
+  # UI
+  cached_network_image: ^3.3.1
+  flutter_card_swiper: ^7.0.1
+  flutter_rating_bar: ^4.0.1
+  shimmer: ^3.0.0
+  smooth_page_indicator: ^1.1.0
+  material_design_icons_flutter: ^7.0.7296
+  cupertino_icons: ^1.0.6
+
+  # Media
+  image_picker: ^1.0.7
+
+  # Networking & Utils
+  dio: ^5.4.1
+  uuid: ^4.3.3
+  timeago: ^3.6.1
+  url_launcher: ^6.2.5
+  connectivity_plus: ^6.0.3
+  shared_preferences: ^2.2.2
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700

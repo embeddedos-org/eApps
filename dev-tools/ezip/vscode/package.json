@@ -1,0 +1,19 @@
+{
+  "name": "eos-ezip",
+  "displayName": "Archive Browser — EoS",
+  "description": "Archive Browser for VS Code",
+  "version": "1.0.0",
+  "publisher": "embeddedos",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [{ "command": "eos-ezip.activate", "title": "Archive Browser" }]
+  },
+  "scripts": { "compile": "tsc -p ./", "watch": "tsc -watch -p ./" },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}

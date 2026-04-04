@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.enote</id>
+  <name>Code Notes & Snippets — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>Code Notes & Snippets for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

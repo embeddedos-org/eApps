@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.eviewer</id>
+  <name>Binary/Hex Viewer — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>Binary/Hex Viewer for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

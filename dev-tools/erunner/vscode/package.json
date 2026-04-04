@@ -1,0 +1,19 @@
+{
+  "name": "eos-erunner",
+  "displayName": "Task/Script Runner — EoS",
+  "description": "Task/Script Runner for VS Code",
+  "version": "1.0.0",
+  "publisher": "embeddedos",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [{ "command": "eos-erunner.activate", "title": "Task/Script Runner" }]
+  },
+  "scripts": { "compile": "tsc -p ./", "watch": "tsc -watch -p ./" },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0"
+  }
+}

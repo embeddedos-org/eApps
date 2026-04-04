@@ -1,0 +1,13 @@
+apiVersion: v2
+name: eos-eoffice
+description: Office Suite — EoS Enterprise Helm Chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+maintainers:
+  - name: EmbeddedOS
+    url: https://github.com/embeddedos-org
+keywords:
+  - eos
+  - eoffice
+  - enterprise

@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  echat:
+    build: .
+    container_name: eos-echat
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - EOS_LICENSE_KEY=${EOS_LICENSE_KEY}
+    volumes:
+      - echat_data:/app/data
+    networks:
+      - eos-enterprise
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  echat_data:
+
+networks:
+  eos-enterprise:
+    external: true

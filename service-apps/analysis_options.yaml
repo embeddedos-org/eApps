@@ -1,7 +1,0 @@
-include: package:flutter_lints/flutter.yaml
-
-linter:
-  rules:
-    curly_braces_in_flow_control_structures: true
-    prefer_const_constructors: true
-    prefer_const_declarations: true

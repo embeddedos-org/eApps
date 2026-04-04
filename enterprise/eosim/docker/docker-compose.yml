@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  eosim:
+    build: .
+    container_name: eos-eosim
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - EOS_LICENSE_KEY=${EOS_LICENSE_KEY}
+    volumes:
+      - eosim_data:/app/data
+    networks:
+      - eos-enterprise
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  eosim_data:
+
+networks:
+  eos-enterprise:
+    external: true

@@ -1,0 +1,11 @@
+{
+  "name": "@eos/econverter-cli",
+  "version": "1.0.0",
+  "description": "Unit/format converter - EoS CLI Tool",
+  "bin": { "eos-econverter": "./index.js" },
+  "main": "index.js",
+  "scripts": { "start": "node index.js", "test": "jest" },
+  "keywords": ["eos", "econverter", "cli"],
+  "license": "Apache-2.0",
+  "dependencies": { "commander": "^12.0.0", "chalk": "^5.3.0", "ora": "^7.0.1" }
+}

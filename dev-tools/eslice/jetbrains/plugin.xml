@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.eslice</id>
+  <name>Image Asset Slicer — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>Image Asset Slicer for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

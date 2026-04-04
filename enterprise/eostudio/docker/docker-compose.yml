@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  eostudio:
+    build: .
+    container_name: eos-eostudio
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - EOS_LICENSE_KEY=${EOS_LICENSE_KEY}
+    volumes:
+      - eostudio_data:/app/data
+    networks:
+      - eos-enterprise
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  eostudio_data:
+
+networks:
+  eos-enterprise:
+    external: true

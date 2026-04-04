@@ -1,0 +1,11 @@
+{
+  "name": "@eos/ecal-cli",
+  "version": "1.0.0",
+  "description": "Calendar management - EoS CLI Tool",
+  "bin": { "eos-ecal": "./index.js" },
+  "main": "index.js",
+  "scripts": { "start": "node index.js", "test": "jest" },
+  "keywords": ["eos", "ecal", "cli"],
+  "license": "Apache-2.0",
+  "dependencies": { "commander": "^12.0.0", "chalk": "^5.3.0", "ora": "^7.0.1" }
+}

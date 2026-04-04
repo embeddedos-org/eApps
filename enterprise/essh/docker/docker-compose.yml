@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  essh:
+    build: .
+    container_name: eos-essh
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - EOS_LICENSE_KEY=${EOS_LICENSE_KEY}
+    volumes:
+      - essh_data:/app/data
+    networks:
+      - eos-enterprise
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  essh_data:
+
+networks:
+  eos-enterprise:
+    external: true

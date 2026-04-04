@@ -6,7 +6,7 @@
 
 **One repository. Every EoS app. All platforms. Automated delivery.**
 
-eApps is the unified marketplace, monorepo, and automated app store for the entire [EoS (Embedded Operating System)](https://github.com/embeddedos-org) ecosystem — browser extensions, desktop applications, mobile apps, cloud services, and 40+ embedded-native apps.
+eApps is the unified marketplace, monorepo, and automated app store for the entire [EoS (Embedded Operating System)](https://github.com/embeddedos-org) ecosystem — **50 apps across 8 platform categories = 188 platform targets**. Native apps, desktop apps, mobile apps, web PWAs, browser extensions, dev tools, CLI tools, and enterprise deployments.
 
 🌐 **Live App Store:** [embeddedos-org.github.io/eApps](https://embeddedos-org.github.io/eApps/)
 
@@ -16,12 +16,17 @@ eApps is the unified marketplace, monorepo, and automated app store for the enti
 
 | Category | Folder | Count | Technologies | Artifacts |
 |---|---|---|---|---|
-| 🧩 **Extensions** | `extensions/` | 11 | Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 | `.zip` `.crx` `.xpi` `.vsix` |
+| ⚙️ **Native Apps** | `apps/` | 46 | C + LVGL (cross-platform via CMake) | Binaries, WASM |
 | 🖥️ **Desktop Apps** | `desktop-apps/` | 4 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
-| 📱 **Mobile Apps** | `mobile-apps/` | 5 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
-| ☁️ **Service Apps** | `service-apps/` | 2 | Firebase, Docker, Node.js | Docker images, Firebase deploy |
-| ⚙️ **Native Apps** | `apps/` | 40+ | C + LVGL (cross-platform via CMake) | Binaries, WASM |
-| 🌐 **Web Apps** | `desktop-apps/eoffice/browser/` | 1 | HTML/CSS/JS | GitHub Pages PWA |
+| 📱 **Mobile Apps** | `mobile-apps/` | 32 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
+| 🌐 **Web Apps** | `web-apps/` | 34 | HTML5/JS/WASM PWA | GitHub Pages PWA |
+| 🧩 **Browser Extensions** | `browser-extensions/` | 20 | WebExtensions Manifest V3 | `.zip` `.crx` `.xpi` |
+| 🛠️ **Dev Tools** | `dev-tools/` | 14 | VS Code TS, JetBrains Kotlin, Vim | `.vsix` `.jar` |
+| ⌨️ **CLI Tools** | `cli-tools/` | 22 | Node.js, Python | npm, pip, Homebrew |
+| 🏢 **Enterprise** | `enterprise/` | 16 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
+| 🧩 **Legacy Extensions** | `extensions/` | 11 | Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 | `.zip` `.crx` `.xpi` `.vsix` |
+
+> **Total: 50 apps × 8 platform categories = 188 platform targets**
 
 ### Headline Products
 
@@ -115,8 +120,12 @@ eApps/
 │   ├── eosim/                      #   Python/QEMU hardware simulator (63+ platforms)
 │   └── ebrowser/                   #   C/SDL2 browser engine
 │
-├── mobile-apps/                    # 📱 (build references → service-apps/)
-├── service-apps/                   # ☁️ Flutter apps + Firebase backend (from eServiceApps)
+├── mobile-apps/                    # 📱 32 Flutter mobile apps (incl. eServiceApps)
+├── web-apps/                       # 🌐 34 PWA web apps (HTML5/JS/WASM)
+├── browser-extensions/             # 🧩 20 browser extensions (Manifest V3)
+├── dev-tools/                      # 🛠️ 14 IDE extensions (VS Code, JetBrains)
+├── cli-tools/                      # ⌨️ 22 CLI tools (Node.js, Python)
+├── enterprise/                     # 🏢 16 enterprise deployments (Docker, Helm, MSI)
 ├── shared/                         # 🔗 Reusable code (JS, Flutter, C, Python)
 │
 ├── apps/                           # ⚙️ 40+ native LVGL apps (original eApps)
@@ -190,7 +199,7 @@ cd desktop-apps/eosim && pip install -e . && python -m eosim
 cd desktop-apps/ebrowser && cmake -B build && cmake --build build
 
 # Mobile apps (Flutter)
-cd service-apps && flutter pub get && flutter run
+cd mobile-apps/eserviceapps && flutter pub get && flutter run
 
 # Run App Store locally
 npx serve . # or python -m http.server 8000
@@ -284,7 +293,7 @@ The `shared/` directory contains reusable code across platforms:
 | [eOffice](https://github.com/embeddedos-org/eOffice) | `extensions/`, `desktop-apps/eoffice/` | 11 extensions, Electron desktop, 12 office apps, web apps, server |
 | [EoStudio](https://github.com/embeddedos-org/EoStudio) | `desktop-apps/eostudio/` | Visual design IDE, codegen, 13 GUI editors |
 | [EoSim](https://github.com/embeddedos-org/EoSim) | `desktop-apps/eosim/` | Hardware simulator, 63 platforms, QEMU, GUI renderers |
-| [eServiceApps](https://github.com/embeddedos-org/eServiceApps) | `service-apps/` | Flutter mobile apps, Firebase backend |
+| [eServiceApps](https://github.com/embeddedos-org/eServiceApps) | `mobile-apps/eserviceapps/` | Flutter mobile apps, Firebase backend |
 | [eBrowser](https://github.com/embeddedos-org/eBrowser) | `desktop-apps/ebrowser/` | C browser engine, rendering, TLS, plugins |
 
 > All original repos can be archived. This is the single source of truth.
@@ -310,7 +319,7 @@ python -m pytest tests/test_merge_validation.py -v
 cd build && ctest --output-on-failure
 
 # Run Flutter tests
-cd service-apps && flutter test
+cd mobile-apps/eserviceapps && flutter test
 
 # Run EoStudio tests
 cd desktop-apps/eostudio && python -m pytest tests/ -v

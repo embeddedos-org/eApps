@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.erunner</id>
+  <name>Task/Script Runner — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>Task/Script Runner for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

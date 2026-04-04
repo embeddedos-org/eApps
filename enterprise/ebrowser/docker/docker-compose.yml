@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  ebrowser:
+    build: .
+    container_name: eos-ebrowser
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - EOS_LICENSE_KEY=${EOS_LICENSE_KEY}
+    volumes:
+      - ebrowser_data:/app/data
+    networks:
+      - eos-enterprise
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  ebrowser_data:
+
+networks:
+  eos-enterprise:
+    external: true

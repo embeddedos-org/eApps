@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.etimer</id>
+  <name>Focus Timer — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>Focus Timer for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>

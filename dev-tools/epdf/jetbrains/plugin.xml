@@ -1,0 +1,8 @@
+<idea-plugin>
+  <id>org.embeddedos.epdf</id>
+  <name>PDF/Doc Viewer — EoS</name>
+  <version>1.0.0</version>
+  <vendor>EmbeddedOS</vendor>
+  <description>PDF/Doc Viewer for JetBrains IDEs</description>
+  <depends>com.intellij.modules.platform</depends>
+</idea-plugin>
