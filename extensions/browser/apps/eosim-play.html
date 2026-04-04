@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EoSim Play — 3D Simulation Games</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0e1a;--bg2:#111827;--bg3:#1e293b;--text:#e2e8f0;--text2:#94a3b8;--accent:#60a5fa;--green:#34d399;--orange:#fbbf24;--red:#f87171;--radius:10px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;display:flex;flex-direction:column}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:var(--bg2);border-bottom:1px solid #1e293b;flex-shrink:0}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.logo{font-size:16px;font-weight:700;color:var(--accent)}
+.sim-tabs{display:flex;gap:4px}
+.sim-tab{padding:6px 14px;border-radius:var(--radius);border:1px solid transparent;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font)}
+.sim-tab:hover{background:#1e293b;color:var(--text)}
+.sim-tab.active{background:#1e3a5f;color:var(--accent);border-color:var(--accent)}
+
+.main{flex:1;display:flex;position:relative;overflow:hidden}
+.canvas-wrap{flex:1;position:relative}
+canvas{width:100%;height:100%;display:block}
+
+.controls-panel{width:220px;background:var(--bg2);border-left:1px solid #1e293b;padding:12px;overflow-y:auto;flex-shrink:0}
+.panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:8px}
+.control-key{display:flex;align-items:center;gap:8px;padding:5px 8px;margin-bottom:4px;border-radius:6px;font-size:12px;transition:background 0.15s}
+.control-key:hover{background:#1e293b}
+.key-badge{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 6px;border-radius:4px;background:#334155;color:var(--accent);font-size:10px;font-weight:700;font-family:monospace}
+.key-label{color:var(--text2);font-size:11px}
+
+.state-panel{margin-top:12px;padding-top:10px;border-top:1px solid #1e293b}
+.state-row{display:flex;justify-content:space-between;padding:3px 0;font-size:11px}
+.state-key{color:var(--text2)}
+.state-val{color:var(--accent);font-weight:600;font-family:monospace}
+
+.play-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;margin-top:10px;border:1px solid var(--accent);border-radius:var(--radius);background:transparent;color:var(--accent);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:var(--font)}
+.play-btn:hover{background:#1e3a5f}
+.play-btn.running{border-color:var(--red);color:var(--red)}
+.play-btn.running:hover{background:#3b1111}
+
+.badge{display:inline-flex;padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700;letter-spacing:0.3px}
+.badge-reuse{background:#064e3b;color:var(--green)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo">🎮 EoSim Play</div>
+    <span class="badge badge-reuse">Reuses EoSim Renderers</span>
+  </div>
+  <div class="sim-tabs" id="simTabs"></div>
+</div>
+
+<div class="main">
+  <div class="canvas-wrap" id="canvasWrap">
+    <canvas id="simCanvas"></canvas>
+  </div>
+  <div class="controls-panel" id="controlsPanel">
+    <div class="panel-title">⌨️ Controls</div>
+    <div id="controlsList"></div>
+    <button class="play-btn" id="playBtn">▶ Start Simulation</button>
+    <div class="state-panel">
+      <div class="panel-title">📊 State</div>
+      <div id="stateList"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../../../shared/js/sim-engine.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const SIMS = [
+    { id: 'aircraft', icon: '✈️', label: 'Aircraft' },
+    { id: 'vehicle',  icon: '🚗', label: 'Car' },
+    { id: 'drone',    icon: '🚁', label: 'Drone' },
+  ];
+
+  const canvas = document.getElementById('simCanvas');
+  const engine = new SimEngine(canvas, { fps: 30 });
+  let currentSim = null;
+  let isRunning = false;
+
+  function buildTabs() {
+    const tabs = document.getElementById('simTabs');
+    SIMS.forEach(sim => {
+      const btn = document.createElement('button');
+      btn.className = 'sim-tab';
+      btn.dataset.sim = sim.id;
+      btn.textContent = `${sim.icon} ${sim.label}`;
+      btn.addEventListener('click', () => switchSim(sim.id));
+      tabs.appendChild(btn);
+    });
+  }
+
+  function switchSim(simId) {
+    engine.stop();
+    isRunning = false;
+    updatePlayBtn();
+
+    document.querySelectorAll('.sim-tab').forEach(t => t.classList.toggle('active', t.dataset.sim === simId));
+
+    currentSim = createSim(simId);
+    engine.state = currentSim.defaultState();
+    engine.setRenderer(currentSim);
+    renderControls();
+    renderState();
+
+    engine.clear();
+    engine.drawGrid();
+    currentSim.update(engine, engine.state, 0);
+  }
+
+  function renderControls() {
+    const list = document.getElementById('controlsList');
+    list.innerHTML = '';
+    if (!currentSim || !currentSim.controls) return;
+    currentSim.controls.forEach(ctrl => {
+      const div = document.createElement('div');
+      div.className = 'control-key';
+      div.innerHTML = `<span class="key-badge">${ctrl.key.length === 1 ? ctrl.key.toUpperCase() : ctrl.key.replace('Arrow','')}</span><span class="key-label">${ctrl.label}</span>`;
+      list.appendChild(div);
+    });
+  }
+
+  function renderState() {
+    const list = document.getElementById('stateList');
+    list.innerHTML = '';
+    if (!engine.state) return;
+    Object.entries(engine.state).forEach(([k, v]) => {
+      if (typeof v === 'object') return;
+      const row = document.createElement('div');
+      row.className = 'state-row';
+      const formatted = typeof v === 'number' ? v.toFixed(1) : String(v);
+      row.innerHTML = `<span class="state-key">${k}</span><span class="state-val">${formatted}</span>`;
+      list.appendChild(row);
+    });
+  }
+
+  function updatePlayBtn() {
+    const btn = document.getElementById('playBtn');
+    if (isRunning) {
+      btn.textContent = '⏸ Pause';
+      btn.classList.add('running');
+    } else {
+      btn.textContent = '▶ Start Simulation';
+      btn.classList.remove('running');
+    }
+  }
+
+  document.getElementById('playBtn').addEventListener('click', () => {
+    if (isRunning) {
+      engine.stop();
+      isRunning = false;
+    } else {
+      engine.start();
+      isRunning = true;
+      stateLoop();
+    }
+    updatePlayBtn();
+  });
+
+  function stateLoop() {
+    if (!isRunning) return;
+    renderState();
+    requestAnimationFrame(stateLoop);
+  }
+
+  // Keyboard input — maps to sim controls
+  document.addEventListener('keydown', (e) => {
+    if (!currentSim || !currentSim.controls) return;
+    const ctrl = currentSim.controls.find(c => c.key === e.key || c.key === e.key.toLowerCase());
+    if (!ctrl) return;
+    e.preventDefault();
+    if (ctrl.toggle) {
+      engine.state[ctrl.field] = !engine.state[ctrl.field];
+    } else {
+      const val = (engine.state[ctrl.field] || 0) + ctrl.delta;
+      engine.state[ctrl.field] = ctrl.max !== undefined ? Math.min(val, ctrl.max) : val;
+    }
+  });
+
+  buildTabs();
+  switchSim('aircraft');
+})();
+</script>
+</body>
+</html>

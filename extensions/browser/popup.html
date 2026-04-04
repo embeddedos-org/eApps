@@ -133,6 +133,9 @@ body::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px;}
 <div class="section-label">Applications</div>
 <div class="app-list" id="appList"></div>
 
+<div class="section-label">🎮 EoSim Simulations</div>
+<div class="app-list" id="simList"></div>
+
 <div class="quick-actions">
   <button class="quick-btn" id="newDoc">📝 New Document</button>
   <button class="quick-btn" id="newNote">📒 New Note</button>
@@ -245,6 +248,31 @@ body::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px;}
 
   renderApps();
   checkEbot();
+
+  // EoSim Simulations
+  const SIMS = [
+    { id:'eosim-play', icon:'✈️', name:'Aircraft Sim', desc:'Fly a 3D aircraft — reuses EoSim renderer', color:'#0ea5e9', param:'aircraft' },
+    { id:'eosim-play', icon:'🚗', name:'Car Sim',      desc:'Drive a vehicle — reuses EoSim renderer',  color:'#22c55e', param:'vehicle' },
+    { id:'eosim-play', icon:'🚁', name:'Drone Sim',    desc:'Fly a quadrotor — reuses EoSim renderer',  color:'#a855f7', param:'drone' },
+  ];
+  const simList = document.getElementById('simList');
+  SIMS.forEach(sim => {
+    const item = document.createElement('div');
+    item.className = 'app-item';
+    item.addEventListener('click', () => {
+      chrome.runtime.sendMessage({ type: 'openApp', app: sim.id });
+      window.close();
+    });
+    item.innerHTML = `
+      <div class="app-icon" style="background:${sim.color}22;color:${sim.color}">${sim.icon}</div>
+      <div class="app-info">
+        <div class="app-name">${sim.name}</div>
+        <div class="app-desc">${sim.desc}</div>
+      </div>
+      <span class="app-badge badge-offline">Game</span>
+    `;
+    simList.appendChild(item);
+  });
 })();
 </script>
 </body>

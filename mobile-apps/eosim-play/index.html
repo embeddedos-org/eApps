@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="https://embeddedos-org.github.io/eApps/icons/eosim-play.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="https://embeddedos-org.github.io/eApps/icons/eosim-play.svg">
+<title>EoSim Play</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0e1a;--bg2:#111827;--text:#e2e8f0;--text2:#94a3b8;--accent:#60a5fa;--green:#34d399;--radius:12px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;display:flex;flex-direction:column;touch-action:none}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg2);border-bottom:1px solid #1e293b;flex-shrink:0}
+.logo{font-size:15px;font-weight:700;color:var(--accent)}
+.sim-tabs{display:flex;gap:4px}
+.sim-tab{padding:6px 10px;border-radius:var(--radius);border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.sim-tab.active{background:#1e3a5f;color:var(--accent)}
+
+.main{flex:1;position:relative}
+canvas{width:100%;height:100%;display:block}
+
+.touch-controls{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding:12px 16px;pointer-events:none;z-index:20}
+.touch-pad{display:grid;grid-template-columns:50px 50px 50px;grid-template-rows:50px 50px 50px;gap:4px;pointer-events:auto}
+.touch-btn{width:50px;height:50px;border-radius:12px;border:2px solid #334155;background:rgba(30,41,59,0.8);color:var(--accent);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;user-select:none}
+.touch-btn:active{background:rgba(96,165,250,0.2);border-color:var(--accent)}
+.touch-btn.empty{visibility:hidden}
+
+.action-btns{display:flex;flex-direction:column;gap:4px;pointer-events:auto}
+.action-btn{padding:12px 16px;border-radius:12px;border:2px solid #334155;background:rgba(30,41,59,0.8);color:var(--green);font-size:12px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.action-btn:active{background:rgba(52,211,153,0.2)}
+
+.hud{position:fixed;top:50px;left:12px;font-size:11px;color:var(--text2);pointer-events:none;z-index:15;background:rgba(10,14,26,0.7);padding:8px 12px;border-radius:8px}
+.hud-val{color:var(--accent);font-weight:700;font-family:monospace}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">🎮 EoSim Play</div>
+  <div class="sim-tabs" id="simTabs"></div>
+</div>
+
+<div class="main">
+  <canvas id="simCanvas"></canvas>
+</div>
+
+<div class="hud" id="hud"></div>
+
+<div class="touch-controls">
+  <div class="touch-pad" id="dpad">
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" data-key="ArrowUp">↑</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" data-key="ArrowLeft">←</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" data-key="ArrowRight">→</div>
+    <div class="touch-btn empty"></div>
+    <div class="touch-btn" data-key="ArrowDown">↓</div>
+    <div class="touch-btn empty"></div>
+  </div>
+  <div class="action-btns" id="actionBtns">
+    <div class="action-btn" data-key="w">W ↑</div>
+    <div class="action-btn" data-key="s">S ↓</div>
+    <div class="action-btn" data-key="g">G</div>
+  </div>
+</div>
+
+<!-- Reuses same shared sim-engine.js as browser extension -->
+<script src="../../shared/js/sim-engine.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const SIMS = [
+    { id: 'aircraft', icon: '✈️', label: 'Fly' },
+    { id: 'vehicle',  icon: '🚗', label: 'Drive' },
+    { id: 'drone',    icon: '🚁', label: 'Drone' },
+  ];
+
+  const canvas = document.getElementById('simCanvas');
+  const engine = new SimEngine(canvas, { fps: 30 });
+  let currentSim = null;
+
+  function buildTabs() {
+    const tabs = document.getElementById('simTabs');
+    SIMS.forEach(sim => {
+      const btn = document.createElement('button');
+      btn.className = 'sim-tab';
+      btn.dataset.sim = sim.id;
+      btn.textContent = `${sim.icon} ${sim.label}`;
+      btn.addEventListener('click', () => switchSim(sim.id));
+      tabs.appendChild(btn);
+    });
+  }
+
+  function switchSim(simId) {
+    engine.stop();
+    document.querySelectorAll('.sim-tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.sim === simId));
+
+    currentSim = createSim(simId);
+    engine.state = currentSim.defaultState();
+    engine.setRenderer(currentSim);
+    engine.start();
+    hudLoop();
+  }
+
+  function hudLoop() {
+    if (!engine.running) return;
+    const hud = document.getElementById('hud');
+    const s = engine.state;
+    const lines = Object.entries(s)
+      .filter(([, v]) => typeof v !== 'object')
+      .map(([k, v]) => `${k}: <span class="hud-val">${typeof v === 'number' ? v.toFixed(1) : v}</span>`)
+      .join('<br>');
+    hud.innerHTML = lines;
+    requestAnimationFrame(hudLoop);
+  }
+
+  // Touch controls — fire key events
+  function handleTouch(key) {
+    if (!currentSim || !currentSim.controls) return;
+    const ctrl = currentSim.controls.find(c => c.key === key || c.key === key.toLowerCase());
+    if (!ctrl) return;
+    if (ctrl.toggle) {
+      engine.state[ctrl.field] = !engine.state[ctrl.field];
+    } else {
+      const val = (engine.state[ctrl.field] || 0) + ctrl.delta;
+      engine.state[ctrl.field] = ctrl.max !== undefined ? Math.min(val, ctrl.max) : val;
+    }
+  }
+
+  document.querySelectorAll('[data-key]').forEach(btn => {
+    const key = btn.dataset.key;
+    let interval = null;
+    const start = () => { handleTouch(key); interval = setInterval(() => handleTouch(key), 100); };
+    const stop = () => { if (interval) clearInterval(interval); interval = null; };
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); start(); });
+    btn.addEventListener('touchend', stop);
+    btn.addEventListener('touchcancel', stop);
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', stop);
+    btn.addEventListener('mouseleave', stop);
+  });
+
+  // Keyboard fallback for desktop testing
+  document.addEventListener('keydown', (e) => {
+    if (!currentSim || !currentSim.controls) return;
+    const ctrl = currentSim.controls.find(c => c.key === e.key || c.key === e.key.toLowerCase());
+    if (ctrl) { e.preventDefault(); handleTouch(e.key); }
+  });
+
+  buildTabs();
+  switchSim('aircraft');
+})();
+</script>
+</body>
+</html>
