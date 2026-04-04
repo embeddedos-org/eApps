@@ -1,0 +1,192 @@
+name: Release Suite Installers
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 2.1.0)"
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  VERSION: ${{ inputs.version }}
+  TAG: "v${{ inputs.version }}"
+
+jobs:
+  # ── Linux: .deb + .rpm ────────────────────────────────────────
+  build-linux-installers:
+    name: Linux Installers (DEB + RPM)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake libsdl2-dev rpm
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package DEB
+        working-directory: build
+        run: cpack -G DEB
+
+      - name: Package RPM
+        working-directory: build
+        run: cpack -G RPM
+
+      - name: Generate checksums
+        working-directory: build
+        run: sha256sum *.deb *.rpm > SHA256SUMS-linux.txt 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-installers
+          path: |
+            build/*.deb
+            build/*.rpm
+            build/SHA256SUMS-linux.txt
+          retention-days: 90
+
+  # ── Windows: NSIS .exe installer ──────────────────────────────
+  build-windows-installer:
+    name: Windows Installer (NSIS)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Package NSIS
+        working-directory: build
+        run: cpack -G NSIS -C Release
+
+      - name: Generate checksums
+        working-directory: build
+        shell: pwsh
+        run: |
+          Get-ChildItem *.exe | ForEach-Object {
+            $hash = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower()
+            "$hash  $($_.Name)" | Out-File -Append SHA256SUMS-windows.txt -Encoding utf8
+          }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            build/*.exe
+            build/SHA256SUMS-windows.txt
+          retention-days: 90
+
+  # ── macOS: .dmg disk image ────────────────────────────────────
+  build-macos-installer:
+    name: macOS Installer (DMG)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install SDL2
+        run: brew install sdl2
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package DMG
+        working-directory: build
+        run: cpack -G DragNDrop
+
+      - name: Generate checksums
+        working-directory: build
+        run: shasum -a 256 *.dmg > SHA256SUMS-macos.txt 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-installer
+          path: |
+            build/*.dmg
+            build/SHA256SUMS-macos.txt
+          retention-days: 90
+
+  # ── Create GitHub Release with all installers ─────────────────
+  release:
+    name: Create Release
+    needs: [build-linux-installers, build-windows-installer, build-macos-installer]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Collect release files
+        run: |
+          mkdir -p release
+          find artifacts -type f \( -name "*.deb" -o -name "*.rpm" -o -name "*.exe" -o -name "*.dmg" -o -name "SHA256SUMS*" \) -exec cp {} release/ \;
+          cd release && cat SHA256SUMS-*.txt > SHA256SUMS.txt 2>/dev/null && rm -f SHA256SUMS-*.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}-suite
+          name: "eApps Suite ${{ env.TAG }} — Installers"
+          make_latest: false
+          body: |
+            ## eApps Suite ${{ env.TAG }} — Platform Installers
+
+            One-click installers for the eApps Suite (41 embedded apps in one launcher).
+
+            ### Downloads
+
+            | Platform | File | Type |
+            |----------|------|------|
+            | 🐧 Linux (Debian/Ubuntu) | `eApps-Suite-${{ env.VERSION }}-Linux.deb` | `.deb` package |
+            | 🐧 Linux (Fedora/RHEL) | `eApps-Suite-${{ env.VERSION }}-Linux.rpm` | `.rpm` package |
+            | 🪟 Windows | `eApps-Suite-${{ env.VERSION }}-win64.exe` | NSIS installer |
+            | 🍎 macOS | `eApps-Suite-${{ env.VERSION }}-Darwin.dmg` | Disk image |
+
+            ### Install
+
+            **Linux (DEB):**
+            ```bash
+            sudo dpkg -i eApps-Suite-${{ env.VERSION }}-Linux.deb
+            # Then launch from Applications menu or run: eapps_suite
+            ```
+
+            **Linux (RPM):**
+            ```bash
+            sudo rpm -i eApps-Suite-${{ env.VERSION }}-Linux.rpm
+            ```
+
+            **Windows:**
+            Run the `.exe` installer. eApps Suite will appear in your Start Menu.
+
+            **macOS:**
+            Open the `.dmg` and drag eApps Suite to Applications.
+
+            ### Verify
+            ```bash
+            sha256sum -c SHA256SUMS.txt
+            ```
+          files: release/*

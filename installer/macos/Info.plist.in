@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>eApps Suite</string>
+    <key>CFBundleDisplayName</key>
+    <string>eApps Suite</string>
+    <key>CFBundleIdentifier</key>
+    <string>org.embeddedos.eapps-suite</string>
+    <key>CFBundleVersion</key>
+    <string>@CPACK_PACKAGE_VERSION@</string>
+    <key>CFBundleShortVersionString</key>
+    <string>@CPACK_PACKAGE_VERSION@</string>
+    <key>CFBundleExecutable</key>
+    <string>eapps_suite</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleSignature</key>
+    <string>eASu</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>11.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2026 EmbeddedOS Project. MIT License.</string>
+    <key>CFBundleIconFile</key>
+    <string>eapps-suite.icns</string>
+</dict>
+</plist>
