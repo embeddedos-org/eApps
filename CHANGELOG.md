@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-04-04
+
 ### Added
 - SECURITY.md with vulnerability disclosure policy and severity classification
 - CONTRIBUTING.md with development guidelines and PR process
@@ -24,6 +26,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.clang-format` and `.clang-tidy` for code quality enforcement
 - `.editorconfig` for consistent formatting across editors
 - `CODEOWNERS` for automated review assignment
+- Production-grade CI/CD with full release pipeline for all platform categories
+- eMaps — privacy-first maps & navigation app (OpenStreetMap)
+- Multi-platform restructure: web-apps, mobile-apps, desktop-apps, browser-extensions, CLI tools, enterprise
+- eServiceApps Flutter project extraction
+- eDB embedded database integration
+- Platform-specific release infrastructure (Windows .exe, macOS .dmg, Linux .AppImage)
+- Stable release workflow with 3-gate validation (CI → build → integrity)
+- Release-all orchestrator for coordinated multi-platform releases
+- Desktop app builds: eOffice (Electron), EoStudio (PyInstaller), EoSim (PyInstaller+Docker), eBrowser (C/CMake)
+- Mobile app builds: eRide, eSocial, eTrack, eTravel, eWallet, eMaps (Flutter)
+- Browser extension builds: Chrome, Firefox, Edge, Safari
+- VS Code extension build pipeline
+- CLI tools build pipeline (Node.js, Python, PowerShell)
+- Enterprise Docker/Helm build pipeline
+- Web apps deployment (GitHub Pages)
 
 ### Changed
 - CI workflow: added clang-tidy step, coverage reporting, pinned actions to SHA
@@ -32,9 +49,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Release workflow: added SBOM generation step
 - `cmake/eos.cmake`: added `-frandom-seed` for reproducible builds
 - `cmake/linux.cmake`: added `SOURCE_DATE_EPOCH` support
+- Version bumped from 0.1.0 to 2.1.0
 
 ### Fixed
-- Version badge in README now shows 2.0.0 (was 0.1.0)
+- Version badge in README now shows 2.1.0
+- Replaced all .zip download URLs with platform-specific formats
 
 ## [2.0.0] - 2026-04-01
 
@@ -60,6 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ISO/IEC standards compliance documentation
 - MIT license
 
-[Unreleased]: https://github.com/embeddedos-org/eApps/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/embeddedos-org/eApps/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/embeddedos-org/eApps/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/embeddedos-org/eApps/compare/v0.1.0...v2.0.0
 [0.1.0]: https://github.com/embeddedos-org/eApps/releases/tag/v0.1.0
