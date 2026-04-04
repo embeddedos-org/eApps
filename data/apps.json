@@ -432,7 +432,7 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.obsidian"
     },
     {
       "id": "eoffice-sublime",
@@ -474,7 +474,7 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0/eoffice-neovim-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0/eoffice-neovim-1.0.0.nvim"
     },
     {
       "id": "eostudio-vscode",
@@ -537,7 +537,7 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0/eostudio-obsidian-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0/eostudio-obsidian-1.0.0.obsidian"
     },
     {
       "id": "eostudio-sublime",
@@ -579,7 +579,7 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0/eostudio-neovim-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0/eostudio-neovim-1.0.0.nvim"
     },
     {
       "id": "eoffice-slack",
@@ -599,7 +599,7 @@
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.slack-app"
     },
     {
       "id": "eoffice-raycast",
@@ -619,7 +619,7 @@
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.raycast-ext"
     },
     {
       "id": "eoffice-github",
@@ -639,7 +639,7 @@
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.github-app"
     },
     {
       "id": "eoffice-google-workspace",
@@ -659,7 +659,7 @@
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0/eoffice-google-workspace-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0/eoffice-google-workspace-1.0.0.gs"
     },
     {
       "id": "eoffice-office365",
@@ -679,7 +679,7 @@
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0/eoffice-office365-1.0.0.zip"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0/eoffice-office365-1.0.0.officeaddin"
     },
     {
       "id": "eride-android",
@@ -3035,7 +3035,7 @@
       ],
       "downloads": {
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0/eoffice-web-1.0.0-web.tar.gz",
-        "pwa": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0/eoffice-web-1.0.0-pwa.zip"
+        "pwa": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0/eoffice-web-1.0.0-pwa.pwa"
       }
     },
     {
