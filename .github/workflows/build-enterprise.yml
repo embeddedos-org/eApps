@@ -1,0 +1,224 @@
+name: Build Enterprise Docker & Helm
+on:
+  push:
+    tags:
+      - 'enterprise-*-v*'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Enterprise app to build (leave empty for all, or specify app name from enterprise/)'
+        required: false
+        type: string
+        default: ''
+      push_docker:
+        description: 'Push Docker images to Docker Hub'
+        required: false
+        type: boolean
+        default: false
+  workflow_call:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+      has_apps: ${{ steps.discover.outputs.has_apps }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover enterprise apps
+        id: discover
+        run: |
+          FILTER="${{ inputs.app }}"
+          APPS="[]"
+
+          # If triggered by tag, extract app name from tag
+          if [[ "$GITHUB_REF_NAME" == enterprise-*-v* ]]; then
+            TAG_APP="${GITHUB_REF_NAME#enterprise-}"
+            TAG_APP="${TAG_APP%-v*}"
+            FILTER="$TAG_APP"
+          fi
+
+          for dir in enterprise/*/; do
+            APP_NAME=$(basename "$dir")
+            [ "$APP_NAME" = "*" ] && continue
+            if [ -d "${dir}docker" ] || [ -f "${dir}docker/Dockerfile" ]; then
+              if [ -z "$FILTER" ] || [ "$APP_NAME" = "$FILTER" ]; then
+                APPS=$(echo "$APPS" | jq -c --arg app "$APP_NAME" '. + [$app]')
+              fi
+            fi
+          done
+
+          echo "matrix={\"app\":$APPS}" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$APPS" | jq '. | length')
+          echo "has_apps=$( [ "$COUNT" -gt 0 ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+
+  build-docker:
+    needs: discover
+    if: needs.discover.outputs.has_apps == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_NAME" == enterprise-${{ matrix.app }}-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#enterprise-${{ matrix.app }}-v}"
+          else
+            VERSION="0.0.0-dev.$(date +%Y%m%d%H%M%S)"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        if: >
+          inputs.push_docker == true ||
+          startsWith(github.ref, 'refs/tags/')
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: enterprise/${{ matrix.app }}
+          file: enterprise/${{ matrix.app }}/docker/Dockerfile
+          push: ${{ inputs.push_docker == true || startsWith(github.ref, 'refs/tags/') }}
+          tags: |
+            embeddedos/${{ matrix.app }}:enterprise-${{ steps.version.outputs.version }}
+            embeddedos/${{ matrix.app }}:enterprise-latest
+          labels: |
+            org.opencontainers.image.title=${{ matrix.app }}
+            org.opencontainers.image.version=${{ steps.version.outputs.version }}
+            org.opencontainers.image.source=https://github.com/embeddedos-org/eApps
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Save Docker image as tarball
+        run: |
+          mkdir -p dist
+          docker save embeddedos/${{ matrix.app }}:enterprise-${{ steps.version.outputs.version }} \
+            | gzip > dist/${{ matrix.app }}-enterprise-${{ steps.version.outputs.version }}-docker.tar.gz
+
+      - name: Upload Docker artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-${{ matrix.app }}
+          path: dist/*-docker.tar.gz
+
+  build-helm:
+    needs: discover
+    if: needs.discover.outputs.has_apps == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for Helm chart
+        id: check
+        run: |
+          if [ -d "enterprise/${{ matrix.app }}/helm" ] && [ -f "enterprise/${{ matrix.app }}/helm/Chart.yaml" ]; then
+            echo "has_chart=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_chart=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Determine version
+        if: steps.check.outputs.has_chart == 'true'
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_NAME" == enterprise-${{ matrix.app }}-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#enterprise-${{ matrix.app }}-v}"
+          else
+            VERSION="0.0.0-dev"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Install Helm
+        if: steps.check.outputs.has_chart == 'true'
+        uses: azure/setup-helm@v4
+
+      - name: Update Chart version
+        if: steps.check.outputs.has_chart == 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          sed -i "s/^version:.*/version: ${VERSION}/" enterprise/${{ matrix.app }}/helm/Chart.yaml
+          sed -i "s/^appVersion:.*/appVersion: \"${VERSION}\"/" enterprise/${{ matrix.app }}/helm/Chart.yaml
+
+      - name: Lint Helm chart
+        if: steps.check.outputs.has_chart == 'true'
+        run: helm lint enterprise/${{ matrix.app }}/helm/
+
+      - name: Package Helm chart
+        if: steps.check.outputs.has_chart == 'true'
+        run: |
+          mkdir -p dist
+          helm package enterprise/${{ matrix.app }}/helm/ --destination dist/
+
+      - name: Upload Helm artifact
+        if: steps.check.outputs.has_chart == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-${{ matrix.app }}
+          path: dist/*.tgz
+
+  release:
+    needs: [build-docker, build-helm]
+    if: always() && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Parse tag
+        id: tag
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          APP="${TAG#enterprise-}"
+          APP="${APP%-v*}"
+          VERSION="${TAG#*-v}"
+          echo "app=$APP" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Enterprise ${{ steps.tag.outputs.app }} v${{ steps.tag.outputs.version }}"
+          body: |
+            ## Enterprise Release: ${{ steps.tag.outputs.app }} v${{ steps.tag.outputs.version }}
+
+            ### Docker
+            ```bash
+            docker pull embeddedos/${{ steps.tag.outputs.app }}:enterprise-${{ steps.tag.outputs.version }}
+            ```
+
+            ### Helm
+            ```bash
+            helm install ${{ steps.tag.outputs.app }} ./${{ steps.tag.outputs.app }}-${{ steps.tag.outputs.version }}.tgz
+            ```
+
+            ### Manual Docker Load
+            ```bash
+            docker load < ${{ steps.tag.outputs.app }}-enterprise-${{ steps.tag.outputs.version }}-docker.tar.gz
+            ```
+          files: dist/*

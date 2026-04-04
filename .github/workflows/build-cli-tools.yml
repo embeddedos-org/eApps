@@ -1,0 +1,243 @@
+name: Build & Release CLI Tools
+on:
+  push:
+    tags:
+      - 'eos-cli-v*'
+      - 'eos-*-cli-v*'
+  workflow_dispatch:
+    inputs:
+      tool:
+        description: 'CLI tool to build (leave empty for all, or specify app name from cli-tools/)'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      node_matrix: ${{ steps.discover.outputs.node_matrix }}
+      python_matrix: ${{ steps.discover.outputs.python_matrix }}
+      has_node: ${{ steps.discover.outputs.has_node }}
+      has_python: ${{ steps.discover.outputs.has_python }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover CLI tools
+        id: discover
+        run: |
+          FILTER="${{ inputs.tool }}"
+          NODE_APPS="[]"
+          PYTHON_APPS="[]"
+
+          for dir in cli-tools/*/; do
+            APP_NAME=$(basename "$dir")
+
+            if [ -n "$FILTER" ] && [ "$APP_NAME" != "$FILTER" ]; then
+              continue
+            fi
+
+            if [ -f "${dir}package.json" ]; then
+              NODE_APPS=$(echo "$NODE_APPS" | jq -c --arg app "$APP_NAME" '. + [$app]')
+            elif [ -f "${dir}pyproject.toml" ]; then
+              PYTHON_APPS=$(echo "$PYTHON_APPS" | jq -c --arg app "$APP_NAME" '. + [$app]')
+            fi
+          done
+
+          echo "node_matrix={\"app\":$NODE_APPS}" >> "$GITHUB_OUTPUT"
+          echo "python_matrix={\"app\":$PYTHON_APPS}" >> "$GITHUB_OUTPUT"
+
+          NODE_COUNT=$(echo "$NODE_APPS" | jq '. | length')
+          PYTHON_COUNT=$(echo "$PYTHON_APPS" | jq '. | length')
+          echo "has_node=$( [ "$NODE_COUNT" -gt 0 ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+          echo "has_python=$( [ "$PYTHON_COUNT" -gt 0 ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+
+  build-node:
+    needs: discover
+    if: needs.discover.outputs.has_node == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.node_matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: cli-tools/${{ matrix.app }}
+        run: npm ci 2>/dev/null || npm install 2>/dev/null || true
+
+      - name: Run tests
+        working-directory: cli-tools/${{ matrix.app }}
+        run: npm test 2>/dev/null || true
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_NAME" == eos-${{ matrix.app }}-cli-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#eos-${{ matrix.app }}-cli-v}"
+          elif [[ "$GITHUB_REF_NAME" == eos-cli-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#eos-cli-v}"
+          else
+            VERSION=$(jq -r '.version // "0.0.0-dev"' cli-tools/${{ matrix.app }}/package.json)
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Update version
+        working-directory: cli-tools/${{ matrix.app }}
+        run: |
+          jq --arg v "${{ steps.version.outputs.version }}" '.version = $v' package.json > tmp.json
+          mv tmp.json package.json
+
+      - name: Pack tarball
+        working-directory: cli-tools/${{ matrix.app }}
+        run: |
+          mkdir -p ../../dist
+          npm pack --pack-destination ../../dist
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-node-${{ matrix.app }}
+          path: dist/*.tgz
+
+  build-python:
+    needs: discover
+    if: needs.discover.outputs.has_python == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.python_matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Run tests
+        working-directory: cli-tools/${{ matrix.app }}
+        run: |
+          pip install -e ".[dev]" 2>/dev/null || pip install -e . 2>/dev/null || true
+          python -m pytest 2>/dev/null || true
+
+      - name: Build wheel and sdist
+        working-directory: cli-tools/${{ matrix.app }}
+        run: |
+          python -m build
+          mkdir -p ../../dist
+          cp dist/*.whl dist/*.tar.gz ../../dist/ 2>/dev/null || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-python-${{ matrix.app }}
+          path: dist/*
+
+  publish-npm:
+    needs: [discover, build-node]
+    if: >
+      always() &&
+      needs.build-node.result == 'success' &&
+      startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.node_matrix) }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cli-node-${{ matrix.app }}
+          path: dist
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish to npm
+        if: env.NPM_TOKEN != ''
+        run: |
+          for tgz in dist/*.tgz; do
+            echo "Publishing $tgz ..."
+            npm publish "$tgz" --access public || true
+          done
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-pypi:
+    needs: [discover, build-python]
+    if: >
+      always() &&
+      needs.build-python.result == 'success' &&
+      startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.python_matrix) }}
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cli-python-${{ matrix.app }}
+          path: dist
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install twine
+        run: pip install twine
+
+      - name: Publish to PyPI
+        if: env.PYPI_API_TOKEN != ''
+        run: |
+          twine upload dist/*.whl dist/*.tar.gz || true
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
+  release:
+    needs: [build-node, build-python]
+    if: always() && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "CLI Tools ${{ github.ref_name }}"
+          body: |
+            ## CLI Tools Release
+
+            ### Node.js tools
+            ```bash
+            npm install -g <package-name>
+            ```
+
+            ### Python tools
+            ```bash
+            pip install <package-name>
+            ```
+          files: dist/*

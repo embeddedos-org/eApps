@@ -1,0 +1,164 @@
+name: Build & Deploy Web Apps
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'web-apps/**'
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'Web app to deploy (leave empty for all)'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+      app_list: ${{ steps.discover.outputs.app_list }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover web apps
+        id: discover
+        run: |
+          FILTER="${{ inputs.app }}"
+          APPS="[]"
+          for dir in web-apps/*/; do
+            APP_NAME=$(basename "$dir")
+            [ "$APP_NAME" = "*" ] && continue
+            if [ -z "$FILTER" ] || [ "$APP_NAME" = "$FILTER" ]; then
+              APPS=$(echo "$APPS" | jq -c --arg app "$APP_NAME" '. + [$app]')
+            fi
+          done
+          echo "matrix={\"app\":$APPS}" >> "$GITHUB_OUTPUT"
+          echo "app_list=$APPS" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (if applicable)
+        working-directory: web-apps/${{ matrix.app }}
+        run: |
+          if [ -f package.json ]; then
+            npm ci 2>/dev/null || npm install 2>/dev/null || true
+          fi
+
+      - name: Build app (if build script exists)
+        working-directory: web-apps/${{ matrix.app }}
+        run: |
+          if [ -f package.json ] && jq -e '.scripts.build' package.json >/dev/null 2>&1; then
+            npm run build
+          fi
+
+      - name: Prepare deploy directory
+        run: |
+          APP="${{ matrix.app }}"
+          mkdir -p deploy/${APP}
+
+          if [ -d "web-apps/${APP}/dist" ]; then
+            cp -r web-apps/${APP}/dist/* deploy/${APP}/
+          elif [ -d "web-apps/${APP}/build" ]; then
+            cp -r web-apps/${APP}/build/* deploy/${APP}/
+          elif [ -d "web-apps/${APP}/public" ]; then
+            cp -r web-apps/${APP}/public/* deploy/${APP}/
+          else
+            cp -r web-apps/${APP}/* deploy/${APP}/
+            rm -rf deploy/${APP}/node_modules deploy/${APP}/package*.json deploy/${APP}/tsconfig*
+          fi
+
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-app-${{ matrix.app }}
+          path: deploy/
+
+  assemble-and-deploy:
+    needs: [discover, build]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            web-apps/index.html
+            data/apps.json
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: site
+          pattern: web-app-*
+          merge-multiple: true
+
+      - name: Generate index page
+        run: |
+          APP_LIST='${{ needs.discover.outputs.app_list }}'
+          cat > site/index.html << 'INDEXEOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>EoS Web Apps</title>
+            <style>
+              body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+              h1 { color: #333; }
+              .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+              .app-card { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; text-decoration: none; color: inherit; }
+              .app-card:hover { border-color: #0066cc; background: #f0f7ff; }
+              .app-card h3 { margin: 0 0 0.5rem; }
+            </style>
+          </head>
+          <body>
+            <h1>EoS Web Apps</h1>
+            <div class="apps" id="app-list"></div>
+            <script>
+              const apps = APPLISTPLACEHOLDER;
+              const container = document.getElementById('app-list');
+              apps.forEach(app => {
+                const card = document.createElement('a');
+                card.href = './' + app + '/';
+                card.className = 'app-card';
+                card.innerHTML = '<h3>' + app + '</h3><p>Open app →</p>';
+                container.appendChild(card);
+              });
+            </script>
+          </body>
+          </html>
+          INDEXEOF
+
+          sed -i "s|APPLISTPLACEHOLDER|${APP_LIST}|" site/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

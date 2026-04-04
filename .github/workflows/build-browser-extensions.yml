@@ -5,9 +5,11 @@ on:
       - 'eoffice-chrome-v*'
       - 'eoffice-firefox-v*'
       - 'eoffice-safari-v*'
+      - 'eos-ext-*-v*'
     branches: [master]
     paths:
       - 'extensions/browser/**'
+      - 'browser-extensions/**'
   workflow_dispatch:
     inputs:
       target:
@@ -16,15 +18,24 @@ on:
         default: 'all'
         type: choice
         options: [chrome, firefox, all]
+      extension_app:
+        description: 'Extension app to build (leave empty for all, or specify app name from browser-extensions/)'
+        required: false
+        type: string
+        default: ''
+  workflow_call:
 
 permissions:
   contents: write
   pages: write
 
 jobs:
-  build-chrome:
+  # ────────────────────────────────────────────────────────────────
+  # Legacy eOffice extension builds (from extensions/browser/)
+  # ────────────────────────────────────────────────────────────────
+  build-chrome-eoffice:
     if: >
-      github.event_name == 'workflow_dispatch' && (inputs.target == 'chrome' || inputs.target == 'all') ||
+      github.event_name == 'workflow_dispatch' && (inputs.target == 'chrome' || inputs.target == 'all') && inputs.extension_app == '' ||
       startsWith(github.ref, 'refs/tags/eoffice-chrome') ||
       (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
@@ -45,10 +56,8 @@ jobs:
           VERSION="${GITHUB_REF_NAME#eoffice-chrome-v}"
           [ "$VERSION" = "$GITHUB_REF_NAME" ] && VERSION="0.0.0-dev"
 
-          # Update manifest version
           jq --arg v "$VERSION" '.version = $v' manifest.json > tmp.json && mv tmp.json manifest.json
 
-          # Package as .zip (Chrome Web Store format)
           mkdir -p ../../dist
           zip -r ../../dist/eoffice-chrome-${VERSION}.zip . \
             -x "node_modules/*" "*.git*" "package*.json" "tsconfig*"
@@ -56,12 +65,12 @@ jobs:
       - name: Upload Chrome artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chrome-extension
+          name: chrome-extension-eoffice
           path: dist/eoffice-chrome-*.zip
 
-  build-firefox:
+  build-firefox-eoffice:
     if: >
-      github.event_name == 'workflow_dispatch' && (inputs.target == 'firefox' || inputs.target == 'all') ||
+      github.event_name == 'workflow_dispatch' && (inputs.target == 'firefox' || inputs.target == 'all') && inputs.extension_app == '' ||
       startsWith(github.ref, 'refs/tags/eoffice-firefox') ||
       (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
@@ -81,7 +90,6 @@ jobs:
           VERSION="${GITHUB_REF_NAME#eoffice-firefox-v}"
           [ "$VERSION" = "$GITHUB_REF_NAME" ] && VERSION="0.0.0-dev"
 
-          # Create Firefox-compatible manifest (add browser_specific_settings)
           jq --arg v "$VERSION" '
             .version = $v |
             .browser_specific_settings = {
@@ -93,7 +101,6 @@ jobs:
             }
           ' manifest.json > manifest_ff.json && mv manifest_ff.json manifest.json
 
-          # Build .xpi via web-ext
           mkdir -p ../../dist
           web-ext build --artifacts-dir ../../dist --filename eoffice-firefox-${VERSION}.xpi \
             --ignore-files "node_modules" "package*.json" "tsconfig*"
@@ -101,12 +108,110 @@ jobs:
       - name: Upload Firefox artifact
         uses: actions/upload-artifact@v4
         with:
-          name: firefox-extension
+          name: firefox-extension-eoffice
           path: dist/eoffice-firefox-*.xpi
 
+  # ────────────────────────────────────────────────────────────────
+  # New browser-extensions/ matrix build (20 apps)
+  # ────────────────────────────────────────────────────────────────
+  discover-browser-extensions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.discover.outputs.matrix }}
+      has_apps: ${{ steps.discover.outputs.has_apps }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover browser extension apps
+        id: discover
+        run: |
+          FILTER="${{ inputs.extension_app }}"
+          APPS="[]"
+          for dir in browser-extensions/*/; do
+            APP_NAME=$(basename "$dir")
+            if [ -f "${dir}manifest.json" ]; then
+              if [ -z "$FILTER" ] || [ "$APP_NAME" = "$FILTER" ]; then
+                APPS=$(echo "$APPS" | jq -c --arg app "$APP_NAME" '. + [$app]')
+              fi
+            fi
+          done
+          echo "matrix={\"app\":$APPS}" >> "$GITHUB_OUTPUT"
+          COUNT=$(echo "$APPS" | jq '. | length')
+          if [ "$COUNT" -gt 0 ]; then
+            echo "has_apps=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_apps=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build-browser-extension:
+    needs: discover-browser-extensions
+    if: needs.discover-browser-extensions.outputs.has_apps == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.discover-browser-extensions.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install web-ext
+        run: npm install -g web-ext
+
+      - name: Install dependencies
+        working-directory: browser-extensions/${{ matrix.app }}
+        run: npm ci --ignore-scripts 2>/dev/null || npm install --ignore-scripts 2>/dev/null || true
+
+      - name: Determine version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF_NAME" == eos-ext-${{ matrix.app }}-v* ]]; then
+            VERSION="${GITHUB_REF_NAME#eos-ext-${{ matrix.app }}-v}"
+          else
+            VERSION=$(jq -r '.version // "0.0.0-dev"' browser-extensions/${{ matrix.app }}/manifest.json)
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build Chrome extension (.zip)
+        working-directory: browser-extensions/${{ matrix.app }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          jq --arg v "$VERSION" '.version = $v' manifest.json > tmp.json && mv tmp.json manifest.json
+          mkdir -p ../../dist
+          zip -r ../../dist/${{ matrix.app }}-chrome-${VERSION}.zip . \
+            -x "node_modules/*" "*.git*" "package*.json" "tsconfig*" ".eslint*"
+
+      - name: Build Firefox extension (.xpi)
+        working-directory: browser-extensions/${{ matrix.app }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          jq --arg v "$VERSION" '
+            .version = $v |
+            .browser_specific_settings = {
+              "gecko": {
+                "id": "'${{ matrix.app }}'@embeddedos.org",
+                "strict_min_version": "109.0"
+              }
+            }
+          ' manifest.json > manifest_ff.json && mv manifest_ff.json manifest.json
+          web-ext build --artifacts-dir ../../dist \
+            --filename ${{ matrix.app }}-firefox-${VERSION}.xpi \
+            --ignore-files "node_modules" "package*.json" "tsconfig*"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-ext-${{ matrix.app }}
+          path: dist/*
+
+  # ────────────────────────────────────────────────────────────────
+  # Release (tag-triggered only)
+  # ────────────────────────────────────────────────────────────────
   release:
-    needs: [build-chrome, build-firefox]
-    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build-chrome-eoffice, build-firefox-eoffice, build-browser-extension]
+    if: always() && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

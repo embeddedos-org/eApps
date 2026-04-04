@@ -1,0 +1,123 @@
+name: Release All
+on:
+  workflow_dispatch:
+    inputs:
+      mobile_app:
+        description: 'Mobile app to build (leave empty to skip)'
+        required: false
+        type: choice
+        options: ['', eride, esocial, etrack, etravel, ewallet, emaps]
+      build_browser_extensions:
+        description: 'Build browser extensions'
+        required: false
+        type: boolean
+        default: true
+      build_vscode_extensions:
+        description: 'Build VS Code extensions'
+        required: false
+        type: boolean
+        default: true
+      build_cli_tools:
+        description: 'Build CLI tools'
+        required: false
+        type: boolean
+        default: true
+      build_web_apps:
+        description: 'Build and deploy web apps'
+        required: false
+        type: boolean
+        default: true
+      build_enterprise:
+        description: 'Build enterprise Docker/Helm'
+        required: false
+        type: boolean
+        default: true
+      build_desktop:
+        description: 'Build desktop apps'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  packages: write
+
+jobs:
+  mobile:
+    if: inputs.mobile_app != ''
+    uses: ./.github/workflows/build-mobile.yml
+    with:
+      app: ${{ inputs.mobile_app }}
+    secrets: inherit
+
+  browser-extensions:
+    if: inputs.build_browser_extensions
+    uses: ./.github/workflows/build-browser-extensions.yml
+    secrets: inherit
+
+  vscode-extensions:
+    if: inputs.build_vscode_extensions
+    uses: ./.github/workflows/build-vscode-extension.yml
+    secrets: inherit
+
+  cli-tools:
+    if: inputs.build_cli_tools
+    uses: ./.github/workflows/build-cli-tools.yml
+    secrets: inherit
+
+  web-apps:
+    if: inputs.build_web_apps
+    uses: ./.github/workflows/build-web-apps.yml
+    secrets: inherit
+
+  enterprise:
+    if: inputs.build_enterprise
+    uses: ./.github/workflows/build-enterprise.yml
+    secrets: inherit
+
+  desktop:
+    if: inputs.build_desktop
+    uses: ./.github/workflows/build-desktop.yml
+    secrets: inherit
+
+  summary:
+    needs: [mobile, browser-extensions, vscode-extensions, cli-tools, web-apps, enterprise, desktop]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release summary
+        run: |
+          echo "## Release All Summary" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Workflow | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|----------|--------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Mobile (${{ inputs.mobile_app }}) | ${{ needs.mobile.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Browser Extensions | ${{ needs.browser-extensions.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| VS Code Extensions | ${{ needs.vscode-extensions.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| CLI Tools | ${{ needs.cli-tools.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Web Apps | ${{ needs.web-apps.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Enterprise | ${{ needs.enterprise.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Desktop | ${{ needs.desktop.result || 'skipped' }} |" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check for failures
+        run: |
+          FAILED=false
+          for result in \
+            "${{ needs.mobile.result }}" \
+            "${{ needs.browser-extensions.result }}" \
+            "${{ needs.vscode-extensions.result }}" \
+            "${{ needs.cli-tools.result }}" \
+            "${{ needs.web-apps.result }}" \
+            "${{ needs.enterprise.result }}" \
+            "${{ needs.desktop.result }}"; do
+            if [ "$result" = "failure" ]; then
+              FAILED=true
+            fi
+          done
+          if [ "$FAILED" = "true" ]; then
+            echo "::error::One or more workflows failed. Check individual workflow runs for details."
+            exit 1
+          fi
+          echo "All enabled workflows completed successfully!"
