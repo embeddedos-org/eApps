@@ -83,6 +83,12 @@
     el.innerHTML = html;
   }
 
+  function getFileExt(url) {
+    if (!url) return '';
+    const m = url.match(/\.([a-z0-9]+)$/i);
+    return m ? '.' + m[1] : '';
+  }
+
   function getDownloadUrl(app) {
     if (app.downloadUrl) return app.downloadUrl;
     if (app.downloads) {
@@ -107,14 +113,16 @@
     let downloadBtn = '';
     if (app.downloads && Object.keys(app.downloads).length > 1) {
       const entries = Object.entries(app.downloads).slice(0, 3);
-      downloadBtn = entries.map(([plat, url]) =>
-        `<a href="${url}" class="btn btn-primary" target="_blank">⬇ ${PLATFORM_LABELS[plat] || plat}</a>`
-      ).join('');
+      downloadBtn = entries.map(([plat, url]) => {
+        const ext = getFileExt(url);
+        return `<a href="${url}" class="btn btn-primary" target="_blank" title="${ext}">⬇ ${PLATFORM_LABELS[plat] || plat} <small>${ext}</small></a>`;
+      }).join('');
       if (Object.keys(app.downloads).length > 3) {
         downloadBtn += `<a href="${app.releaseUrl}" class="btn btn-outline" target="_blank">+${Object.keys(app.downloads).length - 3} more</a>`;
       }
     } else if (downloadUrl) {
-      downloadBtn = `<a href="${downloadUrl}" class="btn btn-primary" target="_blank">⬇ Download</a>`;
+      const ext = getFileExt(downloadUrl);
+      downloadBtn = `<a href="${downloadUrl}" class="btn btn-primary" target="_blank">⬇ Download <small>${ext}</small></a>`;
     }
 
     return `

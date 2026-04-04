@@ -1,0 +1,17 @@
+{
+  "addons": {
+    "eoffice@embeddedos.org": {
+      "updates": [
+        {
+          "version": "0.1.0",
+          "update_link": "https://github.com/embeddedos-org/eApps/releases/latest/download/eoffice-firefox-0.1.0.xpi",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "109.0"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
