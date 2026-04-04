@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  edb:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - edb_data:/data
+    environment:
+      - EDB_DB_PATH=/data/edb.db
+      - EDB_API_HOST=0.0.0.0
+      - EDB_API_PORT=8000
+      - EDB_JWT_SECRET=${EDB_JWT_SECRET:-change-me-in-production}
+      - EDB_ENCRYPTION_KEY=${EDB_ENCRYPTION_KEY:-change-me-in-production}
+      - EDB_LOG_LEVEL=INFO
+    restart: unless-stopped
+
+volumes:
+  edb_data:
