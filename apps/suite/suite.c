@@ -23,6 +23,7 @@ extern const eapps_app_info_t epdf_info;       extern const eapps_app_lifecycle_
 extern const eapps_app_info_t ezip_info;       extern const eapps_app_lifecycle_t ezip_lifecycle;
 extern const eapps_app_info_t eviewer_info;    extern const eapps_app_lifecycle_t eviewer_lifecycle;
 extern const eapps_app_info_t esession_info;   extern const eapps_app_lifecycle_t esession_lifecycle;
+extern const eapps_app_info_t etrack_info;     extern const eapps_app_lifecycle_t etrack_lifecycle;
 #endif
 
 #ifdef EAPPS_BUILD_MEDIA
@@ -75,6 +76,7 @@ void suite_register_all_apps(void) {
     REG(ecal); REG(enote); REG(econverter); REG(ebuffer);
     REG(efiles); REG(ecleaner); REG(eclock); REG(etools);
     REG(etimer); REG(epdf); REG(ezip); REG(eviewer); REG(esession);
+    REG(etrack);
 #endif
 #ifdef EAPPS_BUILD_MEDIA
     REG(emusic); REG(evideo); REG(egallery); REG(eplay); REG(epaint);

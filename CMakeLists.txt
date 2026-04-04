@@ -74,6 +74,7 @@ if(EAPPS_BUILD_PRODUCTIVITY)
     add_subdirectory(apps/ezip)
     add_subdirectory(apps/eviewer)
     add_subdirectory(apps/esession)
+    add_subdirectory(apps/etrack)
 endif()
 
 if(EAPPS_BUILD_MEDIA)

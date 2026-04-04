@@ -6,7 +6,7 @@ endif()
 
 # Link all enabled app libraries
 if(EAPPS_BUILD_PRODUCTIVITY)
-    list(APPEND SUITE_LINK_LIBS ecal enote econverter ebuffer efiles ecleaner eclock etools etimer epdf ezip eviewer esession)
+    list(APPEND SUITE_LINK_LIBS ecal enote econverter ebuffer efiles ecleaner eclock etools etimer epdf ezip eviewer esession etrack)
 endif()
 if(EAPPS_BUILD_MEDIA)
     list(APPEND SUITE_LINK_LIBS emusic evideo egallery eplay epaint)
