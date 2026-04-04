@@ -1,7 +1,7 @@
 name: eosuite
-description: EoSuite - A modular Super App for service-oriented mobile applications.
+description: EoSuite - Embedded OS Service Apps
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -9,65 +9,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-
-  # State Management
   flutter_riverpod: ^2.4.9
-  riverpod_annotation: ^2.3.3
-
-  # Routing
   go_router: ^13.0.0
-
-  # Firebase
   firebase_core: ^2.24.2
   firebase_auth: ^4.16.0
   cloud_firestore: ^4.14.0
   firebase_messaging: ^14.7.9
-  firebase_storage: ^11.6.0
-
-  # Maps & Location
+  firebase_storage: ^11.5.6
   google_maps_flutter: ^2.5.3
-  geolocator: ^11.0.0
-  geocoding: ^2.2.0
-
-  # UI
-  cached_network_image: ^3.3.1
-  flutter_local_notifications: ^17.0.0
-  shimmer: ^3.0.0
-  flutter_rating_bar: ^4.0.1
-  flutter_card_swiper: ^7.0.0
-  image_picker: ^1.0.7
-  smooth_page_indicator: ^1.1.0
-
-  # Utilities
-  intl: ^0.19.0
-  dio: ^5.4.0
-  uuid: ^4.2.2
-  timeago: ^3.6.1
-  url_launcher: ^6.2.2
-  connectivity_plus: ^6.0.3
+  geolocator: ^10.1.0
   shared_preferences: ^2.2.2
-  path: ^1.9.0
-
-  # Icons
-  cupertino_icons: ^1.0.6
-  material_design_icons_flutter: ^7.0.7296
-
-  # Charts (Admin)
-  fl_chart: ^0.66.2
+  http: ^1.2.0
+  intl: ^0.19.0
+  image_picker: ^1.0.7
+  url_launcher: ^6.2.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
   mockito: ^5.4.4
   build_runner: ^2.4.8
+  firebase_core_platform_interface: ^5.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true
-  generate: true
-
-  assets:
-    - assets/images/
-    - assets/icons/

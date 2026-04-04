@@ -2,16 +2,6 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
+    curly_braces_in_flow_control_structures: true
     prefer_const_constructors: true
     prefer_const_declarations: true
-    avoid_print: true
-    prefer_single_quotes: true
-    sort_child_properties_last: true
-    use_key_in_widget_constructors: true
-    sized_box_for_whitespace: true
-    prefer_const_literals_to_create_immutables: true
-
-analyzer:
-  exclude:
-    - "**/*.g.dart"
-    - "**/*.freezed.dart"
