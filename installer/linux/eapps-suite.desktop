@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=eApps Suite
+Comment=EoS Application Suite — 41 embedded apps in one launcher
+Exec=eapps_suite
+Icon=eapps-suite
+Type=Application
+Categories=Utility;Development;System;
+Keywords=eos;embedded;apps;suite;
+StartupNotify=true
+Terminal=false
