@@ -30,7 +30,7 @@ jobs:
             ext: tar.gz
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -100,7 +100,7 @@ jobs:
             ext: tar.gz
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
 
@@ -173,7 +173,7 @@ jobs:
             cc: riscv64-linux-gnu-gcc
             platform: eos-riscv64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Install cross-compiler
@@ -208,7 +208,7 @@ jobs:
     name: WASM (Emscripten)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
       - uses: mymindstorm/setup-emsdk@v14
@@ -241,7 +241,7 @@ jobs:
     name: EoSim Validate
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -262,7 +262,7 @@ jobs:
     needs: [build-suite, build-individual, build-eos, build-wasm, eosim-check]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
