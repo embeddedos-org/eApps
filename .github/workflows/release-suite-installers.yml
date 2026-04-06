@@ -47,7 +47,7 @@ jobs:
         working-directory: build
         run: sha256sum *.deb *.rpm > SHA256SUMS-linux.txt 2>/dev/null || true
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: linux-installers
           path: |
@@ -84,7 +84,7 @@ jobs:
             "$hash  $($_.Name)" | Out-File -Append SHA256SUMS-windows.txt -Encoding utf8
           }
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: windows-installer
           path: |
@@ -118,7 +118,7 @@ jobs:
         working-directory: build
         run: shasum -a 256 *.dmg > SHA256SUMS-macos.txt 2>/dev/null || true
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: macos-installer
           path: |

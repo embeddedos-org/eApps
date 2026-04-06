@@ -63,7 +63,7 @@ jobs:
             -x "node_modules/*" "*.git*" "package*.json" "tsconfig*"
 
       - name: Upload Chrome artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: chrome-extension-eoffice
           path: dist/eoffice-chrome-*.zip
@@ -106,7 +106,7 @@ jobs:
             --ignore-files "node_modules" "package*.json" "tsconfig*"
 
       - name: Upload Firefox artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: firefox-extension-eoffice
           path: dist/eoffice-firefox-*.xpi
@@ -201,7 +201,7 @@ jobs:
             --ignore-files "node_modules" "package*.json" "tsconfig*"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: browser-ext-${{ matrix.app }}
           path: dist/*

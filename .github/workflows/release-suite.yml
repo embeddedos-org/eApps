@@ -85,7 +85,7 @@ jobs:
           Copy-Item build\apps\suite\Release\*.exe dist\ -ErrorAction SilentlyContinue
           Compress-Archive -Path dist\* -DestinationPath ${{ matrix.artifact }}.zip
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
           path: |

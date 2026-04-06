@@ -65,7 +65,7 @@ jobs:
           mkdir -p staging
           find build-${{ matrix.arch }} -name "*.a" -exec cp {} staging/ \;
           tar czf eapps-${{ steps.version.outputs.version }}-${{ matrix.arch }}.tar.gz -C staging .
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: eapps-${{ matrix.arch }}
           path: "*.tar.gz"
@@ -94,7 +94,7 @@ jobs:
           find build-wasm -name "*.js" -o -name "*.wasm" -o -name "*.html" | xargs -I{} cp {} staging/ 2>/dev/null || true
           find build-wasm -name "*.a" -exec cp {} staging/ \; 2>/dev/null || true
           tar czf eapps-${{ steps.version.outputs.version }}-wasm.tar.gz -C staging .
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: eapps-wasm
           path: "*.tar.gz"

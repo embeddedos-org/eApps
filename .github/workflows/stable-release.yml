@@ -157,7 +157,7 @@ jobs:
           find build -name "*.a" -exec cp {} ${PKG}/lib/ \;
           find build/apps -type f -executable -exec cp {} ${PKG}/bin/ \; 2>/dev/null || true
           tar czf ${PKG}.tar.gz ${PKG}/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-linux-x64
           path: "*.tar.gz"
@@ -183,7 +183,7 @@ jobs:
           Get-ChildItem -Path build -Recurse -Filter "*.exe" | Copy-Item -Destination "$PKG/bin/" -ErrorAction SilentlyContinue
           Get-ChildItem -Path build -Recurse -Filter "*.lib" | Copy-Item -Destination "$PKG/bin/" -ErrorAction SilentlyContinue
           Compress-Archive -Path "$PKG/*" -DestinationPath "$PKG.zip"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-windows-x64
           path: "*.zip"
@@ -210,7 +210,7 @@ jobs:
           find build -name "*.a" -exec cp {} ${PKG}/lib/ \;
           find build/apps -type f -perm +111 -exec cp {} ${PKG}/bin/ \; 2>/dev/null || true
           tar czf ${PKG}.tar.gz ${PKG}/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-macos-arm64
           path: "*.tar.gz"
@@ -250,7 +250,7 @@ jobs:
           mkdir -p ${PKG}/lib
           find build -name "*.a" -exec cp {} ${PKG}/lib/ \;
           tar czf ${PKG}.tar.gz ${PKG}/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-eos-${{ matrix.arch }}
           path: "*.tar.gz"
@@ -277,7 +277,7 @@ jobs:
           mkdir -p ${PKG}
           find build-web \( -name "*.wasm" -o -name "*.js" -o -name "*.html" \) -exec cp {} ${PKG}/ \; 2>/dev/null || true
           tar czf ${PKG}.tar.gz ${PKG}/
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-wasm
           path: "*.tar.gz"

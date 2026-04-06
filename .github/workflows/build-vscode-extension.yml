@@ -55,7 +55,7 @@ jobs:
           vsce package --no-dependencies -o ../../dist/eoffice-vscode-${{ steps.version.outputs.version }}.vsix
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vscode-extension
           path: dist/*.vsix

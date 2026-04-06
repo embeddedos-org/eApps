@@ -34,7 +34,7 @@ jobs:
           echo "=== Built binaries for ${{ matrix.abi }} ==="
           find build -name "*.so" -o -name "*.a" | head -20
           echo "Android ${{ matrix.abi }}: BUILD PASSED"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-${{ matrix.abi }}
           path: build/
@@ -96,7 +96,7 @@ jobs:
           echo "=== Built binaries for iOS arm64 ==="
           find build -name "*.a" | head -20
           echo "iOS arm64: BUILD PASSED"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ios-arm64
           path: build/

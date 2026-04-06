@@ -113,7 +113,7 @@ jobs:
             | gzip > dist/${{ matrix.app }}-enterprise-${{ steps.version.outputs.version }}-docker.tar.gz
 
       - name: Upload Docker artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: docker-${{ matrix.app }}
           path: dist/*-docker.tar.gz
@@ -171,7 +171,7 @@ jobs:
 
       - name: Upload Helm artifact
         if: steps.check.outputs.has_chart == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: helm-${{ matrix.app }}
           path: dist/*.tgz

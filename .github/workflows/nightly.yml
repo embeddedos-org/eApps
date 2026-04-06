@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nightly-report-${{ matrix.os }}
           path: nightly-report.xml
@@ -166,7 +166,7 @@ jobs:
           }
           EOF
       - name: Upload SBOM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-nightly
           path: sbom-nightly.cdx.json

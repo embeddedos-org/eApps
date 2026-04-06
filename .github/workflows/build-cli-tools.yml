@@ -103,7 +103,7 @@ jobs:
           npm pack --pack-destination ../../dist
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cli-node-${{ matrix.app }}
           path: dist/*.tgz
@@ -139,7 +139,7 @@ jobs:
           cp dist/*.whl dist/*.tar.gz ../../dist/ 2>/dev/null || true
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cli-python-${{ matrix.app }}
           path: dist/*
