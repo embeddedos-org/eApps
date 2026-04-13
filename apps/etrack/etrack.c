@@ -139,7 +139,7 @@ static void show_list(void){
     lv_obj_set_style_bg_opa(h,LV_OPA_TRANSP,0);lv_obj_set_style_border_width(h,0,0);lv_obj_set_style_pad_all(h,0,0);
     lv_obj_set_flex_flow(h,LV_FLEX_FLOW_ROW);lv_obj_set_flex_align(h,LV_FLEX_ALIGN_SPACE_BETWEEN,LV_FLEX_ALIGN_CENTER,LV_FLEX_ALIGN_CENTER);
     lv_obj_t*t=lv_label_create(h);lv_label_set_text(t,LV_SYMBOL_GPS " eTrack");
-    lv_obj_set_style_text_font(t,&lv_font_montserrat_20,0);lv_obj_set_style_text_color(t,hx(p->on_surface),0);
+    lv_obj_set_style_text_font(t,&lv_font_montserrat_28,0);lv_obj_set_style_text_color(t,hx(p->on_surface),0);
     lv_obj_t*ab=lv_button_create(h);lv_obj_set_size(ab,LV_SIZE_CONTENT,32);lv_obj_set_style_bg_color(ab,hx(p->primary),0);
     lv_obj_set_style_radius(ab,16,0);lv_obj_set_style_pad_hor(ab,14,0);
     lv_obj_t*al=lv_label_create(ab);lv_label_set_text(al,LV_SYMBOL_PLUS " Track");

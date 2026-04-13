@@ -138,4 +138,18 @@ static inline void lv_init(void) {}
 static inline void lv_deinit(void) {}
 static inline void lv_tick_set_cb(void *cb) { (void)cb; }
 static inline uint32_t lv_timer_handler(void) { return 5; }
+
+#define LV_SYMBOL_ENVELOPE "M"
+#define LV_SYMBOL_UPLOAD "U"
+#define LV_SYMBOL_SHUFFLE "H"
+#define LV_SYMBOL_FILE "F"
+#define LV_SYMBOL_LIST "="
+#define LV_SYMBOL_DUMMY "."
+#define LV_SYMBOL_REFRESH "R"
+#define LV_SYMBOL_RIGHT ">"
+#define LV_SYMBOL_DOWNLOAD "D"
+#define LV_SYMBOL_OK "O"
+#define LV_SYMBOL_CLOSE "X"
+#define LV_SYMBOL_PLUS "+"
+#define LV_SYMBOL_TRASH "T"
 #endif
