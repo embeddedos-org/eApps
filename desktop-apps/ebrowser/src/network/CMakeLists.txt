@@ -1,5 +1,0 @@
-add_library(ebowser_network STATIC http.c url.c cache.c cookies.c)
-target_include_directories(ebowser_network PUBLIC ${CMAKE_SOURCE_DIR}/include)
-if(WIN32)
-    target_link_libraries(ebowser_network PRIVATE ws2_32)
-endif()

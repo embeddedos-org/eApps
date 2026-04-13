@@ -1,6 +1,0 @@
-name: vexpress-a9-test
-platform: vexpress-a9
-checks:
-  - type: boot_success
-  - type: timeout
-    seconds: 30
