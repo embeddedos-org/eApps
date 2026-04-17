@@ -19,12 +19,12 @@ typedef struct { int32_t x1, y1, x2, y2; } lv_area_t;
 typedef struct { int32_t x, y; } lv_point_t;
 typedef void (*lv_timer_cb_t)(lv_timer_t *);
 typedef void (*lv_event_cb_t)(lv_event_t *);
-enum { LV_OPA_TRANSP=0, LV_OPA_COVER=255, LV_OPA_10=25, LV_OPA_20=51, LV_OPA_30=76, LV_OPA_50=127 };
+enum { LV_OPA_TRANSP=0, LV_OPA_COVER=255, LV_OPA_10=25, LV_OPA_20=51, LV_OPA_30=76, LV_OPA_40=102, LV_OPA_50=127, LV_OPA_60=153 };
 enum { LV_FLEX_FLOW_ROW=0, LV_FLEX_FLOW_COLUMN=1, LV_FLEX_FLOW_ROW_WRAP=2 };
 enum { LV_FLEX_ALIGN_START=0, LV_FLEX_ALIGN_CENTER=1, LV_FLEX_ALIGN_END=2, LV_FLEX_ALIGN_SPACE_BETWEEN=3, LV_FLEX_ALIGN_SPACE_EVENLY=4 };
 enum { LV_TEXT_ALIGN_CENTER=1 };
 enum { LV_LABEL_LONG_WRAP=0, LV_LABEL_LONG_DOT=1 };
-enum { LV_EVENT_CLICKED=0, LV_EVENT_VALUE_CHANGED=1, LV_EVENT_PRESSING=2 };
+enum { LV_EVENT_CLICKED=0, LV_EVENT_VALUE_CHANGED=1, LV_EVENT_PRESSING=2, LV_EVENT_READY=3 };
 enum { LV_OBJ_FLAG_HIDDEN=1, LV_OBJ_FLAG_SCROLLABLE=2 };
 enum { LV_BORDER_SIDE_TOP=1, LV_BORDER_SIDE_BOTTOM=2 };
 enum { LV_ALIGN_TOP_MID=0, LV_ALIGN_CENTER=1, LV_ALIGN_LEFT_MID=2, LV_ALIGN_RIGHT_MID=3, LV_ALIGN_BOTTOM_MID=4 };
@@ -36,6 +36,7 @@ enum { LV_STATE_CHECKED=1 };
 enum { LV_DISPLAY_RENDER_MODE_PARTIAL=0 };
 enum { LV_COLOR_FORMAT_NATIVE=0 };
 #define LV_SIZE_CONTENT 0
+#define LV_COORD_MAX 0x7FFF
 #define LV_PCT(x) (-(x))
 typedef struct { lv_color_t bg_color; uint8_t bg_opa; int radius; } lv_draw_rect_dsc_t;
 #define LV_SYMBOL_LEFT "<"
@@ -49,7 +50,19 @@ typedef struct { lv_color_t bg_color; uint8_t bg_opa; int radius; } lv_draw_rect
 #define LV_SYMBOL_GPS "L"
 #define LV_SYMBOL_CHARGE "C"
 #define LV_SYMBOL_WARNING "!"
+#define LV_SYMBOL_HOME "H"
+#define LV_SYMBOL_SHOPPING_CART "P"
+#define LV_SYMBOL_EYE_OPEN "V"
+#define LV_SYMBOL_POWER "O"
+#define LV_SYMBOL_UP "^"
+#define LV_SYMBOL_DOWN "v"
+#define LV_SYMBOL_PLAY "Y"
+#define LV_SYMBOL_PAUSE "U"
+#define LV_SYMBOL_PREV "["
+#define LV_SYMBOL_NEXT "]"
+#define LV_SYMBOL_DEGREE_SIGN "°"
 typedef struct { int dummy; } lv_font_t;
+extern const lv_font_t lv_font_montserrat_10;
 extern const lv_font_t lv_font_montserrat_12;
 extern const lv_font_t lv_font_montserrat_14;
 extern const lv_font_t lv_font_montserrat_16;
@@ -57,12 +70,14 @@ extern const lv_font_t lv_font_montserrat_28;
 extern const lv_font_t lv_font_montserrat_48;
 static inline lv_obj_t *lv_obj_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_button_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
+static inline lv_obj_t *lv_btn_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_label_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_textarea_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_slider_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_switch_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_arc_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_bar_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
+static inline lv_obj_t *lv_dropdown_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline lv_obj_t *lv_canvas_create(lv_obj_t *p) { (void)p; return (lv_obj_t*)1; }
 static inline void lv_obj_set_size(lv_obj_t *o, int w, int h) { (void)o;(void)w;(void)h; }
 static inline void lv_obj_set_width(lv_obj_t *o, int w) { (void)o;(void)w; }
@@ -75,27 +90,36 @@ static inline void lv_obj_set_flex_grow(lv_obj_t *o, int g) { (void)o;(void)g; }
 static inline void lv_obj_add_flag(lv_obj_t *o, int f) { (void)o;(void)f; }
 static inline void lv_obj_clear_flag(lv_obj_t *o, int f) { (void)o;(void)f; }
 static inline void lv_obj_add_state(lv_obj_t *o, int s) { (void)o;(void)s; }
+static inline bool lv_obj_has_state(lv_obj_t *o, int s) { (void)o;(void)s; return false; }
 static inline void lv_obj_add_event_cb(lv_obj_t *o, lv_event_cb_t cb, int e, void *d) { (void)o;(void)cb;(void)e;(void)d; }
 static inline void lv_obj_clean(lv_obj_t *o) { (void)o; }
 static inline void lv_obj_delete(lv_obj_t *o) { (void)o; }
+static inline void lv_obj_del(lv_obj_t *o) { (void)o; }
 static inline void lv_obj_remove_style(lv_obj_t *o, void *s, int p) { (void)o;(void)s;(void)p; }
 static inline lv_obj_t *lv_obj_get_child(lv_obj_t *o, int i) { (void)o;(void)i; return (lv_obj_t*)1; }
 static inline int lv_obj_get_x(lv_obj_t *o) { (void)o; return 0; }
 static inline int lv_obj_get_y(lv_obj_t *o) { (void)o; return 0; }
+static inline void lv_obj_scroll_to_y(lv_obj_t *o, int y, int a) { (void)o;(void)y;(void)a; }
 static inline void lv_obj_set_style_bg_color(lv_obj_t *o, lv_color_t c, int s) { (void)o;(void)c;(void)s; }
 static inline void lv_obj_set_style_bg_opa(lv_obj_t *o, int a, int s) { (void)o;(void)a;(void)s; }
 static inline void lv_obj_set_style_radius(lv_obj_t *o, int r, int s) { (void)o;(void)r;(void)s; }
 static inline void lv_obj_set_style_border_color(lv_obj_t *o, lv_color_t c, int s) { (void)o;(void)c;(void)s; }
 static inline void lv_obj_set_style_border_width(lv_obj_t *o, int w, int s) { (void)o;(void)w;(void)s; }
 static inline void lv_obj_set_style_border_side(lv_obj_t *o, int s, int p) { (void)o;(void)s;(void)p; }
+static inline void lv_obj_set_style_border_opa(lv_obj_t *o, int a, int s) { (void)o;(void)a;(void)s; }
 static inline void lv_obj_set_style_pad_all(lv_obj_t *o, int p, int s) { (void)o;(void)p;(void)s; }
 static inline void lv_obj_set_style_pad_hor(lv_obj_t *o, int p, int s) { (void)o;(void)p;(void)s; }
+static inline void lv_obj_set_style_pad_top(lv_obj_t *o, int p, int s) { (void)o;(void)p;(void)s; }
 static inline void lv_obj_set_style_pad_gap(lv_obj_t *o, int g, int s) { (void)o;(void)g;(void)s; }
+static inline void lv_obj_set_style_pad_row(lv_obj_t *o, int r, int s) { (void)o;(void)r;(void)s; }
+static inline void lv_obj_set_style_margin_top(lv_obj_t *o, int m, int s) { (void)o;(void)m;(void)s; }
 static inline void lv_obj_set_style_shadow_width(lv_obj_t *o, int w, int s) { (void)o;(void)w;(void)s; }
 static inline void lv_obj_set_style_shadow_opa(lv_obj_t *o, int a, int s) { (void)o;(void)a;(void)s; }
+static inline void lv_obj_set_style_shadow_color(lv_obj_t *o, lv_color_t c, int s) { (void)o;(void)c;(void)s; }
 static inline void lv_obj_set_style_text_color(lv_obj_t *o, lv_color_t c, int s) { (void)o;(void)c;(void)s; }
 static inline void lv_obj_set_style_text_font(lv_obj_t *o, const lv_font_t *f, int s) { (void)o;(void)f;(void)s; }
 static inline void lv_obj_set_style_text_align(lv_obj_t *o, int a, int s) { (void)o;(void)a;(void)s; }
+static inline void lv_obj_set_style_text_opa(lv_obj_t *o, int a, int s) { (void)o;(void)a;(void)s; }
 static inline void lv_obj_set_style_min_width(lv_obj_t *o, int w, int s) { (void)o;(void)w;(void)s; }
 static inline void lv_obj_set_style_arc_color(lv_obj_t *o, lv_color_t c, int s) { (void)o;(void)c;(void)s; }
 static inline void lv_obj_set_style_arc_width(lv_obj_t *o, int w, int s) { (void)o;(void)w;(void)s; }
@@ -103,6 +127,9 @@ static inline void lv_label_set_text(lv_obj_t *o, const char *t) { (void)o;(void
 static inline void lv_label_set_long_mode(lv_obj_t *o, int m) { (void)o;(void)m; }
 static inline void lv_textarea_set_one_line(lv_obj_t *o, bool b) { (void)o;(void)b; }
 static inline void lv_textarea_set_placeholder_text(lv_obj_t *o, const char *t) { (void)o;(void)t; }
+static inline void lv_textarea_set_text(lv_obj_t *o, const char *t) { (void)o;(void)t; }
+static inline const char *lv_textarea_get_text(lv_obj_t *o) { (void)o; return ""; }
+static inline void lv_dropdown_set_options(lv_obj_t *o, const char *t) { (void)o;(void)t; }
 static inline int lv_slider_get_value(lv_obj_t *o) { (void)o; return 0; }
 static inline void lv_slider_set_range(lv_obj_t *o, int mn, int mx) { (void)o;(void)mn;(void)mx; }
 static inline void lv_slider_set_value(lv_obj_t *o, int v, int a) { (void)o;(void)v;(void)a; }
@@ -119,6 +146,7 @@ static inline void lv_draw_rect_dsc_init(lv_draw_rect_dsc_t *d) { if(d){d->bg_op
 static inline void lv_draw_rect(lv_layer_t *l, lv_draw_rect_dsc_t *d, lv_area_t *a) { (void)l;(void)d;(void)a; }
 static inline void *lv_event_get_user_data(lv_event_t *e) { (void)e; return NULL; }
 static inline lv_obj_t *lv_event_get_target(lv_event_t *e) { (void)e; return (lv_obj_t*)1; }
+static inline int lv_event_get_code(lv_event_t *e) { (void)e; return 0; }
 static inline lv_indev_t *lv_indev_active(void) { return NULL; }
 static inline void lv_indev_get_point(lv_indev_t *i, lv_point_t *p) { (void)i;(void)p; }
 static inline lv_timer_t *lv_timer_create(lv_timer_cb_t cb, uint32_t p, void *d) { (void)cb;(void)p;(void)d; return NULL; }

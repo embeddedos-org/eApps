@@ -27,6 +27,8 @@ static int s_selected_net = 0;
 static ewifi_vault_t s_vault;
 static ewifi_auto_connect_t s_ac;
 
+static void rebuild_content(void);
+
 static void show_toast(const char *msg) {
     if (s_status_lbl) lv_label_set_text(s_status_lbl, msg);
 }
