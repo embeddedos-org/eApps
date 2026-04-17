@@ -17,25 +17,29 @@ eApps is the unified marketplace, monorepo, and automated app store for the enti
 | Category | Folder | Count | Technologies | Artifacts |
 |---|---|---|---|---|
 | ⚙️ **Native Apps** | `apps/` | 46 | C + LVGL (cross-platform via CMake) | Binaries, WASM |
-| 🖥️ **Desktop Apps** | `desktop-apps/` | 4 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
+| 🖥️ **Desktop Apps** | `desktop-apps/` | 1 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
 | 📱 **Mobile Apps** | `mobile-apps/` | 32 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
 | 🌐 **Web Apps** | `web-apps/` | 34 | HTML5/JS/WASM PWA | GitHub Pages PWA |
 | 🧩 **Browser Extensions** | `browser-extensions/` | 20 | WebExtensions Manifest V3 | `.zip` `.crx` `.xpi` |
 | 🛠️ **Dev Tools** | `dev-tools/` | 14 | VS Code TS, JetBrains Kotlin, Vim | `.vsix` `.jar` |
 | ⌨️ **CLI Tools** | `cli-tools/` | 22 | Node.js, Python | npm, pip, Homebrew |
 | 🏢 **Enterprise** | `enterprise/` | 16 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
-| 🧩 **Legacy Extensions** | `extensions/` | 11 | Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 | `.zip` `.crx` `.xpi` `.vsix` |
 
-> **Total: 50 apps × 8 platform categories = 188 platform targets**
+
+> **Total: 46 native apps + desktop/mobile/web/CLI/dev tools across all platforms**
+>
+> **Note:** eOffice, EoStudio, EoSim, and eBrowser have been extracted to their own repositories (see above).
+
+### Standalone Products (separate repositories)
+
+| Product | Repository | Description |
+|---|---|---|
+| **eOffice** | [embeddedos-org/eOffice](https://github.com/embeddedos-org/eOffice) | Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway |
+| **EoStudio** | [embeddedos-org/EoStudio](https://github.com/embeddedos-org/EoStudio) | Visual design IDE — UI, 3D, CAD, games, hardware, code generation |
+| **EoSim** | [embeddedos-org/EoSim](https://github.com/embeddedos-org/EoSim) | Hardware & platform simulator — 63+ boards, QEMU, GUI renderers |
+| **eBrowser** | [embeddedos-org/eBrowser](https://github.com/embeddedos-org/eBrowser) | Privacy-first web browser with custom rendering engine |
 
 ### Headline Products
-
-| Product | Description | Platforms |
-|---|---|---|
-| **eOffice** | Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway | Desktop, Web, Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 |
-| **EoStudio** | Visual design IDE — UI, 3D, CAD, games, hardware, code generation | Windows, macOS, Linux |
-| **EoSim** | Hardware & platform simulator — 63+ boards (ARM, RISC-V, ESP32, STM32, RPi, Jetson), QEMU, GUI renderers | Windows, macOS, Linux, Docker |
-| **eBrowser** | Privacy-first web browser with custom rendering engine | Windows, macOS, Linux, EoS, WASM |
 | **eServiceApps** | eRide, eSocial, eTrack, eTravel, eWallet | Android, iOS |
 
 ---
