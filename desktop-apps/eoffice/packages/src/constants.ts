@@ -59,15 +59,6 @@ export const APP_REGISTRY: EOfficeApp[] = [
     path: '/apps/email',
   },
   {
-    id: 'edb',
-    name: 'eDB',
-    icon: '🗄️',
-    description: 'Database',
-    category: 'storage',
-    version: '0.1.0',
-    path: '/apps/edb',
-  },
-  {
     id: 'edrive',
     name: 'eDrive',
     icon: '☁️',

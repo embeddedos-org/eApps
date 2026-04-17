@@ -1,1 +1,0 @@
-"""eDB REST API."""

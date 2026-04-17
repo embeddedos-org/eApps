@@ -9,7 +9,6 @@ const PORT_MAP: Record<string, number> = {
   esheets: 5175,
   eslides: 5176,
   email: 5177,
-  edb: 5178,
   edrive: 5179,
   econnect: 5180,
   eforms: 5181,

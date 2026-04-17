@@ -35,7 +35,7 @@ Office Suite
 | **eSlides**          | Presentations             | Slide titles, talking points, alt-text generation         |
 | **eNotes**           | Digital notebooks         | Summarize notes, auto-tag, link related notes             |
 | **eMail**            | Email & Calendar          | Draft emails, smart replies, task extraction              |
-| **eDB**              | Lightweight database      | Query suggestions, schema recommendations                 |
+| **eDrive**
 | **eDrive**           | Cloud storage             | Semantic search, file tagging, duplicate detection        |
 | **eConnect**         | Collaboration & chat      | Meeting summaries, action-item extraction, chat assistant |
 | **eForms**           | Forms & surveys           | Auto-generate questions, summarize responses              |
@@ -72,10 +72,10 @@ Office Suite
                      │------------------------│
                      │ eDocs    eSheets       │
                      │ eSlides  eNotes        │
-                     │ eMail    eDB           │
-                     │ eDrive   eConnect      │
-                     │ eForms   eSway         │
-                     │ ePlanner / ToDo        │
+                     │ eMail    eDrive        │
+                     │ eConnect eForms        │
+                     │ eSway    ePlanner/ToDo │
+                     │                        │
                      └─────────┬──────────────┘
                                │ API / HTTP Requests
                                ▼
@@ -173,7 +173,7 @@ Office Suite
 
 ### Phase 3 – Extended Suite & Integrations (12–18 months)
 
-* Apps: **eConnect, eDrive, eDB, eForms, eSway, ePlanner**
+* Apps: **eConnect, eDrive, eForms, eSway, ePlanner**
 * eBot: AI summaries for meetings, cross-app task tracking
 * Integrations: SSO, Slack/Teams notifications, cloud sync
 * Plugin system enabled
@@ -205,7 +205,7 @@ Office Suite
 
 * **Suite:** eOffice
 * **AI Assistant:** eBot
-* **Apps:** eDocs, eSheets, eSlides, eNotes, eMail, eDB, eDrive, eConnect, eForms, eSway, ePlanner
+* **Apps:** eDocs, eSheets, eSlides, eNotes, eMail, eDrive, eConnect, eForms, eSway, ePlanner
 * **Tagline:**
 
 > *"eOffice with eBot – Your intelligent assistant across all workspaces."*

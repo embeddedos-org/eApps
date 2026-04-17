@@ -30,7 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - eMaps — privacy-first maps & navigation app (OpenStreetMap)
 - Multi-platform restructure: web-apps, mobile-apps, desktop-apps, browser-extensions, CLI tools, enterprise
 - eServiceApps Flutter project extraction
-- eDB embedded database integration
 - Platform-specific release infrastructure (Windows .exe, macOS .dmg, Linux .AppImage)
 - Stable release workflow with 3-gate validation (CI → build → integrity)
 - Release-all orchestrator for coordinated multi-platform releases

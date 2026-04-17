@@ -14,7 +14,6 @@ All notable changes to the eOffice Suite project will be documented in this file
 ### Phase 3 — Extended Suite & Integrations
 - **eConnect:** Collaboration & messaging — channels, message threads, eBot chat summarize
 - **eDrive:** Cloud storage — file browser, preview, upload, folders, eBot semantic search
-- **eDB:** Database manager — table viewer, row editing, SQL query editor, eBot query suggestions
 - **eForms:** Forms & surveys — form builder (7 field types), preview, validation, eBot question generation
 - **eSway:** Interactive presentations — quiz/poll/Q&A slides, live responses, eBot quiz generation
 - **ePlanner:** Task management — kanban board (todo/in-progress/done), drag-to-move, eBot task extraction

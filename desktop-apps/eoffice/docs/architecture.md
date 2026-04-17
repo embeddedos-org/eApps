@@ -48,7 +48,6 @@ eOffice/
 │   ├── esheets/           Spreadsheets (port 5175)
 │   ├── eslides/           Presentations (port 5176)
 │   ├── email/             Email & Calendar (port 5177)
-│   ├── edb/               Database (port 5178)
 │   ├── edrive/            Cloud storage (port 5179)
 │   ├── econnect/          Collaboration (port 5180)
 │   ├── eforms/            Forms & surveys (port 5181)

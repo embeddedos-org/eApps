@@ -47,8 +47,8 @@ describe('constants', () => {
   });
 
   describe('APP_REGISTRY', () => {
-    it('has exactly 11 apps', () => {
-      expect(APP_REGISTRY).toHaveLength(11);
+    it('has exactly 10 apps', () => {
+      expect(APP_REGISTRY).toHaveLength(10);
     });
 
     it('each app has all required fields', () => {
@@ -100,7 +100,6 @@ describe('constants', () => {
       expect(ids).toContain('esheets');
       expect(ids).toContain('eslides');
       expect(ids).toContain('email');
-      expect(ids).toContain('edb');
       expect(ids).toContain('edrive');
       expect(ids).toContain('econnect');
       expect(ids).toContain('eforms');

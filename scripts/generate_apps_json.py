@@ -194,7 +194,7 @@ add("ebot-ios", "eBot AI for iOS",
 # DESKTOP — Windows / macOS / Linux / EoS / ARM
 # ═══════════════════════════════════════════════════════════
 desktop_apps = [
-    ("eoffice-desktop", "eOffice Desktop", "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
+    ("eoffice-desktop", "eOffice Desktop", "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eForms, eSway.",
      ["productivity", "office", "electron"], "desktop-apps/eoffice/"),
     ("eostudio-desktop", "EoStudio", "Visual design studio & IDE — UI, 3D, CAD, games, hardware, code generation, simulation.",
      ["design", "ide", "cad", "3d", "codegen", "python"], "desktop-apps/eostudio/"),

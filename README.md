@@ -32,7 +32,7 @@ eApps is the unified marketplace, monorepo, and automated app store for the enti
 
 | Product | Description | Platforms |
 |---|---|---|
-| **eOffice** | Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway | Desktop, Web, Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 |
+| **eOffice** | Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eForms, eSway | Desktop, Web, Chrome, Firefox, Safari, VS Code, JetBrains, Obsidian, Slack, Raycast, GitHub, Google WS, Office 365 |
 | **EoStudio** | Visual design IDE — UI, 3D, CAD, games, hardware, code generation | Windows, macOS, Linux |
 | **EoSim** | Hardware & platform simulator — 63+ boards (ARM, RISC-V, ESP32, STM32, RPi, Jetson), QEMU, GUI renderers | Windows, macOS, Linux, Docker |
 | **eBrowser** | Privacy-first web browser with custom rendering engine | Windows, macOS, Linux, EoS, WASM |

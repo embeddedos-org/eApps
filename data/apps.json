@@ -1150,7 +1150,7 @@
     {
       "id": "eoffice-desktop",
       "name": "eOffice Desktop",
-      "description": "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
+      "description": "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eForms, eSway.",
       "category": "desktop",
       "platform": [
         "windows-x64",

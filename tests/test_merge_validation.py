@@ -220,7 +220,7 @@ class TestEOfficeDesktopMerge(unittest.TestCase):
 
     def test_office_apps_all_present(self):
         expected = [
-            "econnect", "edb", "edocs", "edrive", "eforms",
+            "econnect", "edocs", "edrive", "eforms",
             "email", "enotes", "eplanner", "esheets", "eslides",
             "esway", "launcher",
         ]
