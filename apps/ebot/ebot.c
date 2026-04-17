@@ -247,14 +247,19 @@ int ebot_fetch_models(ebot_state_t *state) {
             char name[64];
             if (!json_get_string(p, "name", name, sizeof(name))) break;
             strncpy(state->models[state->model_count].name, name, 63);
+            state->models[state->model_count].name[63] = '\0';
 
             char tier[16];
-            if (json_get_string(p, "tier", tier, sizeof(tier)))
+            if (json_get_string(p, "tier", tier, sizeof(tier))) {
                 strncpy(state->models[state->model_count].tier, tier, 15);
+                state->models[state->model_count].tier[15] = '\0';
+            }
 
             char params[16];
-            if (json_get_string(p, "params", params, sizeof(params)))
+            if (json_get_string(p, "params", params, sizeof(params))) {
                 strncpy(state->models[state->model_count].params, params, 15);
+                state->models[state->model_count].params[15] = '\0';
+            }
 
             state->model_count++;
             p = strstr(p + 1, "\"name\"");
@@ -280,14 +285,19 @@ int ebot_fetch_tools(ebot_state_t *state) {
             char name[64];
             if (!json_get_string(p, "name", name, sizeof(name))) break;
             strncpy(state->tools[state->tool_count].name, name, 63);
+            state->tools[state->tool_count].name[63] = '\0';
 
             char desc[256];
-            if (json_get_string(p, "description", desc, sizeof(desc)))
+            if (json_get_string(p, "description", desc, sizeof(desc))) {
                 strncpy(state->tools[state->tool_count].description, desc, 255);
+                state->tools[state->tool_count].description[255] = '\0';
+            }
 
             char perm[64];
-            if (json_get_string(p, "permission", perm, sizeof(perm)))
+            if (json_get_string(p, "permission", perm, sizeof(perm))) {
                 strncpy(state->tools[state->tool_count].permission, perm, 63);
+                state->tools[state->tool_count].permission[63] = '\0';
+            }
 
             state->tool_count++;
             p = strstr(p + 1, "\"name\"");

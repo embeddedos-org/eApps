@@ -55,7 +55,7 @@ static void load_default_devices(void)
 {
     memset(s_devices, 0, sizeof(s_devices));
 
-    #define SCPY(d,s) strncpy(d,s,sizeof(d)-1)
+    #define SCPY(d,s) do { strncpy(d,s,sizeof(d)-1); (d)[sizeof(d)-1] = '\0'; } while(0)
     SCPY(s_devices[0].name, "Sony TV");
     SCPY(s_devices[0].brand, "Sony");
     SCPY(s_devices[0].model, "Bravia");
@@ -305,7 +305,9 @@ static void add_device_cb(lv_event_t *e)
     }
     memset(&s_devices[s_device_count], 0, sizeof(eremote_device_t));
     strncpy(s_devices[s_device_count].name, "New Device", 31);
+    s_devices[s_device_count].name[31] = '\0';
     strncpy(s_devices[s_device_count].brand, "Unknown", 23);
+    s_devices[s_device_count].brand[23] = '\0';
     s_devices[s_device_count].type = EREMOTE_DEV_CUSTOM;
     s_devices[s_device_count].conn = EREMOTE_CONN_BLE;
     s_devices[s_device_count].op_mode = EREMOTE_MODE_DIRECT;

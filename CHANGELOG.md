@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Improved string safety across multiple apps (`eWiFi`, `eBot`, `eRemote`) by ensuring explicit null-termination for all `strncpy` calls.
+- Updated `eWiFi` simulation data labels to clearly distinguish mock credentials from production environment configurations.
+- Refactored `SCPY` macro in `eRemote` to handle bounds checking and null-termination automatically.
+
 ## [2.1.0] - 2026-04-04
 
 ### Added

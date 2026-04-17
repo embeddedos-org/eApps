@@ -57,6 +57,7 @@ static int extract_profiles_win(ewifi_saved_cred_t *out, int max)
 
         memset(&out[count], 0, sizeof(ewifi_saved_cred_t));
         strncpy(out[count].ssid, marker, EWIFI_SSID_MAX - 1);
+        out[count].ssid[EWIFI_SSID_MAX - 1] = '\0';
         out[count].password_found = false;
         count++;
     }
@@ -76,6 +77,7 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
     char line[256];
     memset(cred, 0, sizeof(*cred));
     strncpy(cred->ssid, ssid, EWIFI_SSID_MAX - 1);
+    cred->ssid[EWIFI_SSID_MAX - 1] = '\0';
 
     while (fgets(line, sizeof(line), fp)) {
         /* Key Content : password_here */
@@ -86,6 +88,7 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
                 val += 2;
                 trim(val);
                 strncpy(cred->password, val, EWIFI_PASS_MAX - 1);
+                cred->password[EWIFI_PASS_MAX - 1] = '\0';
                 cred->password_found = (strlen(cred->password) > 0);
             }
         }
@@ -96,6 +99,7 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
                 val += 2;
                 trim(val);
                 strncpy(cred->auth_type, val, sizeof(cred->auth_type) - 1);
+                cred->auth_type[sizeof(cred->auth_type) - 1] = '\0';
             }
         }
         /* Cipher / Security */
@@ -106,6 +110,7 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
                 val += 2;
                 trim(val);
                 strncpy(cred->security, val, sizeof(cred->security) - 1);
+                cred->security[sizeof(cred->security) - 1] = '\0';
             }
         }
     }
@@ -297,18 +302,26 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
     if (max < 3) return 0;
     memset(out, 0, 3 * sizeof(ewifi_saved_cred_t));
 
-    strncpy(out[0].ssid, "HomeNetwork_5G", EWIFI_SSID_MAX - 1);
-    strncpy(out[0].password, "MyStr0ng!WiFi#2026", EWIFI_PASS_MAX - 1);
+    strncpy(out[0].ssid, "DEMO_5G_NETWORK", EWIFI_SSID_MAX - 1);
+    out[0].ssid[EWIFI_SSID_MAX - 1] = '\0';
+    strncpy(out[0].password, "DEMO_PASS_2026", EWIFI_PASS_MAX - 1);
+    out[0].password[EWIFI_PASS_MAX - 1] = '\0';
     strncpy(out[0].auth_type, "WPA3-SAE", 23);
+    out[0].auth_type[23] = '\0';
     out[0].password_found = true;
 
-    strncpy(out[1].ssid, "HomeNetwork", EWIFI_SSID_MAX - 1);
-    strncpy(out[1].password, "SimplePass123", EWIFI_PASS_MAX - 1);
+    strncpy(out[1].ssid, "SIMULATED_HOME", EWIFI_SSID_MAX - 1);
+    out[1].ssid[EWIFI_SSID_MAX - 1] = '\0';
+    strncpy(out[1].password, "SIMULATED_123", EWIFI_PASS_MAX - 1);
+    out[1].password[EWIFI_PASS_MAX - 1] = '\0';
     strncpy(out[1].auth_type, "WPA2-PSK", 23);
+    out[1].auth_type[23] = '\0';
     out[1].password_found = true;
 
-    strncpy(out[2].ssid, "Office_5G_AC", EWIFI_SSID_MAX - 1);
+    strncpy(out[2].ssid, "OFFICE_LAB_TEST", EWIFI_SSID_MAX - 1);
+    out[2].ssid[EWIFI_SSID_MAX - 1] = '\0';
     strncpy(out[2].auth_type, "WPA2-Enterprise", 23);
+    out[2].auth_type[23] = '\0';
     out[2].password_found = false;
 
     return 3;
