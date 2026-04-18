@@ -274,17 +274,20 @@ static int g_scene_count = 0;
 void eremote_scenes_init(void)
 {
     strncpy(g_scenes[0].name, "Movie Mode", 31);
+    g_scenes[0].name[31] = '\0';
     g_scenes[0].steps[0] = (eremote_scene_step_t){0, CMD_POWER, 1, 0};
     g_scenes[0].steps[1] = (eremote_scene_step_t){0, CMD_INPUT, 2, 500};
     g_scenes[0].steps[2] = (eremote_scene_step_t){1, CMD_POWER, 1, 300};
     g_scenes[0].step_count = 3;
 
     strncpy(g_scenes[1].name, "Night Mode", 31);
+    g_scenes[1].name[31] = '\0';
     g_scenes[1].steps[0] = (eremote_scene_step_t){3, CMD_TEMP_DOWN, 20, 0};
     g_scenes[1].steps[1] = (eremote_scene_step_t){0, CMD_POWER, 0, 500};
     g_scenes[1].step_count = 2;
 
     strncpy(g_scenes[2].name, "Music Mode", 31);
+    g_scenes[2].name[31] = '\0';
     g_scenes[2].steps[0] = (eremote_scene_step_t){1, CMD_POWER, 1, 0};
     g_scenes[2].steps[1] = (eremote_scene_step_t){1, CMD_VOL_UP, 60, 300};
     g_scenes[2].step_count = 2;
@@ -308,6 +311,7 @@ static int g_schedule_count = 0;
 void eremote_schedules_init(void)
 {
     strncpy(g_schedules[0].name, "AC Off Timer", 31);
+    g_schedules[0].name[31] = '\0';
     g_schedules[0].hour = 23;
     g_schedules[0].minute = 0;
     g_schedules[0].days = 0x7F;
@@ -316,6 +320,7 @@ void eremote_schedules_init(void)
     g_schedules[0].enabled = true;
 
     strncpy(g_schedules[1].name, "Morning TV", 31);
+    g_schedules[1].name[31] = '\0';
     g_schedules[1].hour = 7;
     g_schedules[1].minute = 30;
     g_schedules[1].days = 0x1F;

@@ -145,6 +145,7 @@ static void test_vault_wrong_pin(void) {
 static void test_vault_encrypt_decrypt_roundtrip(void) {
     ewifi_vault_t v;
     ewifi_vault_init(&v);
+    ewifi_vault_set_pin(&v, "1234");
     ewifi_vault_add(&v, "CryptoNet", "mypassword", "test", false);
 
     ewifi_vault_encrypt_all(&v);
