@@ -60,6 +60,8 @@ typedef struct { lv_color_t bg_color; uint8_t bg_opa; int radius; } lv_draw_rect
 #define LV_SYMBOL_PAUSE "U"
 #define LV_SYMBOL_PREV "["
 #define LV_SYMBOL_NEXT "]"
+#define LV_SYMBOL_VOLUME_MID "vm"
+#define LV_SYMBOL_VOLUME_MAX "VX"
 #define LV_SYMBOL_DEGREE_SIGN "°"
 typedef struct { int dummy; } lv_font_t;
 extern const lv_font_t lv_font_montserrat_10;

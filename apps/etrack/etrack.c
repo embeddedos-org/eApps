@@ -21,7 +21,7 @@ typedef struct{char st[MAX_S];char loc[MAX_S];char ex[MAX_L];time_t ts;}evt_t;
 typedef struct{char num[MAX_S];char lbl[MAX_S];car_t car;typ_t typ;st_t st;char stx[MAX_L];time_t ct;bool act;evt_t ev[10];int evc;}item_t;
 
 static lv_obj_t*s_root=NULL;static lv_obj_t*s_vw=NULL;static item_t s_items[MAX_ITEMS];static int s_cnt=0;
-static lv_obj_t*s_nta=NULL;static lv_obj_t*s_lta=NULL;static lv_obj_t*s_dlbl=NULL;static car_t s_ac=C_OTHER;static typ_t s_at=T_PKG;
+static lv_obj_t*s_nta=NULL;static lv_obj_t*s_lta=NULL;static lv_obj_t*s_dlbl=NULL;
 
 static const char*cn(car_t c){switch(c){case C_FEDEX:return "FedEx";case C_UPS:return "UPS";case C_DHL:return "DHL";case C_AMZ:return "Amazon";default:return "Other";}}
 static const char*ci(car_t c){switch(c){case C_FEDEX:return LV_SYMBOL_TRASH;case C_UPS:return LV_SYMBOL_HOME;case C_DHL:return LV_SYMBOL_CHARGE;case C_AMZ:return LV_SYMBOL_SHOPPING_CART;default:return LV_SYMBOL_GPS;}}
@@ -29,9 +29,7 @@ static const char*se(st_t s){switch(s){case S_PEND:return "Pending";case S_IN:re
 static const char*sl(st_t s){switch(s){case S_PEND:return "🕓";case S_IN:return "🚚";case S_OUT:return "🏠";case S_DELV:return "✅";default:return "❌";}}
 static uint32_t sc(st_t s){switch(s){case S_PEND:return 0xFFB300;case S_IN:return 0x1E88E5;case S_OUT:return 0x8E24AA;case S_DELV:return 0x43A047;default:return 0xE53935;}}
 
-static car_t det(const char*n,typ_t*t){*t=T_PKG;if(strstr(n,"1Z"))return C_UPS;if(strlen(n)==12)return C_FEDEX;if(strlen(n)==10)return C_DHL;if(strstr(n,"TBA"))return C_AMZ;return C_OTHER;}
 static void clr(void){if(s_vw){lv_obj_del(s_vw);s_vw=NULL;}s_nta=NULL;s_lta=NULL;s_dlbl=NULL;}
-static void save(void){}
 static void load(void){if(s_cnt>0)return;s_cnt=2;
     strcpy(s_items[0].num,"1Z999AA10123456784");strcpy(s_items[0].lbl,"eOffice Pro Laptop");s_items[0].car=C_UPS;s_items[0].st=S_OUT;strcpy(s_items[0].stx,"Estimated 2:00 PM today");s_items[0].act=true;s_items[0].evc=1;strcpy(s_items[0].ev[0].st,"Out for Delivery");strcpy(s_items[0].ev[0].loc,"San Francisco, CA");s_items[0].ev[0].ts=time(NULL)-3600;
     strcpy(s_items[1].num,"456789012345");strcpy(s_items[1].lbl,"EoS Dev Kit");s_items[1].car=C_FEDEX;s_items[1].st=S_IN;strcpy(s_items[1].stx,"Departed Memphis, TN");s_items[1].act=true;s_items[1].evc=0;}
@@ -76,7 +74,7 @@ static void show_detail(int idx){clr();const eapps_palette_t*p=eapps_theme_get_p
     lv_obj_set_style_pad_all(s_vw,8,0);lv_obj_set_flex_flow(s_vw,LV_FLEX_FLOW_COLUMN);lv_obj_set_style_pad_gap(s_vw,8,0);
     lv_obj_t*bb=lv_btn_create(s_vw);lv_obj_set_size(bb,LV_SIZE_CONTENT,30);lv_obj_t*bl=lv_label_create(bb);lv_label_set_text(bl,LV_SYMBOL_LEFT " Back");lv_obj_add_event_cb(bb,on_bk,LV_EVENT_CLICKED,NULL);
     lv_obj_t*hd=lv_obj_create(s_vw);lv_obj_set_size(hd,LV_PCT(100),LV_SIZE_CONTENT);lv_obj_set_style_bg_color(hd,hx(p->card),0);
-    lv_obj_set_style_border_width(hd,1,0);lv_obj_set_style_pad_all(12,0);lv_obj_set_flex_flow(hd,LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_style_border_width(hd,1,0);lv_obj_set_style_pad_all(hd,12,0);lv_obj_set_flex_flow(hd,LV_FLEX_FLOW_COLUMN);
     lv_obj_t*cl=lv_label_create(hd);lv_label_set_text(cl,cn(it->car));
 }
 static void on_sv(lv_event_t*e){(void)e;show_list();}

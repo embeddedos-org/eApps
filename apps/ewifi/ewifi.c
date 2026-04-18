@@ -231,42 +231,6 @@ static void build_channel_tab(lv_obj_t *body) {
     }
 }
 
-/* ---- Build Handshake Education Tab ---- */
-static void build_handshake_tab(lv_obj_t *body) {
-    const eapps_palette_t *p = eapps_theme_get_palette();
-
-    lv_obj_t *title = lv_label_create(body);
-    lv_label_set_text(title, "WPA2-PSK 4-Way Handshake");
-    lv_obj_set_style_text_color(title, hc(p->primary), 0);
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_14, 0);
-
-    int steps = ewifi_handshake_step_count();
-    for (int i = 0; i < steps; i++) {
-        ewifi_handshake_step_t step = (ewifi_handshake_step_t)i;
-        const ewifi_handshake_info_t *info = ewifi_handshake_get_step(step);
-        if (!info) continue;
-
-        lv_obj_t *card = eapps_card_create(body);
-        lv_obj_set_style_pad_all(card, 10, 0);
-
-        /* Step number + title */
-        lv_obj_t *hdr = lv_label_create(card);
-        char hdr_txt[64];
-        snprintf(hdr_txt, 64, "Step %d: %s", i, info->description);
-        lv_label_set_text(hdr, hdr_txt);
-        lv_obj_set_style_text_color(hdr, hc(p->primary), 0);
-        lv_obj_set_style_text_font(hdr, &lv_font_montserrat_12, 0);
-
-        /* Detail text */
-        lv_obj_t *det = lv_label_create(card);
-        lv_label_set_text(det, info->detail);
-        lv_label_set_long_mode(det, LV_LABEL_LONG_WRAP);
-        lv_obj_set_width(det, LV_PCT(100));
-        lv_obj_set_style_text_color(det, hc(p->on_surface), 0);
-        lv_obj_set_style_text_font(det, &lv_font_montserrat_12, 0);
-    }
-}
-
 /* ---- Build Security Tab ---- */
 static void build_security_tab(lv_obj_t *body) {
     const eapps_palette_t *p = eapps_theme_get_palette();

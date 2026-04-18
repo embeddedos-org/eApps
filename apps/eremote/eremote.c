@@ -642,6 +642,8 @@ static void rebuild_remote_panel(void)
         build_vol_ch(s_remote_panel, btn_bg, btn_fg);
         build_media(s_remote_panel, btn_bg, btn_fg);
         break;
+    default:
+        break;
     }
 
     refresh_labels();

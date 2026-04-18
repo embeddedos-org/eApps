@@ -74,7 +74,6 @@ if(EAPPS_BUILD_PRODUCTIVITY)
     add_subdirectory(apps/ezip)
     add_subdirectory(apps/eviewer)
     add_subdirectory(apps/esession)
-    add_subdirectory(apps/etrack)
 endif()
 
 if(EAPPS_BUILD_MEDIA)
@@ -108,6 +107,7 @@ if(EAPPS_BUILD_CONNECTIVITY)
     add_subdirectory(apps/echat)
     add_subdirectory(apps/eremote)
     add_subdirectory(apps/ewifi)
+    add_subdirectory(apps/etrack)
 endif()
 
 if(EAPPS_BUILD_SECURITY)
@@ -154,7 +154,7 @@ set(CPACK_COMPONENT_SUITE_LAUNCHER_REQUIRED ON)
 
 set(CPACK_COMPONENT_PRODUCTIVITY_DISPLAY_NAME "Productivity Apps (14)")
 set(CPACK_COMPONENT_PRODUCTIVITY_DESCRIPTION
-    "ecal, enote, econverter, ebuffer, efiles, ecleaner, eclock, etools, etimer, epdf, ezip, eviewer, esession, etrack")
+    "ecal, enote, econverter, ebuffer, efiles, ecleaner, eclock, etools, etimer, epdf, ezip, eviewer, esession")
 set(CPACK_COMPONENT_PRODUCTIVITY_GROUP "Individual Apps")
 
 set(CPACK_COMPONENT_MEDIA_DISPLAY_NAME "Media Apps (5)")
@@ -167,7 +167,7 @@ set(CPACK_COMPONENT_GAMES_DESCRIPTION
 set(CPACK_COMPONENT_GAMES_GROUP "Individual Apps")
 
 set(CPACK_COMPONENT_CONNECTIVITY_DISPLAY_NAME "Connectivity Apps (8)")
-set(CPACK_COMPONENT_CONNECTIVITY_DESCRIPTION "eftp, eserial, essh, evnc, etunnel, echat, eremote, ewifi")
+set(CPACK_COMPONENT_CONNECTIVITY_DESCRIPTION "eftp, eserial, essh, evnc, etunnel, echat, eremote, ewifi, etrack")
 set(CPACK_COMPONENT_CONNECTIVITY_GROUP "Individual Apps")
 
 set(CPACK_COMPONENT_SECURITY_DISPLAY_NAME "Security Apps (3)")
