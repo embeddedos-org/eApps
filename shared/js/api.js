@@ -7,7 +7,7 @@ import auth from './auth.js';
 
 export class EosApiClient {
   constructor(config = {}) {
-    this.baseUrl = config.baseUrl || 'https://api.embeddedos.org';
+    this.baseUrl = config.baseUrl || 'https://embeddedos-org.github.io/api';
   }
 
   async request(endpoint, options = {}) {

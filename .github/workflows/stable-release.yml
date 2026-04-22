@@ -370,7 +370,7 @@ jobs:
                 "supplier": { "name": "embeddedos-org", "url": ["https://github.com/embeddedos-org"] },
                 "licenses": [{ "license": { "id": "MIT" } }],
                 "externalReferences": [
-                  { "type": "website", "url": "https://www.embeddedos.org" },
+                  { "type": "website", "url": "https://embeddedos-org.github.io" },
                   { "type": "vcs", "url": "https://github.com/embeddedos-org/eApps" },
                   { "type": "issue-tracker", "url": "https://github.com/embeddedos-org/eApps/issues" }
                 ]
