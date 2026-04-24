@@ -273,6 +273,26 @@ Each tag → **build → test → package → sign → release → update `apps.
 
 > Configure secrets in **Settings → Secrets and variables → Actions** on GitHub.
 
+### Security Practices
+
+- **No hardcoded secrets** — all signing keys, API tokens, and passwords are loaded from environment variables or CI/CD secrets
+- **Default admin password** — the eDB admin user reads its password from the `EDB_ADMIN_PASSWORD` environment variable; if unset, a secure random password is generated and logged
+- **Auto-update manifests** — served over HTTPS from GitHub Pages; Chrome and Firefox enforce signature verification on extensions
+- **Supply chain** — Dependabot, CodeQL, and OpenSSF Scorecard workflows run on every push
+- **Native apps** — static buffer allocations follow LVGL best practices for embedded targets; no dynamic allocation in render paths
+
+### Reporting Vulnerabilities
+
+If you discover a security vulnerability, please **do not** open a public issue. Instead, email **security@embeddedos.org** with:
+
+1. Description of the vulnerability
+2. Steps to reproduce
+3. Affected versions
+
+We aim to acknowledge reports within 48 hours and provide a fix within 7 days for critical issues.
+
+See [SECURITY.md](SECURITY.md) for the full security policy.
+
 ---
 
 ## 🔗 Shared Code

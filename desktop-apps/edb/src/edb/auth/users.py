@@ -125,14 +125,30 @@ class UserManager:
         return cursor.rowcount > 0
 
     def ensure_admin_exists(self) -> None:
-        """Create a default admin user if no admins exist."""
+        """Create a default admin user if no admins exist.
+
+        The admin password is read from the EDB_ADMIN_PASSWORD environment
+        variable.  If the variable is not set, a secure random password is
+        generated and logged so the operator can retrieve it on first boot.
+        """
+        import os
+        import secrets
+
         row = self._engine.fetchone(
             f'SELECT id FROM "{USERS_TABLE}" WHERE role = ?', (Role.ADMIN.value,)
         )
         if row is None:
+            password = os.environ.get("EDB_ADMIN_PASSWORD", "")
+            if not password:
+                password = secrets.token_urlsafe(16)
+                logger.warning(
+                    "No EDB_ADMIN_PASSWORD set — generated admin password: %s  "
+                    "(change it immediately)",
+                    password,
+                )
             self.create_user(UserCreate(
                 username="admin",
-                password="admin1234",
+                password=password,
                 role=Role.ADMIN,
             ))
 
