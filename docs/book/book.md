@@ -4,6 +4,9 @@
 
 ## The Definitive Technical Reference
 
+![Figure: eApps System Architecture — app marketplace, runtime, and LVGL widget toolkit](images/architecture.png)
+
+
 **Version 1.0**
 
 **Srikanth Patchava & EmbeddedOS Contributors**
