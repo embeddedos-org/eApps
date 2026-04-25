@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eApps — Unified App Marketplace | EmbeddedOS</title>
+  <meta name="description" content="60+ apps across all platforms: desktop, mobile, browser extensions, native LVGL, and cloud services. Automated CI/CD builds and GitHub Pages App Store.">
+  <meta name="keywords" content="app store, marketplace, lvgl, mobile apps, desktop apps, browser extensions, embedded">
+  <meta name="author" content="EmbeddedOS">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://embeddedos-org.github.io/eApps/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="eApps — Unified App Marketplace | EmbeddedOS">
+  <meta property="og:description" content="60+ apps across all platforms: desktop, mobile, browser extensions, native LVGL, and cloud services. Automated CI/CD builds and GitHub Pages App Store.">
+  <meta property="og:url" content="https://embeddedos-org.github.io/eApps/">
+  <meta property="og:site_name" content="EmbeddedOS">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="eApps — Unified App Marketplace | EmbeddedOS">
+  <meta name="twitter:description" content="60+ apps across all platforms: desktop, mobile, browser extensions, native LVGL, and cloud services. Automated CI/CD builds and GitHub Pages App Store.">
+  <link rel="stylesheet" href="style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "eApps",
+    "description": "60+ apps across all platforms: desktop, mobile, browser extensions, native LVGL, and cloud services. Automated CI/CD builds and GitHub Pages App Store.",
+    "url": "https://embeddedos-org.github.io/eApps/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "EmbeddedOS",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Organization", "name": "EmbeddedOS", "url": "https://embeddedos-org.github.io/" }
+  }
+  </script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="https://embeddedos-org.github.io/" class="logo">
+        <div class="logo-icon">eOS</div>
+        EmbeddedOS
+      </a>
+      <div class="nav-links">
+        <a href="https://embeddedos-org.github.io/">Home</a>
+        <a href="#features" class="active">Docs</a>
+        <a href="https://github.com/embeddedos-org/eApps" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badges">
+        <span class="badge badge-yellow">60+ Apps</span>
+        <span class="badge badge-orange">Cross-Platform</span>
+        <span class="badge badge-green">App Store</span>
+      </div>
+      <h1 style="background: linear-gradient(135deg, #e3b341, #f0d060); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">eApps</h1>
+      <p class="subtitle">60+ apps across all platforms: desktop, mobile, browser extensions, native LVGL, and cloud services. Automated CI/CD builds and GitHub Pages App Store.</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/embeddedos-org/eApps" class="btn btn-primary" target="_blank">Star on GitHub</a>
+        <a href="#quickstart" class="btn btn-outline">Quick Start</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <h2 class="section-title">Features</h2>
+    <p class="section-subtitle">One marketplace for every platform — from microcontrollers to the cloud</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>60+ Apps Across All Platforms</h3>
+        <p>A unified collection of applications spanning desktop, mobile, embedded, web, and cloud environments.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Desktop Apps</h3>
+        <p>Full-featured desktop applications including eOffice, EoStudio, EoSim, and eBrowser for productivity and development.</p>
+      </div>
+      <div class="feature-card">
+        <h3>5 Mobile Apps</h3>
+        <p>Cross-platform mobile apps: eRide, eSocial, eTrack, eTravel, and eWallet — built with native performance.</p>
+      </div>
+      <div class="feature-card">
+        <h3>40+ Native LVGL Apps</h3>
+        <p>Lightweight GUI apps built with LVGL for embedded displays, touchscreens, and resource-constrained devices.</p>
+      </div>
+      <div class="feature-card">
+        <h3>11 Browser Extensions</h3>
+        <p>Chrome and Firefox extensions for developer tools, productivity, and EmbeddedOS ecosystem integration.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Cloud Services</h3>
+        <p>Backend services for OTA updates, telemetry, user management, and cross-device synchronization.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Automated CI/CD Builds</h3>
+        <p>GitHub Actions pipelines for automated building, testing, and publishing across all target platforms.</p>
+      </div>
+      <div class="feature-card">
+        <h3>GitHub Pages App Store</h3>
+        <p>Browse, search, and download apps from the self-hosted <a href="https://embeddedos-org.github.io/eApps/">App Store</a> powered by GitHub Pages.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="quickstart">
+    <h2 class="section-title">Quick Start</h2>
+    <p class="section-subtitle">Get up and running in seconds</p>
+    <pre><code>cmake -B build -DEAPPS_PORT=sdl2 && cmake --build build && ./build/eapps_suite</code></pre>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <a href="https://embeddedos-org.github.io/">EmbeddedOS</a>
+        <a href="https://embeddedos-org.github.io/eNI/">eNI</a>
+        <a href="https://embeddedos-org.github.io/EoSim/">EoSim</a>
+        <a href="https://embeddedos-org.github.io/EoStudio/">EoStudio</a>
+        <a href="https://embeddedos-org.github.io/eApps/">eApps</a>
+        <a href="https://embeddedos-org.github.io/eDB/">eDB</a>
+        <a href="https://embeddedos-org.github.io/eAI/">eAI</a>
+        <a href="https://embeddedos-org.github.io/eIPC/">eIPC</a>
+        <a href="https://embeddedos-org.github.io/eOffice/">eOffice</a>
+        <a href="https://embeddedos-org.github.io/eBrowser/">eBrowser</a>
+        <a href="https://embeddedos-org.github.io/eRide/">eRide</a>
+        <a href="https://embeddedos-org.github.io/eSocial/">eSocial</a>
+        <a href="https://embeddedos-org.github.io/eTrack/">eTrack</a>
+        <a href="https://embeddedos-org.github.io/eTravel/">eTravel</a>
+        <a href="https://embeddedos-org.github.io/eWallet/">eWallet</a>
+      </div>
+      <div class="footer-bottom">&copy; 2026 EmbeddedOS Organization. Open-source under MIT License.</div>
+    </div>
+  </footer>
+</body>
+</html>
