@@ -68,6 +68,9 @@ The monorepo architecture enables shared code across platforms — a fix in the 
 
 eApps is the unified marketplace, monorepo, and automated app store for the EoS ecosystem. It is a single repository that contains every EoS application across all platforms, with automated build, test, package, sign, and deploy pipelines.
 
+![Figure: eApps UI Rendering Pipeline — widget tree through compositor to framebuffer](images/ui-rendering.png)
+
+
 **One repository. Every EoS app. All platforms. Automated delivery.**
 
 ## 1.2 Key Capabilities
@@ -841,6 +844,9 @@ Mobile Device Management profiles for enterprise deployment of mobile apps:
 The app lifecycle covers the complete journey from development through deployment, updates, and retirement.
 
 ## 13.2 Lifecycle Stages
+
+
+![Figure: eApps Application Lifecycle — discover, download, install, launch, update cycle](images/app-lifecycle.png)
 
 ```
 ┌──────────┐   ┌───────┐   ┌──────────┐   ┌──────────┐   ┌─────────┐
