@@ -22,7 +22,7 @@
 
 eApps is the unified marketplace, monorepo, and automated app store for the entire EoS (Embedded Operating System) ecosystem. It represents the convergence of native embedded applications, desktop software, mobile apps, web progressive web apps, browser extensions, developer tools, CLI utilities, and enterprise deployments into a single repository with fully automated CI/CD pipelines.
 
-This reference book is intended for application developers, platform engineers, DevOps professionals, and product managers who need to build, package, distribute, and maintain applications across the diverse EoS ecosystem. Whether you are developing a native LVGL embedded application, packaging a Flutter mobile app, creating a VS Code extension, or deploying a Docker-based enterprise solution, this book provides comprehensive technical coverage.
+This reference book is intended for application developers, platform engineers, DevOps professionals, and product managers who need to build, package, distribute, and maintain applications across the diverse EoS ecosystem. Whether you are developing a native LVGL [@lvgl_docs] embedded application, packaging a Flutter [@flutter] mobile app, creating a VS Code extension, or deploying a Docker-based enterprise solution, this book provides comprehensive technical coverage.
 
 eApps manages **50 applications across 8 platform categories**, producing **188 platform targets** through 7 CI/CD workflows. The marketplace is served as a static website on GitHub Pages, with `data/apps.json` as the single source of truth for all application listings, versions, and download links.
 
@@ -1410,3 +1410,8 @@ See `docs/adding-apps.md` for detailed instructions.
 *eApps — EoS Unified Marketplace & App Store Reference — Version 1.0 — April 2026*
 
 *Copyright (c) 2026 EmbeddedOS Organization. Apache License 2.0.*
+
+## References
+
+::: {#refs}
+:::
