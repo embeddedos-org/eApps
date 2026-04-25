@@ -3,6 +3,7 @@
 [![Marketplace](https://img.shields.io/badge/🏪_Marketplace-Live-blue?logo=github)](https://embeddedos-org.github.io/eApps/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/embeddedos-org/eApps/ci-native.yml?label=CI&logo=github)](https://github.com/embeddedos-org/eApps/actions)
+[![Book](https://github.com/embeddedos-org/eApps/actions/workflows/book-build.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/book-build.yml)
 
 **One repository. Every EoS app. All platforms. Automated delivery.**
 
