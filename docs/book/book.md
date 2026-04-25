@@ -66,6 +66,9 @@ The monorepo architecture enables shared code across platforms — a fix in the 
 
 ## 1.1 What is eApps?
 
+
+![Figure: eApps — 3D Product Visualization](images/product-3d.png)
+
 eApps is the unified marketplace, monorepo, and automated app store for the EoS ecosystem. It is a single repository that contains every EoS application across all platforms, with automated build, test, package, sign, and deploy pipelines.
 
 ![Figure: eApps UI Rendering Pipeline — widget tree through compositor to framebuffer](images/ui-rendering.png)
