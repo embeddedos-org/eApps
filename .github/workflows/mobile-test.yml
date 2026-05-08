@@ -5,6 +5,13 @@ on:
   workflow_dispatch:
 env:
   EOSIM_VERSION: "0.1.0"
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   android-cross-compile:
     name: Android Build (${{ matrix.abi }})

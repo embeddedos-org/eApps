@@ -21,6 +21,10 @@ permissions:
   contents: write
   packages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   discover:
     runs-on: ubuntu-latest
@@ -91,7 +95,7 @@ jobs:
         continue-on-error: true
 
       - name: Build Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: enterprise/${{ matrix.app }}
           file: enterprise/${{ matrix.app }}/docker/Dockerfile

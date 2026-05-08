@@ -29,6 +29,10 @@ permissions:
   contents: write
   pages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # ────────────────────────────────────────────────────────────────
   # Legacy eOffice extension builds (from extensions/browser/)

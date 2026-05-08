@@ -13,9 +13,19 @@ on:
         required: true
         type: choice
         options: [eoffice-desktop, eostudio, eosim, ebrowser]
+  workflow_call:
+    inputs:
+      app:
+        description: 'Desktop app to build'
+        required: false
+        type: string
 
 permissions:
   contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   parse:

@@ -13,11 +13,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   build:
-    name: Build (${{ matrix.os }})
+    name: Native (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -35,14 +37,13 @@ jobs:
       - name: Configure
         run: cmake -B build -DBUILD_TESTING=ON
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release --parallel
       - name: Test
         run: ctest --test-dir build --output-on-failure -C Release
 
   build-categories:
     name: Category (${{ matrix.category }})
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -68,12 +69,11 @@ jobs:
       - name: Build ${{ matrix.category }}
         run: |
           cmake -B build ${{ matrix.flags }} -DEAPPS_BUILD_SUITE=OFF
-          cmake --build build
+          cmake --build build --parallel
 
   sanitize:
     name: Sanitizers
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
         with:
@@ -85,8 +85,67 @@ jobs:
           cmake -B build \
             -DBUILD_TESTING=ON \
             -DCMAKE_C_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
-          cmake --build build
+          cmake --build build --parallel
       - name: Run tests
-        run: ctest --test-dir build --output-on-failure
         env:
           ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+        run: ctest --test-dir build --output-on-failure
+
+  js-ts-lane:
+    name: JS/TS lane (web-apps + browser-extensions + desktop-apps)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - name: web-apps lint+build
+        shell: bash
+        run: |
+          set -e
+          if [ -d web-apps ]; then
+            for d in web-apps/*/; do
+              [ -d "$d" ] || continue
+              if [ -f "$d/package.json" ]; then
+                echo "=== $d ==="
+                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+              fi
+            done
+          else
+            echo "::notice::No web-apps/ directory"
+          fi
+      - name: browser-extensions lint+build
+        shell: bash
+        run: |
+          set -e
+          if [ -d browser-extensions ]; then
+            for d in browser-extensions/*/; do
+              [ -d "$d" ] || continue
+              if [ -f "$d/package.json" ]; then
+                echo "=== $d ==="
+                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+              fi
+            done
+          else
+            echo "::notice::No browser-extensions/ directory"
+          fi
+      - name: desktop-apps lint+build
+        shell: bash
+        run: |
+          set -e
+          if [ -d desktop-apps ]; then
+            for d in desktop-apps/*/; do
+              [ -d "$d" ] || continue
+              if [ -f "$d/package.json" ]; then
+                echo "=== $d ==="
+                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+              fi
+            done
+          else
+            echo "::notice::No desktop-apps/ directory"
+          fi

@@ -14,6 +14,10 @@ env:
   VERSION: ${{ inputs.version }}
   TAG: "v${{ inputs.version }}"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   # ── Linux: .deb + .rpm ────────────────────────────────────────
   build-linux-installers:

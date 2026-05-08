@@ -25,6 +25,10 @@ env:
   VERSION: ${{ inputs.version }}
   TAG: "v${{ inputs.version }}"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   # ══════════════════════════════════════════════════════════════════
   # GATE 1: Full CI validation (must pass before any release)
@@ -122,7 +126,7 @@ jobs:
           - nrf52
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install EoSim

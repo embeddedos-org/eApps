@@ -12,6 +12,9 @@ concurrency:
 env:
   EOSIM_VERSION: "0.1.0"
 
+permissions:
+  contents: read
+
 jobs:
   # ── Install & validate across OS × Python matrix ──────────────────
   install-validate:
@@ -24,7 +27,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install EoSim
@@ -67,7 +70,7 @@ jobs:
           - jetson-nano
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install EoSim
@@ -99,7 +102,7 @@ jobs:
             platform: riscv64-linux
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install EoSim
@@ -118,7 +121,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Test EoSim on Windows
@@ -136,7 +139,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Test EoSim on macOS
