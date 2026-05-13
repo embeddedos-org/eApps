@@ -1,17 +1,29 @@
 {
   "name": "eos-efiles",
-  "displayName": "Advanced File Explorer — EoS",
+  "displayName": "Advanced File Explorer \u2014 EoS",
   "description": "Advanced File Explorer for VS Code",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "publisher": "embeddedos",
-  "engines": { "vscode": "^1.85.0" },
-  "categories": ["Other"],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [{ "command": "eos-efiles.activate", "title": "Advanced File Explorer" }]
+    "commands": [
+      {
+        "command": "eos-efiles.activate",
+        "title": "Advanced File Explorer"
+      }
+    ]
   },
-  "scripts": { "compile": "tsc -p ./", "watch": "tsc -watch -p ./" },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
   "devDependencies": {
     "@types/vscode": "^1.85.0",
     "typescript": "^5.3.0"
