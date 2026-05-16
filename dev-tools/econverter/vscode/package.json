@@ -2,7 +2,7 @@
   "name": "eos-econverter",
   "displayName": "Data Format Converter \u2014 EoS",
   "description": "Data Format Converter for VS Code",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publisher": "embeddedos",
   "engines": {
     "vscode": "^1.85.0"

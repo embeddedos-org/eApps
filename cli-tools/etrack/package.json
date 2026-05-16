@@ -1,6 +1,6 @@
 {
   "name": "@eos/etrack-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Project task tracker - EoS CLI Tool",
   "bin": {
     "eos-etrack": "./index.js"

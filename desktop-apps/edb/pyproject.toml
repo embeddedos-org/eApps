@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "edb"
-version = "3.0.0"
+version = "3.0.1"
 description = "eDB: Unified Multi-Model Database Ecosystem"
 readme = "README.md"
 license = {text = "MIT"}

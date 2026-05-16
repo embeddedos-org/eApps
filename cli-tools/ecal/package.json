@@ -1,6 +1,6 @@
 {
   "name": "@eos/ecal-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Calendar management - EoS CLI Tool",
   "bin": {
     "eos-ecal": "./index.js"

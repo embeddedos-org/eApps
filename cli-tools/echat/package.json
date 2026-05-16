@@ -1,6 +1,6 @@
 {
   "name": "@eos/echat-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Terminal messaging - EoS CLI Tool",
   "bin": {
     "eos-echat": "./index.js"

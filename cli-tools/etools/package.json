@@ -1,6 +1,6 @@
 {
   "name": "@eos/etools-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Utility toolkit - EoS CLI Tool",
   "bin": {
     "eos-etools": "./index.js"

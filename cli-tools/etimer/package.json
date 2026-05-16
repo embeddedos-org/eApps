@@ -1,6 +1,6 @@
 {
   "name": "@eos/etimer-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Timer & pomodoro - EoS CLI Tool",
   "bin": {
     "eos-etimer": "./index.js"

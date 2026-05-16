@@ -2,7 +2,7 @@
   "name": "eos-erunner",
   "displayName": "Task/Script Runner \u2014 EoS",
   "description": "Task/Script Runner for VS Code",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publisher": "embeddedos",
   "engines": {
     "vscode": "^1.85.0"

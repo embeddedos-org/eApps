@@ -2,7 +2,7 @@
   "name": "eos-enote",
   "displayName": "Code Notes & Snippets \u2014 EoS",
   "description": "Code Notes & Snippets for VS Code",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publisher": "embeddedos",
   "engines": {
     "vscode": "^1.85.0"

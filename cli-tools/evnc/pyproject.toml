@@ -4,7 +4,7 @@ build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "eos-evnc"
-version = "3.0.0"
+version = "3.0.1"
 description = "VNC client - EoS CLI Tool"
 license = {text = "Apache-2.0"}
 requires-python = ">=3.9"

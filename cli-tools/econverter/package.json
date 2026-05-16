@@ -1,6 +1,6 @@
 {
   "name": "@eos/econverter-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Unit/format converter - EoS CLI Tool",
   "bin": {
     "eos-econverter": "./index.js"

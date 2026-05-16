@@ -2,7 +2,7 @@
   "name": "eos-efiles",
   "displayName": "Advanced File Explorer \u2014 EoS",
   "description": "Advanced File Explorer for VS Code",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publisher": "embeddedos",
   "engines": {
     "vscode": "^1.85.0"

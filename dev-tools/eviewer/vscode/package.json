@@ -2,7 +2,7 @@
   "name": "eos-eviewer",
   "displayName": "Binary/Hex Viewer \u2014 EoS",
   "description": "Binary/Hex Viewer for VS Code",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "publisher": "embeddedos",
   "engines": {
     "vscode": "^1.85.0"

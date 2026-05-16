@@ -1,6 +1,6 @@
 {
   "name": "@eos/ebot-cli",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "AI assistant in terminal - EoS CLI Tool",
   "bin": {
     "eos-ebot": "./index.js"
