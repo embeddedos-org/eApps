@@ -1,5 +1,14 @@
 # ⚡ eApps — EoS Unified Marketplace & App Store
 
+<!-- begin: org-uniform badges (audit-2026-05) -->
+[![CI](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/embeddedos-org/eApps/badge)](https://securityscorecards.dev/viewer/?uri=github.com/embeddedos-org/eApps)
+[![Release](https://img.shields.io/github/v/tag/embeddedos-org/eApps?label=release&sort=semver)](https://github.com/embeddedos-org/eApps/releases)
+[![License](https://img.shields.io/github/license/embeddedos-org/eApps)](LICENSE)
+<!-- end: org-uniform badges (audit-2026-05) -->
+
+
 [![Marketplace](https://img.shields.io/badge/🏪_Marketplace-Live-blue?logo=github)](https://embeddedos-org.github.io/eApps/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/embeddedos-org/eApps/ci-native.yml?label=CI&logo=github)](https://github.com/embeddedos-org/eApps/actions)
@@ -377,3 +386,16 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. In summary:
   <strong>🏪 <a href="https://embeddedos-org.github.io/eApps/">Visit the EoS App Store</a></strong><br/>
   Built with ❤️ by <a href="https://github.com/embeddedos-org">embeddedos-org</a>
 </p>
+
+<!-- begin: release-model (audit-2026-05) -->
+## Release model
+
+`master` is the line of development; every PR lands here. `release` is a
+rolling pointer to the latest released `vX.Y.Z` tag, updated automatically
+by [`.github/workflows/sync-release-branch.yml`](.github/workflows/sync-release-branch.yml).
+Tags are immutable.
+
+See [embeddedos-org/.github/STANDARDS.md](https://github.com/embeddedos-org/.github/blob/master/STANDARDS.md)
+for the org-wide tag scheme, release model, and the compliance frameworks
+every product targets.
+<!-- end: release-model (audit-2026-05) -->
