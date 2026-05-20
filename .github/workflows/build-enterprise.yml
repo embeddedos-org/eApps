@@ -154,7 +154,7 @@ jobs:
 
       - name: Install Helm
         if: steps.check.outputs.has_chart == 'true'
-        uses: azure/setup-helm@v4
+        uses: azure/setup-helm@v5
 
       - name: Update Chart version
         if: steps.check.outputs.has_chart == 'true'
