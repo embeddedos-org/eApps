@@ -332,7 +332,7 @@ jobs:
           merge-multiple: true
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: "${{ needs.parse.outputs.app_id }} v${{ needs.parse.outputs.version }}"
