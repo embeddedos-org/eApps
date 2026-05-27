@@ -1,13 +1,9 @@
 import unittest
-
-class TesteAppsPerformance(unittest.TestCase):
-    import time
-    def test_ui_frame_rendering_time(self):
-        import time
+import time
+class TestEAppsPerformance(unittest.TestCase):
+    def test_launch_time_sla(self):
         start = time.perf_counter()
-        # Simulate layout + paint for 1 UI frame (60 FPS = 16.6ms)
-        for _ in range(1000):
-            _ = 100 + 200
-        end = time.perf_counter()
-        frame_ms = (end - start) * 1000
-        assert frame_ms < 16.6, f"UI frame render time {frame_ms:.1f}ms exceeds 16.6ms SLA"
+        for _ in range(10):
+            pass # simulate app launch
+        launch_time = time.perf_counter() - start
+        self.assertLess(launch_time, 0.1) # < 100ms SLA

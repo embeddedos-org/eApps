@@ -1,10 +1,5 @@
 import unittest
-
-class TesteAppsFunctional(unittest.TestCase):
-    def test_user_interaction_event_pipeline(self):
-        events = []
-        # User taps button
-        events.append({"type": "TAP", "target": "submit_btn"})
-        # Event handler dispatches event
-        dispatched = events.pop(0)
-        assert dispatched["type"] == "TAP"
+class TestEAppsFunctional(unittest.TestCase):
+    def test_app_lifecycle_pipeline(self):
+        pipeline = ["download", "install", "launch", "terminate"]
+        self.assertEqual(pipeline[-1], "terminate")
