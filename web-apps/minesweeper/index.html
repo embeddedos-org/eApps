@@ -1,41 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minesweeper — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minesweeper — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#dc2626">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fef2f2;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,sans-serif;min-height:100vh}
+header{background:#dc2626;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.hud{display:flex;gap:12px;font-size:13px}
+.hud span{background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px}
+.game-wrap{padding:20px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.difficulty{display:flex;gap:8px}
+.diff-btn{border:none;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;background:white;color:#374151;border:1px solid #e5e7eb;transition:all .15s}
+.diff-btn.active{background:#dc2626;color:white;border-color:#dc2626}
+#board{display:inline-grid;gap:2px;background:#e2e8f0;padding:8px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.cell{width:28px;height:28px;border:none;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer;background:white;transition:background .1s}
+.cell:hover{background:#f1f5f9}
+.cell.revealed{background:#f8fafc;cursor:default}
+.cell.mine{background:#fef2f2}
+.cell.flagged{background:#fff7ed}
+.n1{color:#3b82f6}.n2{color:#22c55e}.n3{color:#ef4444}.n4{color:#7c3aed}.n5{color:#b45309}.n6{color:#0891b2}.n7{color:#1e293b}.n8{color:#64748b}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Minesweeper</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Minesweeper</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>💣 Minesweeper</h1><div class="hud"><span>💣 <span id="mineCount">10</span></span><span>⏱ <span id="timer">0</span>s</span></div></header>
+<div class="game-wrap">
+  <div class="difficulty">
+    <button class="diff-btn active" onclick="newGame(9,9,10,this)">Easy</button>
+    <button class="diff-btn" onclick="newGame(16,16,40,this)">Medium</button>
+    <button class="diff-btn" onclick="newGame(16,30,99,this)">Hard</button>
+  </div>
+  <div id="board"></div>
+  <p style="font-size:12px;color:#64748b">Left click: reveal • Right click: flag</p>
+</div>
+<script>
+let ROWS=9,COLS=9,MINES=10,board=[],revealed=[],flagged=[],firstClick=true,timerInt,seconds=0,gameOver=false;
+function newGame(r,c,m,btn){
+  ROWS=r;COLS=c;MINES=m;
+  document.querySelectorAll('.diff-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  board=Array.from({length:ROWS},()=>Array(COLS).fill(0));
+  revealed=Array.from({length:ROWS},()=>Array(COLS).fill(false));
+  flagged=Array.from({length:ROWS},()=>Array(COLS).fill(false));
+  firstClick=true;gameOver=false;seconds=0;
+  clearInterval(timerInt);document.getElementById('timer').textContent=0;
+  document.getElementById('mineCount').textContent=MINES;
+  render();
+}
+function placeMines(sr,sc){
+  let placed=0;
+  while(placed<MINES){
+    const r=Math.floor(Math.random()*ROWS),c=Math.floor(Math.random()*COLS);
+    if(board[r][c]!=-1&&!(Math.abs(r-sr)<=1&&Math.abs(c-sc)<=1)){board[r][c]=-1;placed++;}
+  }
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)if(board[r][c]!==-1){
+    let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){const nr=r+dr,nc=c+dc;if(nr>=0&&nr<ROWS&&nc>=0&&nc<COLS&&board[nr][nc]===-1)n++;}
+    board[r][c]=n;
+  }
+}
+function reveal(r,c){
+  if(r<0||r>=ROWS||c<0||c>=COLS||revealed[r][c]||flagged[r][c])return;
+  if(firstClick){firstClick=false;placeMines(r,c);timerInt=setInterval(()=>document.getElementById('timer').textContent=++seconds,1000);}
+  revealed[r][c]=true;
+  if(board[r][c]===-1){gameOver=true;clearInterval(timerInt);revealAll();alert('💥 Game Over!');return;}
+  if(board[r][c]===0)for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++)reveal(r+dr,c+dc);
+  render();checkWin();
+}
+function revealAll(){for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++)revealed[r][c]=true;render();}
+function checkWin(){
+  const unrevealed=revealed.flat().filter(v=>!v).length;
+  if(unrevealed===MINES){clearInterval(timerInt);alert('🎉 You Win! Time: '+seconds+'s');}
+}
+function flag(e,r,c){e.preventDefault();if(revealed[r][c])return;flagged[r][c]=!flagged[r][c];render();}
+function render(){
+  const el=document.getElementById('board');
+  el.style.gridTemplateColumns=`repeat(${COLS},28px)`;
+  el.innerHTML='';
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const btn=document.createElement('button');
+    btn.className='cell';
+    if(revealed[r][c]){
+      btn.classList.add('revealed');
+      if(board[r][c]===-1){btn.textContent='💣';btn.classList.add('mine');}
+      else if(board[r][c]>0){btn.textContent=board[r][c];btn.classList.add('n'+board[r][c]);}
+    }else if(flagged[r][c]){btn.textContent='🚩';btn.classList.add('flagged');}
+    btn.onclick=()=>{if(!gameOver)reveal(r,c);};
+    btn.oncontextmenu=e=>flag(e,r,c);
+    el.appendChild(btn);
+  }
+}
+newGame(9,9,10,null);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

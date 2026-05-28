@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// eGuard — EoS LVGL Application
 #include "eguard.h"
 #include <stdbool.h>
 #include <string.h>

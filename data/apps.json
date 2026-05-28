@@ -1,57 +1,58 @@
 {
   "meta": {
-    "version": "2.0.0",
-    "lastUpdated": "2026-04-03",
-    "org": "embeddedos-org",
-    "hubUrl": "https://embeddedos-org.github.io/eApps/"
+    "total_apps": 114,
+    "total_tests": 2883,
+    "test_status": "passing",
+    "last_updated": "2025-05-28",
+    "version": "1.7.0"
   },
   "categories": [
     {
       "id": "browser-ext",
       "name": "Browser Extensions",
-      "icon": "🌐",
+      "icon": "\ud83c\udf10",
       "description": "Chrome, Firefox, Safari, Edge, Opera, Brave browser extensions"
     },
     {
       "id": "ide-ext",
       "name": "IDE & Dev Tools",
-      "icon": "🛠️",
+      "icon": "\ud83d\udee0\ufe0f",
       "description": "VS Code, JetBrains, Obsidian, Sublime, Vim/Neovim extensions"
     },
     {
       "id": "mobile-android",
       "name": "Android & TV",
-      "icon": "📱",
+      "icon": "\ud83d\udcf1",
       "description": "Android Phone, Tablet, Android TV, Wear OS apps"
     },
     {
       "id": "mobile-ios",
       "name": "iOS & iPadOS",
-      "icon": "🍎",
+      "icon": "\ud83c\udf4e",
       "description": "iPhone, iPad, Apple Watch, Apple TV apps"
     },
     {
       "id": "desktop",
       "name": "Desktop",
-      "icon": "🖥️",
-      "description": "Windows, macOS, Linux, EoS — x86_64, ARM64, Apple Silicon"
+      "icon": "\ud83d\udda5\ufe0f",
+      "description": "Windows, macOS, Linux, EoS \u2014 x86_64, ARM64, Apple Silicon"
     },
     {
       "id": "native",
       "name": "Embedded / Native",
-      "icon": "⚙️",
+      "icon": "\u2699\ufe0f",
       "description": "C + LVGL apps for EoS and embedded platforms"
     },
     {
       "id": "service",
       "name": "Cloud & Services",
-      "icon": "☁️",
+      "icon": "\u2601\ufe0f",
       "description": "Firebase, Docker, APIs, backend services"
     },
     {
       "id": "os-images",
       "name": "OS & VM Images",
-      "icon": "💿",
+      "icon": "\ud83d\udcbf",
       "description": "EoS ISO, VirtualBox OVA, VMware VMDK, QEMU qcow2"
     }
   ],
@@ -59,7 +60,7 @@
     {
       "id": "eoffice-chrome",
       "name": "eOffice for Chrome",
-      "description": "Full eOffice productivity suite as a Chrome extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Chrome extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "chrome"
@@ -67,7 +68,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/chrome/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0",
       "tags": [
         "productivity",
@@ -75,12 +76,14 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0/eoffice-chrome-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-chrome-v1.0.0/eoffice-chrome-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-firefox",
       "name": "eOffice for Firefox",
-      "description": "Full eOffice productivity suite as a Firefox extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Firefox extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "firefox"
@@ -88,7 +91,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/firefox/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0",
       "tags": [
         "productivity",
@@ -96,12 +99,14 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0/eoffice-firefox-1.0.0.xpi"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-firefox-v1.0.0/eoffice-firefox-1.0.0.xpi",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-safari",
       "name": "eOffice for Safari",
-      "description": "Full eOffice productivity suite as a Safari extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Safari extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "safari"
@@ -109,7 +114,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/safari/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0",
       "tags": [
         "productivity",
@@ -117,12 +122,14 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0/eoffice-safari-1.0.0.safariextz"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-safari-v1.0.0/eoffice-safari-1.0.0.safariextz",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-edge",
       "name": "eOffice for Edge",
-      "description": "Full eOffice productivity suite as a Edge extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Edge extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "edge"
@@ -130,7 +137,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/edge/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-edge-v1.0.0",
       "tags": [
         "productivity",
@@ -138,12 +145,14 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-edge-v1.0.0/eoffice-edge-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-edge-v1.0.0/eoffice-edge-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-opera",
       "name": "eOffice for Opera",
-      "description": "Full eOffice productivity suite as a Opera extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Opera extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "opera"
@@ -151,7 +160,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/opera/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-opera-v1.0.0",
       "tags": [
         "productivity",
@@ -159,12 +168,14 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-opera-v1.0.0/eoffice-opera-1.0.0.nex"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-opera-v1.0.0/eoffice-opera-1.0.0.nex",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-brave",
       "name": "eOffice for Brave",
-      "description": "Full eOffice productivity suite as a Brave extension — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice productivity suite as a Brave extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "browser-ext",
       "platform": [
         "brave"
@@ -172,7 +183,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/brave/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-brave-v1.0.0",
       "tags": [
         "productivity",
@@ -180,7 +191,9 @@
         "docs",
         "sheets"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-brave-v1.0.0/eoffice-brave-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-brave-v1.0.0/eoffice-brave-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-chrome",
@@ -193,7 +206,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/chrome/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-chrome-v1.0.0",
       "tags": [
         "privacy",
@@ -201,7 +214,9 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-chrome-v1.0.0/ebrowser-ext-chrome-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-chrome-v1.0.0/ebrowser-ext-chrome-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-firefox",
@@ -214,7 +229,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/firefox/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-firefox-v1.0.0",
       "tags": [
         "privacy",
@@ -222,7 +237,9 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-firefox-v1.0.0/ebrowser-ext-firefox-1.0.0.xpi"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-firefox-v1.0.0/ebrowser-ext-firefox-1.0.0.xpi",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-safari",
@@ -235,7 +252,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/safari/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-safari-v1.0.0",
       "tags": [
         "privacy",
@@ -243,7 +260,9 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-safari-v1.0.0/ebrowser-ext-safari-1.0.0.safariextz"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-safari-v1.0.0/ebrowser-ext-safari-1.0.0.safariextz",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-edge",
@@ -256,7 +275,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/edge/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-edge-v1.0.0",
       "tags": [
         "privacy",
@@ -264,7 +283,9 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-edge-v1.0.0/ebrowser-ext-edge-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-edge-v1.0.0/ebrowser-ext-edge-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-opera",
@@ -277,7 +298,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/opera/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-opera-v1.0.0",
       "tags": [
         "privacy",
@@ -285,7 +306,9 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-opera-v1.0.0/ebrowser-ext-opera-1.0.0.nex"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-opera-v1.0.0/ebrowser-ext-opera-1.0.0.nex",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebrowser-ext-brave",
@@ -298,7 +321,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/brave/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-brave-v1.0.0",
       "tags": [
         "privacy",
@@ -306,12 +329,14 @@
         "adblocker",
         "browser"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-brave-v1.0.0/ebrowser-ext-brave-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ext-brave-v1.0.0/ebrowser-ext-brave-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebot-chrome",
       "name": "eBot AI for Chrome",
-      "description": "AI assistant chatbot extension for Chrome — ask questions, summarize pages, translate.",
+      "description": "AI assistant chatbot extension for Chrome \u2014 ask questions, summarize pages, translate.",
       "category": "browser-ext",
       "platform": [
         "chrome"
@@ -319,7 +344,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/chrome/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-chrome-v1.0.0",
       "tags": [
         "ai",
@@ -327,12 +352,14 @@
         "assistant",
         "productivity"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-chrome-v1.0.0/ebot-chrome-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-chrome-v1.0.0/ebot-chrome-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebot-firefox",
       "name": "eBot AI for Firefox",
-      "description": "AI assistant chatbot extension for Firefox — ask questions, summarize pages, translate.",
+      "description": "AI assistant chatbot extension for Firefox \u2014 ask questions, summarize pages, translate.",
       "category": "browser-ext",
       "platform": [
         "firefox"
@@ -340,7 +367,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/firefox/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-firefox-v1.0.0",
       "tags": [
         "ai",
@@ -348,12 +375,14 @@
         "assistant",
         "productivity"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-firefox-v1.0.0/ebot-firefox-1.0.0.xpi"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-firefox-v1.0.0/ebot-firefox-1.0.0.xpi",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "ebot-edge",
       "name": "eBot AI for Edge",
-      "description": "AI assistant chatbot extension for Edge — ask questions, summarize pages, translate.",
+      "description": "AI assistant chatbot extension for Edge \u2014 ask questions, summarize pages, translate.",
       "category": "browser-ext",
       "platform": [
         "edge"
@@ -361,7 +390,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/browser/edge/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-edge-v1.0.0",
       "tags": [
         "ai",
@@ -369,7 +398,9 @@
         "assistant",
         "productivity"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-edge-v1.0.0/ebot-edge-1.0.0.crx"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-edge-v1.0.0/ebot-edge-1.0.0.crx",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-vscode",
@@ -382,7 +413,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/vscode/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0",
       "tags": [
         "productivity",
@@ -390,7 +421,9 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0/eoffice-vscode-1.0.0.vsix"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-vscode-v1.0.0/eoffice-vscode-1.0.0.vsix",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-jetbrains",
@@ -403,7 +436,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/jetbrains/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0",
       "tags": [
         "productivity",
@@ -411,7 +444,9 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0/eoffice-jetbrains-1.0.0.jar"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-jetbrains-v1.0.0/eoffice-jetbrains-1.0.0.jar",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-obsidian",
@@ -424,7 +459,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/obsidian/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0",
       "tags": [
         "productivity",
@@ -432,7 +467,9 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.obsidian"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-obsidian-v1.0.0/eoffice-obsidian-1.0.0.obsidian",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-sublime",
@@ -445,7 +482,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/sublime/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-sublime-v1.0.0",
       "tags": [
         "productivity",
@@ -453,7 +490,9 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-sublime-v1.0.0/eoffice-sublime-1.0.0.sublime-package"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-sublime-v1.0.0/eoffice-sublime-1.0.0.sublime-package",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-neovim",
@@ -466,7 +505,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/neovim/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0",
       "tags": [
         "productivity",
@@ -474,7 +513,9 @@
         "editor",
         "office"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0/eoffice-neovim-1.0.0.nvim"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-neovim-v1.0.0/eoffice-neovim-1.0.0.nvim",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eostudio-vscode",
@@ -487,7 +528,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/vscode/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-vscode-v1.0.0",
       "tags": [
         "design",
@@ -495,7 +536,9 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-vscode-v1.0.0/eostudio-vscode-1.0.0.vsix"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-vscode-v1.0.0/eostudio-vscode-1.0.0.vsix",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eostudio-jetbrains",
@@ -508,7 +551,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/jetbrains/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-jetbrains-v1.0.0",
       "tags": [
         "design",
@@ -516,7 +559,9 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-jetbrains-v1.0.0/eostudio-jetbrains-1.0.0.jar"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-jetbrains-v1.0.0/eostudio-jetbrains-1.0.0.jar",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eostudio-obsidian",
@@ -529,7 +574,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/obsidian/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0",
       "tags": [
         "design",
@@ -537,7 +582,9 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0/eostudio-obsidian-1.0.0.obsidian"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-obsidian-v1.0.0/eostudio-obsidian-1.0.0.obsidian",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eostudio-sublime",
@@ -550,7 +597,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/sublime/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-sublime-v1.0.0",
       "tags": [
         "design",
@@ -558,7 +605,9 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-sublime-v1.0.0/eostudio-sublime-1.0.0.sublime-package"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-sublime-v1.0.0/eostudio-sublime-1.0.0.sublime-package",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eostudio-neovim",
@@ -571,7 +620,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/neovim/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0",
       "tags": [
         "design",
@@ -579,12 +628,14 @@
         "codegen",
         "hardware"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0/eostudio-neovim-1.0.0.nvim"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-neovim-v1.0.0/eostudio-neovim-1.0.0.nvim",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-slack",
       "name": "eOffice for Slack",
-      "description": "eOffice integration for Slack — collaborate on docs and sheets.",
+      "description": "eOffice integration for Slack \u2014 collaborate on docs and sheets.",
       "category": "ide-ext",
       "platform": [
         "slack"
@@ -592,19 +643,21 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/slack/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.slack-app"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-slack-v1.0.0/eoffice-slack-1.0.0.slack-app",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-raycast",
       "name": "eOffice for Raycast",
-      "description": "eOffice integration for Raycast — collaborate on docs and sheets.",
+      "description": "eOffice integration for Raycast \u2014 collaborate on docs and sheets.",
       "category": "ide-ext",
       "platform": [
         "raycast"
@@ -612,19 +665,21 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/raycast/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.raycast-ext"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-raycast-v1.0.0/eoffice-raycast-1.0.0.raycast-ext",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-github",
       "name": "eOffice for GitHub",
-      "description": "eOffice integration for GitHub — collaborate on docs and sheets.",
+      "description": "eOffice integration for GitHub \u2014 collaborate on docs and sheets.",
       "category": "ide-ext",
       "platform": [
         "github"
@@ -632,19 +687,21 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/github/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.github-app"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-github-v1.0.0/eoffice-github-1.0.0.github-app",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-google-workspace",
       "name": "eOffice for Google Workspace",
-      "description": "eOffice integration for Google Workspace — collaborate on docs and sheets.",
+      "description": "eOffice integration for Google Workspace \u2014 collaborate on docs and sheets.",
       "category": "ide-ext",
       "platform": [
         "google-workspace"
@@ -652,19 +709,21 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/google-workspace/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0/eoffice-google-workspace-1.0.0.gs"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-google-workspace-v1.0.0/eoffice-google-workspace-1.0.0.gs",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eoffice-office365",
       "name": "eOffice for Office 365",
-      "description": "eOffice integration for Office 365 — collaborate on docs and sheets.",
+      "description": "eOffice integration for Office 365 \u2014 collaborate on docs and sheets.",
       "category": "ide-ext",
       "platform": [
         "office365"
@@ -672,14 +731,16 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "extensions/office365/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0",
       "tags": [
         "productivity",
         "collaboration",
         "integration"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0/eoffice-office365-1.0.0.officeaddin"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-office365-v1.0.0/eoffice-office365-1.0.0.officeaddin",
+      "test_status": "passing",
+      "test_label": "460 tests"
     },
     {
       "id": "eride-android",
@@ -694,7 +755,7 @@
       "icon": "assets/icons/eride.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/eride/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0",
       "tags": [
         "transport",
@@ -707,7 +768,9 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0/eride-android-1.0.0-android.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0/eride-android-1.0.0-android-tv.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/eride-android-v1.0.0/eride-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "esocial-android",
@@ -722,7 +785,7 @@
       "icon": "assets/icons/esocial.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/esocial/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0",
       "tags": [
         "social",
@@ -735,7 +798,9 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0/esocial-android-1.0.0-android.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0/esocial-android-1.0.0-android-tv.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/esocial-android-v1.0.0/esocial-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "etrack-android",
@@ -750,7 +815,7 @@
       "icon": "assets/icons/etrack.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/etrack/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0",
       "tags": [
         "logistics",
@@ -763,7 +828,9 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0/etrack-android-1.0.0-android.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0/etrack-android-1.0.0-android-tv.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/etrack-android-v1.0.0/etrack-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "etravel-android",
@@ -778,7 +845,7 @@
       "icon": "assets/icons/etravel.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/etravel/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0",
       "tags": [
         "travel",
@@ -791,7 +858,9 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0/etravel-android-1.0.0-android.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0/etravel-android-1.0.0-android-tv.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/etravel-android-v1.0.0/etravel-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ewallet-android",
@@ -806,7 +875,7 @@
       "icon": "assets/icons/ewallet.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/ewallet/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0",
       "tags": [
         "fintech",
@@ -819,12 +888,14 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0/ewallet-android-1.0.0-android.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0/ewallet-android-1.0.0-android-tv.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-android-v1.0.0/ewallet-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eoffice-android",
       "name": "eOffice for Android",
-      "description": "Full eOffice suite on Android — eDocs, eSheets, eSlides, eNotes, ePlanner.",
+      "description": "Full eOffice suite on Android \u2014 eDocs, eSheets, eSlides, eNotes, ePlanner.",
       "category": "mobile-android",
       "platform": [
         "android",
@@ -834,7 +905,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0",
       "tags": [
         "productivity",
@@ -846,12 +917,14 @@
         "android": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0/eoffice-android-1.0.0-android.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0/eoffice-android-1.0.0-android-tablet.apk",
         "android-tv": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-android-v1.0.0/eoffice-android-1.0.0-android-tv.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eostudio-android",
       "name": "EoStudio for Android",
-      "description": "Visual design IDE on Android tablet — UI design, code generation, preview.",
+      "description": "Visual design IDE on Android tablet \u2014 UI design, code generation, preview.",
       "category": "mobile-android",
       "platform": [
         "android",
@@ -860,7 +933,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eostudio/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-android-v1.0.0",
       "tags": [
         "design",
@@ -871,7 +944,9 @@
       "downloads": {
         "android": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-android-v1.0.0/eostudio-android-1.0.0-android.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-android-v1.0.0/eostudio-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ebrowser-android",
@@ -885,7 +960,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/ebrowser/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-android-v1.0.0",
       "tags": [
         "browser",
@@ -895,7 +970,9 @@
       "downloads": {
         "android": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-android-v1.0.0/ebrowser-android-1.0.0-android.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-android-v1.0.0/ebrowser-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ebot-android",
@@ -909,7 +986,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebot/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0",
       "tags": [
         "ai",
@@ -920,7 +997,9 @@
       "downloads": {
         "android": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0/ebot-android-1.0.0-android.apk",
         "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0/ebot-android-1.0.0-android-tablet.apk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eride-ios",
@@ -934,7 +1013,7 @@
       "icon": "assets/icons/eride.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/eride/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eride-ios-v1.0.0",
       "tags": [
         "transport",
@@ -946,7 +1025,9 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eride-ios-v1.0.0/eride-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/eride-ios-v1.0.0/eride-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "esocial-ios",
@@ -960,7 +1041,7 @@
       "icon": "assets/icons/esocial.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/esocial/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esocial-ios-v1.0.0",
       "tags": [
         "social",
@@ -972,7 +1053,9 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/esocial-ios-v1.0.0/esocial-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/esocial-ios-v1.0.0/esocial-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "etrack-ios",
@@ -986,7 +1069,7 @@
       "icon": "assets/icons/etrack.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/etrack/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etrack-ios-v1.0.0",
       "tags": [
         "logistics",
@@ -998,7 +1081,9 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/etrack-ios-v1.0.0/etrack-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/etrack-ios-v1.0.0/etrack-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "etravel-ios",
@@ -1012,7 +1097,7 @@
       "icon": "assets/icons/etravel.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/etravel/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etravel-ios-v1.0.0",
       "tags": [
         "travel",
@@ -1024,7 +1109,9 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/etravel-ios-v1.0.0/etravel-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/etravel-ios-v1.0.0/etravel-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ewallet-ios",
@@ -1038,7 +1125,7 @@
       "icon": "assets/icons/ewallet.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/lib/features/ewallet/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-ios-v1.0.0",
       "tags": [
         "fintech",
@@ -1050,12 +1137,14 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-ios-v1.0.0/ewallet-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/ewallet-ios-v1.0.0/ewallet-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eoffice-ios",
       "name": "eOffice for iOS",
-      "description": "Full eOffice suite on iPhone and iPad — eDocs, eSheets, eSlides, eNotes, ePlanner.",
+      "description": "Full eOffice suite on iPhone and iPad \u2014 eDocs, eSheets, eSlides, eNotes, ePlanner.",
       "category": "mobile-ios",
       "platform": [
         "ios",
@@ -1064,7 +1153,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-ios-v1.0.0",
       "tags": [
         "productivity",
@@ -1075,12 +1164,14 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-ios-v1.0.0/eoffice-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-ios-v1.0.0/eoffice-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eostudio-ios",
       "name": "EoStudio for iPadOS",
-      "description": "Visual design IDE on iPad — UI design, code generation, 3D preview.",
+      "description": "Visual design IDE on iPad \u2014 UI design, code generation, 3D preview.",
       "category": "mobile-ios",
       "platform": [
         "ipados"
@@ -1088,7 +1179,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eostudio/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-ios-v1.0.0",
       "tags": [
         "design",
@@ -1096,7 +1187,9 @@
         "codegen",
         "ipados"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-ios-v1.0.0/eostudio-ios-1.0.0.ipa"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-ios-v1.0.0/eostudio-ios-1.0.0.ipa",
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ebrowser-ios",
@@ -1110,7 +1203,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/ebrowser/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ios-v1.0.0",
       "tags": [
         "browser",
@@ -1120,7 +1213,9 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ios-v1.0.0/ebrowser-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-ios-v1.0.0/ebrowser-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "ebot-ios",
@@ -1134,7 +1229,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebot/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-ios-v1.0.0",
       "tags": [
         "ai",
@@ -1145,12 +1240,14 @@
       "downloads": {
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ebot-ios-v1.0.0/ebot-ios-1.0.0-ios.ipa",
         "ipados": "https://github.com/embeddedos-org/eApps/releases/download/ebot-ios-v1.0.0/ebot-ios-1.0.0-ipados.ipa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "37 tests"
     },
     {
       "id": "eoffice-desktop",
       "name": "eOffice Desktop",
-      "description": "Full office suite — eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
+      "description": "Full office suite \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes, eMail, eDrive, eConnect, eDB, eForms, eSway.",
       "category": "desktop",
       "platform": [
         "windows-x64",
@@ -1165,7 +1262,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0",
       "tags": [
         "productivity",
@@ -1181,12 +1278,14 @@
         "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-linux-arm64.AppImage",
         "eos": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-eos.eapp",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-desktop-v1.0.0/eoffice-desktop-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "150 tests"
     },
     {
       "id": "eostudio-desktop",
       "name": "EoStudio",
-      "description": "Visual design studio & IDE — UI, 3D, CAD, games, hardware, code generation, simulation.",
+      "description": "Visual design studio & IDE \u2014 UI, 3D, CAD, games, hardware, code generation, simulation.",
       "category": "desktop",
       "platform": [
         "windows-x64",
@@ -1201,7 +1300,7 @@
       "icon": "assets/icons/eostudio.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eostudio/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0",
       "tags": [
         "design",
@@ -1220,12 +1319,14 @@
         "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-linux-arm64.AppImage",
         "eos": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-eos.eapp",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eostudio-desktop-v1.0.0/eostudio-desktop-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "150 tests"
     },
     {
       "id": "eosim-desktop",
       "name": "EoSim",
-      "description": "Hardware & platform simulator — 63+ boards (ARM, RISC-V, ESP32, STM32, RPi, Jetson), QEMU, native engine, GUI renderers.",
+      "description": "Hardware & platform simulator \u2014 63+ boards (ARM, RISC-V, ESP32, STM32, RPi, Jetson), QEMU, native engine, GUI renderers.",
       "category": "desktop",
       "platform": [
         "windows-x64",
@@ -1240,7 +1341,7 @@
       "icon": "assets/icons/eosim.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eosim/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0",
       "tags": [
         "simulator",
@@ -1258,7 +1359,9 @@
         "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-linux-arm64.AppImage",
         "eos": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-eos.eapp",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eosim-desktop-v1.0.0/eosim-desktop-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "150 tests"
     },
     {
       "id": "ebrowser-desktop",
@@ -1278,7 +1381,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/ebrowser/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0",
       "tags": [
         "browser",
@@ -1296,7 +1399,9 @@
         "linux-arm64": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-linux-arm64.AppImage",
         "eos": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-eos.eapp",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-desktop-v1.0.0/ebrowser-desktop-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "150 tests"
     },
     {
       "id": "efiles",
@@ -1316,7 +1421,7 @@
       "icon": "assets/icons/efiles.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/efiles/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0",
       "tags": [
         "native",
@@ -1333,7 +1438,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0/efiles-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0/efiles-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/efiles-v1.0.0/efiles-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "emusic",
@@ -1353,7 +1460,7 @@
       "icon": "assets/icons/emusic.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/emusic/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0",
       "tags": [
         "native",
@@ -1370,7 +1477,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0/emusic-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0/emusic-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/emusic-v1.0.0/emusic-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "evideo",
@@ -1390,7 +1499,7 @@
       "icon": "assets/icons/evideo.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evideo/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0",
       "tags": [
         "native",
@@ -1407,7 +1516,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0/evideo-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0/evideo-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/evideo-v1.0.0/evideo-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "egallery",
@@ -1427,7 +1538,7 @@
       "icon": "assets/icons/egallery.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/egallery/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0",
       "tags": [
         "native",
@@ -1444,7 +1555,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0/egallery-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0/egallery-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/egallery-v1.0.0/egallery-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "echat",
@@ -1464,7 +1577,7 @@
       "icon": "assets/icons/echat.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/echat/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0",
       "tags": [
         "native",
@@ -1481,7 +1594,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0/echat-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0/echat-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/echat-v1.0.0/echat-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "enote",
@@ -1501,7 +1616,7 @@
       "icon": "assets/icons/enote.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/enote/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0",
       "tags": [
         "native",
@@ -1518,7 +1633,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0/enote-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0/enote-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/enote-v1.0.0/enote-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ecal",
@@ -1538,7 +1655,7 @@
       "icon": "assets/icons/ecal.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ecal/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0",
       "tags": [
         "native",
@@ -1555,7 +1672,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0/ecal-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0/ecal-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ecal-v1.0.0/ecal-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eclock",
@@ -1575,7 +1694,7 @@
       "icon": "assets/icons/eclock.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eclock/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0",
       "tags": [
         "native",
@@ -1592,7 +1711,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0/eclock-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0/eclock-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eclock-v1.0.0/eclock-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "esettings",
@@ -1612,7 +1733,7 @@
       "icon": "assets/icons/esettings.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esettings/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0",
       "tags": [
         "native",
@@ -1629,7 +1750,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0/esettings-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0/esettings-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/esettings-v1.0.0/esettings-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ewifi",
@@ -1649,7 +1772,7 @@
       "icon": "assets/icons/ewifi.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ewifi/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0",
       "tags": [
         "native",
@@ -1666,7 +1789,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0/ewifi-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0/ewifi-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ewifi-v1.0.0/ewifi-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "evpn",
@@ -1686,7 +1811,7 @@
       "icon": "assets/icons/evpn.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evpn/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0",
       "tags": [
         "native",
@@ -1703,7 +1828,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0/evpn-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0/evpn-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/evpn-v1.0.0/evpn-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "essh",
@@ -1723,7 +1850,7 @@
       "icon": "assets/icons/essh.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/essh/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0",
       "tags": [
         "native",
@@ -1740,7 +1867,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0/essh-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0/essh-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/essh-v1.0.0/essh-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eftp",
@@ -1760,7 +1889,7 @@
       "icon": "assets/icons/eftp.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eftp/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0",
       "tags": [
         "native",
@@ -1777,7 +1906,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0/eftp-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0/eftp-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eftp-v1.0.0/eftp-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "epdf",
@@ -1797,7 +1928,7 @@
       "icon": "assets/icons/epdf.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/epdf/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0",
       "tags": [
         "native",
@@ -1814,7 +1945,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0/epdf-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0/epdf-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/epdf-v1.0.0/epdf-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "epaint",
@@ -1834,7 +1967,7 @@
       "icon": "assets/icons/epaint.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/epaint/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0",
       "tags": [
         "native",
@@ -1851,7 +1984,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0/epaint-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0/epaint-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/epaint-v1.0.0/epaint-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "econverter",
@@ -1871,7 +2006,7 @@
       "icon": "assets/icons/econverter.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/econverter/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0",
       "tags": [
         "native",
@@ -1888,7 +2023,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0/econverter-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0/econverter-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/econverter-v1.0.0/econverter-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ezip",
@@ -1908,7 +2045,7 @@
       "icon": "assets/icons/ezip.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ezip/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0",
       "tags": [
         "native",
@@ -1925,12 +2062,14 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0/ezip-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0/ezip-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ezip-v1.0.0/ezip-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eguard",
       "name": "eGuard",
-      "description": "Security suite — antivirus, firewall, privacy protection.",
+      "description": "Security suite \u2014 antivirus, firewall, privacy protection.",
       "category": "native",
       "platform": [
         "eos",
@@ -1945,7 +2084,7 @@
       "icon": "assets/icons/eguard.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eguard/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0",
       "tags": [
         "native",
@@ -1962,7 +2101,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0/eguard-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0/eguard-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eguard-v1.0.0/eguard-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ecleaner",
@@ -1982,7 +2123,7 @@
       "icon": "assets/icons/ecleaner.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ecleaner/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0",
       "tags": [
         "native",
@@ -1999,7 +2140,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0/ecleaner-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0/ecleaner-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ecleaner-v1.0.0/ecleaner-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eremote",
@@ -2019,7 +2162,7 @@
       "icon": "assets/icons/eremote.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eremote/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0",
       "tags": [
         "native",
@@ -2036,7 +2179,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0/eremote-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0/eremote-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eremote-v1.0.0/eremote-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "evnc",
@@ -2056,7 +2201,7 @@
       "icon": "assets/icons/evnc.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evnc/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0",
       "tags": [
         "native",
@@ -2073,7 +2218,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0/evnc-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0/evnc-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/evnc-v1.0.0/evnc-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eserial",
@@ -2093,7 +2240,7 @@
       "icon": "assets/icons/eserial.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eserial/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0",
       "tags": [
         "native",
@@ -2110,7 +2257,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0/eserial-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0/eserial-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eserial-v1.0.0/eserial-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ebot",
@@ -2130,7 +2279,7 @@
       "icon": "assets/icons/ebot.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebot/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0",
       "tags": [
         "native",
@@ -2147,7 +2296,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0/ebot-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0/ebot-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ebot-v1.0.0/ebot-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "etools",
@@ -2167,7 +2318,7 @@
       "icon": "assets/icons/etools.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etools/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0",
       "tags": [
         "native",
@@ -2184,7 +2335,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0/etools-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0/etools-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/etools-v1.0.0/etools-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "etunnel",
@@ -2204,7 +2357,7 @@
       "icon": "assets/icons/etunnel.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etunnel/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0",
       "tags": [
         "native",
@@ -2221,7 +2374,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0/etunnel-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0/etunnel-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/etunnel-v1.0.0/etunnel-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "snake",
@@ -2241,7 +2396,7 @@
       "icon": "assets/icons/snake.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/snake/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0",
       "tags": [
         "native",
@@ -2258,7 +2413,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0/snake-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0/snake-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/snake-v1.0.0/snake-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "tetris",
@@ -2278,7 +2435,7 @@
       "icon": "assets/icons/tetris.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/tetris/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0",
       "tags": [
         "native",
@@ -2295,7 +2452,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0/tetris-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0/tetris-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/tetris-v1.0.0/tetris-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "minesweeper",
@@ -2315,7 +2474,7 @@
       "icon": "assets/icons/minesweeper.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/minesweeper/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0",
       "tags": [
         "native",
@@ -2332,7 +2491,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0/minesweeper-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0/minesweeper-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/minesweeper-v1.0.0/minesweeper-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "echess",
@@ -2352,7 +2513,7 @@
       "icon": "assets/icons/echess.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/echess/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0",
       "tags": [
         "native",
@@ -2369,7 +2530,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0/echess-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0/echess-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/echess-v1.0.0/echess-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "dice",
@@ -2389,7 +2552,7 @@
       "icon": "assets/icons/dice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/dice/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0",
       "tags": [
         "native",
@@ -2406,7 +2569,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0/dice-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0/dice-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/dice-v1.0.0/dice-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eplay",
@@ -2426,7 +2591,7 @@
       "icon": "assets/icons/eplay.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eplay/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0",
       "tags": [
         "native",
@@ -2443,7 +2608,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0/eplay-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0/eplay-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eplay-v1.0.0/eplay-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ehmi",
@@ -2463,7 +2630,7 @@
       "icon": "assets/icons/ehmi.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ehmi/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0",
       "tags": [
         "native",
@@ -2480,7 +2647,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0/ehmi-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0/ehmi-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ehmi-v1.0.0/ehmi-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "esurfer",
@@ -2500,7 +2669,7 @@
       "icon": "assets/icons/esurfer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esurfer/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0",
       "tags": [
         "native",
@@ -2517,7 +2686,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0/esurfer-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0/esurfer-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/esurfer-v1.0.0/esurfer-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "etimer",
@@ -2537,7 +2708,7 @@
       "icon": "assets/icons/etimer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/etimer/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0",
       "tags": [
         "native",
@@ -2554,7 +2725,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0/etimer-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0/etimer-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/etimer-v1.0.0/etimer-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "erunner",
@@ -2574,7 +2747,7 @@
       "icon": "assets/icons/erunner.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/erunner/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0",
       "tags": [
         "native",
@@ -2591,7 +2764,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0/erunner-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0/erunner-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/erunner-v1.0.0/erunner-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eviewer",
@@ -2611,7 +2786,7 @@
       "icon": "assets/icons/eviewer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eviewer/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0",
       "tags": [
         "native",
@@ -2628,7 +2803,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0/eviewer-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0/eviewer-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eviewer-v1.0.0/eviewer-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ebuffer",
@@ -2648,7 +2825,7 @@
       "icon": "assets/icons/ebuffer.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebuffer/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0",
       "tags": [
         "native",
@@ -2665,7 +2842,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0/ebuffer-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0/ebuffer-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ebuffer-v1.0.0/ebuffer-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eslice",
@@ -2685,7 +2864,7 @@
       "icon": "assets/icons/eslice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eslice/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0",
       "tags": [
         "native",
@@ -2702,7 +2881,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0/eslice-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0/eslice-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eslice-v1.0.0/eslice-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "esession",
@@ -2722,7 +2903,7 @@
       "icon": "assets/icons/esession.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/esession/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0",
       "tags": [
         "native",
@@ -2739,7 +2920,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0/esession-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0/esession-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/esession-v1.0.0/esession-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "suite",
@@ -2759,7 +2942,7 @@
       "icon": "assets/icons/suite.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/suite/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0",
       "tags": [
         "native",
@@ -2776,7 +2959,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0/suite-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0/suite-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/suite-v1.0.0/suite-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ecrush",
@@ -2796,7 +2981,7 @@
       "icon": "assets/icons/ecrush.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ecrush/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0",
       "tags": [
         "native",
@@ -2813,7 +2998,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0/ecrush-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0/ecrush-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ecrush-v1.0.0/ecrush-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "ebirds",
@@ -2833,7 +3020,7 @@
       "icon": "assets/icons/ebirds.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/ebirds/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0",
       "tags": [
         "native",
@@ -2850,7 +3037,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0/ebirds-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0/ebirds-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/ebirds-v1.0.0/ebirds-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eblocks",
@@ -2870,7 +3059,7 @@
       "icon": "assets/icons/eblocks.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eblocks/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0",
       "tags": [
         "native",
@@ -2887,7 +3076,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0/eblocks-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0/eblocks-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eblocks-v1.0.0/eblocks-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "evirustower",
@@ -2907,7 +3098,7 @@
       "icon": "assets/icons/evirustower.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/evirustower/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0",
       "tags": [
         "native",
@@ -2924,7 +3115,9 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0/evirustower-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0/evirustower-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/evirustower-v1.0.0/evirustower-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eweb",
@@ -2944,7 +3137,7 @@
       "icon": "assets/icons/eweb.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "apps/eweb/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0",
       "tags": [
         "native",
@@ -2961,12 +3154,14 @@
         "ios": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0/eweb-1.0.0-ios.ipa",
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0/eweb-1.0.0-web.tar.gz",
         "freebsd": "https://github.com/embeddedos-org/eApps/releases/download/eweb-v1.0.0/eweb-1.0.0-freebsd.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "1058 tests"
     },
     {
       "id": "eserviceapps-backend",
       "name": "eServiceApps Backend",
-      "description": "Firebase-powered backend — auth, Firestore, notifications, wallet APIs.",
+      "description": "Firebase-powered backend \u2014 auth, Firestore, notifications, wallet APIs.",
       "category": "service",
       "platform": [
         "firebase",
@@ -2975,7 +3170,7 @@
       "icon": "assets/icons/eserviceapps.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "service-apps/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eserviceapps-backend-v1.0.0",
       "tags": [
         "backend",
@@ -2986,7 +3181,9 @@
       "downloads": {
         "firebase": "https://github.com/embeddedos-org/eApps/releases/download/eserviceapps-backend-v1.0.0/eserviceapps-backend-1.0.0-firebase.tar.gz",
         "cloud": "https://github.com/embeddedos-org/eApps/releases/download/eserviceapps-backend-v1.0.0/eserviceapps-backend-1.0.0-cloud.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "26 tests"
     },
     {
       "id": "eoffice-server",
@@ -3000,7 +3197,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/packages/server/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0",
       "tags": [
         "backend",
@@ -3011,12 +3208,14 @@
       "downloads": {
         "docker": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0/eoffice-server-1.0.0-docker.tar.gz",
         "cloud": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-server-v1.0.0/eoffice-server-1.0.0-cloud.tar.gz"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "26 tests"
     },
     {
       "id": "eoffice-web",
       "name": "eOffice Web",
-      "description": "Full eOffice suite in the browser — eDocs, eSheets, eSlides, ePlanner, eNotes.",
+      "description": "Full eOffice suite in the browser \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
       "category": "service",
       "platform": [
         "web",
@@ -3025,7 +3224,7 @@
       "icon": "assets/icons/eoffice.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/eoffice/browser/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0",
       "tags": [
         "productivity",
@@ -3036,12 +3235,14 @@
       "downloads": {
         "web": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0/eoffice-web-1.0.0-web.tar.gz",
         "pwa": "https://github.com/embeddedos-org/eApps/releases/download/eoffice-web-v1.0.0/eoffice-web-1.0.0-pwa.pwa"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "26 tests"
     },
     {
       "id": "ebrowser-wasm",
       "name": "eBrowser WASM",
-      "description": "eBrowser running in the browser via WebAssembly — no install required.",
+      "description": "eBrowser running in the browser via WebAssembly \u2014 no install required.",
       "category": "service",
       "platform": [
         "web",
@@ -3050,7 +3251,7 @@
       "icon": "assets/icons/ebrowser.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "desktop-apps/ebrowser/",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-wasm-v1.0.0",
       "tags": [
         "browser",
@@ -3060,7 +3261,9 @@
       "downloads": {
         "web": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-wasm-v1.0.0/ebrowser-wasm-1.0.0-web.tar.gz",
         "wasm": "https://github.com/embeddedos-org/eApps/releases/download/ebrowser-wasm-v1.0.0/ebrowser-wasm-1.0.0-wasm.wasm"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "26 tests"
     },
     {
       "id": "eos-desktop-x64",
@@ -3074,7 +3277,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-x64-v1.0.0",
       "tags": [
         "os",
@@ -3085,7 +3288,9 @@
       "downloads": {
         "x86_64": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-x64-v1.0.0/eos-desktop-x64-1.0.0-x86_64.tar.gz",
         "iso": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-x64-v1.0.0/eos-desktop-x64-1.0.0-iso.iso"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-desktop-arm64",
@@ -3099,7 +3304,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-arm64-v1.0.0",
       "tags": [
         "os",
@@ -3110,7 +3315,9 @@
       "downloads": {
         "arm64": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-arm64-v1.0.0/eos-desktop-arm64-1.0.0-arm64.tar.gz",
         "iso": "https://github.com/embeddedos-org/eApps/releases/download/eos-desktop-arm64-v1.0.0/eos-desktop-arm64-1.0.0-iso.iso"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-server-x64",
@@ -3124,7 +3331,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-x64-v1.0.0",
       "tags": [
         "os",
@@ -3135,7 +3342,9 @@
       "downloads": {
         "x86_64": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-x64-v1.0.0/eos-server-x64-1.0.0-x86_64.tar.gz",
         "iso": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-x64-v1.0.0/eos-server-x64-1.0.0-iso.iso"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-server-arm64",
@@ -3149,7 +3358,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-arm64-v1.0.0",
       "tags": [
         "os",
@@ -3160,7 +3369,9 @@
       "downloads": {
         "arm64": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-arm64-v1.0.0/eos-server-arm64-1.0.0-arm64.tar.gz",
         "iso": "https://github.com/embeddedos-org/eApps/releases/download/eos-server-arm64-v1.0.0/eos-server-arm64-1.0.0-iso.iso"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-embedded-stm32",
@@ -3174,7 +3385,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-stm32-v1.0.0",
       "tags": [
         "os",
@@ -3185,7 +3396,9 @@
       "downloads": {
         "stm32": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-stm32-v1.0.0/eos-embedded-stm32-1.0.0-stm32.bin",
         "firmware": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-stm32-v1.0.0/eos-embedded-stm32-1.0.0-firmware.bin"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-embedded-esp32",
@@ -3199,7 +3412,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-esp32-v1.0.0",
       "tags": [
         "os",
@@ -3210,7 +3423,9 @@
       "downloads": {
         "esp32": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-esp32-v1.0.0/eos-embedded-esp32-1.0.0-esp32.bin",
         "firmware": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-esp32-v1.0.0/eos-embedded-esp32-1.0.0-firmware.bin"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-embedded-rpi",
@@ -3225,7 +3440,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0",
       "tags": [
         "os",
@@ -3237,7 +3452,9 @@
         "rpi": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0/eos-embedded-rpi-1.0.0-rpi.img",
         "arm64": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0/eos-embedded-rpi-1.0.0-arm64.tar.gz",
         "img": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-rpi-v1.0.0/eos-embedded-rpi-1.0.0-img.img"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-embedded-riscv",
@@ -3251,7 +3468,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-riscv-v1.0.0",
       "tags": [
         "os",
@@ -3262,7 +3479,9 @@
       "downloads": {
         "riscv": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-riscv-v1.0.0/eos-embedded-riscv-1.0.0-riscv.tar.gz",
         "firmware": "https://github.com/embeddedos-org/eApps/releases/download/eos-embedded-riscv-v1.0.0/eos-embedded-riscv-1.0.0-firmware.bin"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eosim-virtualbox",
@@ -3276,7 +3495,7 @@
       "icon": "assets/icons/eosim.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-virtualbox-v1.0.0",
       "tags": [
         "simulator",
@@ -3287,7 +3506,9 @@
       "downloads": {
         "virtualbox": "https://github.com/embeddedos-org/eApps/releases/download/eosim-virtualbox-v1.0.0/eosim-virtualbox-1.0.0-virtualbox.ova",
         "ova": "https://github.com/embeddedos-org/eApps/releases/download/eosim-virtualbox-v1.0.0/eosim-virtualbox-1.0.0-ova.ova"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eosim-vmware",
@@ -3301,7 +3522,7 @@
       "icon": "assets/icons/eosim.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-vmware-v1.0.0",
       "tags": [
         "simulator",
@@ -3312,12 +3533,14 @@
       "downloads": {
         "vmware": "https://github.com/embeddedos-org/eApps/releases/download/eosim-vmware-v1.0.0/eosim-vmware-1.0.0-vmware.vmdk",
         "vmdk": "https://github.com/embeddedos-org/eApps/releases/download/eosim-vmware-v1.0.0/eosim-vmware-1.0.0-vmdk.vmdk"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eosim-qemu",
       "name": "EoSim QEMU (qcow2)",
-      "description": "EoSim disk image for QEMU — run with qemu-system-x86_64.",
+      "description": "EoSim disk image for QEMU \u2014 run with qemu-system-x86_64.",
       "category": "os-images",
       "platform": [
         "qemu",
@@ -3326,7 +3549,7 @@
       "icon": "assets/icons/eosim.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-qemu-v1.0.0",
       "tags": [
         "simulator",
@@ -3337,12 +3560,14 @@
       "downloads": {
         "qemu": "https://github.com/embeddedos-org/eApps/releases/download/eosim-qemu-v1.0.0/eosim-qemu-1.0.0-qemu.qcow2",
         "qcow2": "https://github.com/embeddedos-org/eApps/releases/download/eosim-qemu-v1.0.0/eosim-qemu-1.0.0-qcow2.qcow2"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eosim-docker",
       "name": "EoSim Docker",
-      "description": "EoSim as a Docker container — docker pull embeddedos/eosim.",
+      "description": "EoSim as a Docker container \u2014 docker pull embeddedos/eosim.",
       "category": "os-images",
       "platform": [
         "docker"
@@ -3350,19 +3575,21 @@
       "icon": "assets/icons/eosim.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-docker-v1.0.0",
       "tags": [
         "simulator",
         "docker",
         "container"
       ],
-      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-docker-v1.0.0/eosim-docker-1.0.0.tar.gz"
+      "downloadUrl": "https://github.com/embeddedos-org/eApps/releases/download/eosim-docker-v1.0.0/eosim-docker-1.0.0.tar.gz",
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     },
     {
       "id": "eos-liveusb",
       "name": "EoS Live USB",
-      "description": "Bootable EoS Live USB image — try EoS without installing.",
+      "description": "Bootable EoS Live USB image \u2014 try EoS without installing.",
       "category": "os-images",
       "platform": [
         "x86_64",
@@ -3372,7 +3599,7 @@
       "icon": "assets/icons/eos.svg",
       "repo": "https://github.com/embeddedos-org/eApps",
       "source": "",
-      "version": "1.0.0",
+      "version": "1.7.0",
       "releaseUrl": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0",
       "tags": [
         "os",
@@ -3384,7 +3611,9 @@
         "x86_64": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0/eos-liveusb-1.0.0-x86_64.tar.gz",
         "arm64": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0/eos-liveusb-1.0.0-arm64.tar.gz",
         "iso": "https://github.com/embeddedos-org/eApps/releases/download/eos-liveusb-v1.0.0/eos-liveusb-1.0.0-iso.iso"
-      }
+      },
+      "test_status": "passing",
+      "test_label": "13 QEMU tests"
     }
   ]
 }
