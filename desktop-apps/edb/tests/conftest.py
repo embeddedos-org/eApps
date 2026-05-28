@@ -47,7 +47,8 @@ def app_client():
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         db_path = f.name
 
-    config = EDBConfig(db_path=db_path, create_admin=True, jwt_secret="test-secret")
+    import os; os.environ["EDB_ADMIN_PASSWORD"] = "admin1234"
+    config = EDBConfig(db_path=db_path, create_admin=True, jwt_secret="test-secret-key-for-edb-integration-tests")
     app = create_app(config)
 
     state = AppState(config)

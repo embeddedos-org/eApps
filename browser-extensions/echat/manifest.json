@@ -1,13 +1,29 @@
 {
   "manifest_version": 3,
-  "name": "Browser Messaging — EoS",
-  "version": "1.0.0",
-  "description": "Browser Messaging - EoS Browser Extension",
-  "permissions": ["storage", "activeTab"],
+  "name": "eChat Messenger",
+  "version": "1.7.0",
+  "description": "Instant messaging and chat client",
+  "permissions": [
+    "storage",
+    "notifications"
+  ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+    "default_title": "eChat Messenger",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
-  "background": { "service_worker": "background.js" },
-  "icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "minimum_chrome_version": "102"
 }

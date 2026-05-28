@@ -1,13 +1,27 @@
 {
-  "name": "Image Gallery — EoS",
-  "short_name": "egallery",
-  "description": "Image Gallery - EoS Progressive Web App",
-  "start_url": ".",
+  "name": "eGallery",
+  "short_name": "eGallery",
+  "description": "eGallery \u2014 EoS Progressive Web App",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1976D2",
+  "orientation": "any",
+  "background_color": "#fdf2f8",
+  "theme_color": "#ec4899",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "lang": "en"
 }

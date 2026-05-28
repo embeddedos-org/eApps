@@ -1,11 +1,7 @@
 // SPDX-License-Identifier: MIT
-#ifndef EAPPS_APP_SUITE_H
-#define EAPPS_APP_SUITE_H
-
-#include "eapps/types.h"
-
-bool suite_init(lv_obj_t *parent);
-void suite_deinit(void);
-void suite_register_all_apps(void);
-
-#endif /* EAPPS_APP_SUITE_H */
+// eSuite — EoS LVGL Application
+#pragma once
+#include "lvgl/lvgl.h"
+#include "eapps_core.h"
+extern const eapps_app_info_t suite_info;
+extern const eapps_app_lifecycle_t suite_lifecycle;

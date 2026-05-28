@@ -1,41 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tetris — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7c3aed">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f5f3ff;display:flex;flex-direction:column;align-items:center;font-family:-apple-system,sans-serif;min-height:100vh}
+header{background:#7c3aed;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.score-area{display:flex;gap:16px;font-size:13px}
+.score-area span{background:rgba(255,255,255,.2);padding:3px 12px;border-radius:20px}
+.game-wrap{padding:16px;display:flex;gap:16px;align-items:flex-start}
+canvas{border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,.15);background:#0f172a}
+.side{display:flex;flex-direction:column;gap:12px}
+.next-box{background:white;border-radius:10px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.next-box h3{font-size:11px;color:#64748b;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.ctrl-btn{border:none;border-radius:8px;background:#7c3aed;color:white;font-size:18px;cursor:pointer;padding:10px;transition:transform .1s}
+.ctrl-btn:active{transform:scale(.9)}
+.ctrl-btn.wide{grid-column:span 3;padding:8px}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Tetris</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Tetris</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>🟦 Tetris</h1><div class="score-area"><span>Score: <b id="score">0</b></span><span>Lines: <b id="lines">0</b></span><span>Level: <b id="level">1</b></span></div></header>
+<div class="game-wrap">
+  <canvas id="c" width="200" height="400"></canvas>
+  <div class="side">
+    <div class="next-box"><h3>Next</h3><canvas id="next" width="80" height="80"></canvas></div>
+    <div class="ctrl-grid">
+      <button class="ctrl-btn" onclick="move(-1,0)">◀</button>
+      <button class="ctrl-btn" onclick="move(0,1)">▼</button>
+      <button class="ctrl-btn" onclick="move(1,0)">▶</button>
+      <button class="ctrl-btn wide" onclick="rotate()">↻ Rotate</button>
+      <button class="ctrl-btn wide" onclick="hardDrop()">⬇ Drop</button>
+    </div>
+  </div>
+</div>
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d');
+const NC=document.getElementById('next'),nctx=NC.getContext('2d');
+const COLS=10,ROWS=20,SZ=20;
+const PIECES=[
+  {shape:[[1,1,1,1]],color:'#06b6d4'},
+  {shape:[[1,1],[1,1]],color:'#eab308'},
+  {shape:[[0,1,0],[1,1,1]],color:'#a855f7'},
+  {shape:[[1,0,0],[1,1,1]],color:'#f97316'},
+  {shape:[[0,0,1],[1,1,1]],color:'#3b82f6'},
+  {shape:[[0,1,1],[1,1,0]],color:'#22c55e'},
+  {shape:[[1,1,0],[0,1,1]],color:'#ef4444'},
+];
+let board,cur,next,score=0,lines=0,level=1,loop;
+function newBoard(){return Array.from({length:ROWS},()=>Array(COLS).fill(0));}
+function randPiece(){const p=PIECES[Math.floor(Math.random()*PIECES.length)];return{shape:p.shape.map(r=>[...r]),color:p.color,x:Math.floor(COLS/2)-Math.floor(p.shape[0].length/2),y:0};}
+function start(){board=newBoard();cur=randPiece();next=randPiece();score=0;lines=0;level=1;update();clearInterval(loop);loop=setInterval(tick,500);}
+function tick(){if(!move(0,1))place();}
+function move(dx,dy){
+  const nx=cur.x+dx,ny=cur.y+dy;
+  if(valid(cur.shape,nx,ny)){cur.x=nx;cur.y=ny;draw();return true;}
+  return false;
+}
+function rotate(){
+  const r=cur.shape[0].map((_,i)=>cur.shape.map(row=>row[i]).reverse());
+  if(valid(r,cur.x,cur.y)){cur.shape=r;draw();}
+}
+function hardDrop(){while(move(0,1));place();}
+function valid(shape,x,y){
+  return shape.every((row,dy)=>row.every((v,dx)=>!v||
+    (x+dx>=0&&x+dx<COLS&&y+dy<ROWS&&(y+dy<0||!board[y+dy][x+dx]))));
+}
+function place(){
+  cur.shape.forEach((row,dy)=>row.forEach((v,dx)=>{if(v&&cur.y+dy>=0)board[cur.y+dy][cur.x+dx]=cur.color;}));
+  let cleared=0;
+  for(let r=ROWS-1;r>=0;r--){if(board[r].every(c=>c)){board.splice(r,1);board.unshift(Array(COLS).fill(0));cleared++;r++;}}
+  if(cleared){lines+=cleared;score+=cleared*100*level;level=Math.floor(lines/10)+1;clearInterval(loop);loop=setInterval(tick,Math.max(100,500-level*40));}
+  document.getElementById('score').textContent=score;
+  document.getElementById('lines').textContent=lines;
+  document.getElementById('level').textContent=level;
+  cur=next;next=randPiece();
+  if(!valid(cur.shape,cur.x,cur.y)){clearInterval(loop);alert('Game Over! Score: '+score);start();}
+  draw();
+}
+function draw(){
+  ctx.fillStyle='#0f172a';ctx.fillRect(0,0,C.width,C.height);
+  board.forEach((row,y)=>row.forEach((c,x)=>{if(c){ctx.fillStyle=c;ctx.fillRect(x*SZ+1,y*SZ+1,SZ-2,SZ-2);}}));
+  cur.shape.forEach((row,dy)=>row.forEach((v,dx)=>{
+    if(v){ctx.fillStyle=cur.color;ctx.fillRect((cur.x+dx)*SZ+1,(cur.y+dy)*SZ+1,SZ-2,SZ-2);}
+  }));
+  // Ghost
+  let gy=cur.y;while(valid(cur.shape,cur.x,gy+1))gy++;
+  cur.shape.forEach((row,dy)=>row.forEach((v,dx)=>{
+    if(v&&gy+dy!==cur.y+dy){ctx.fillStyle='rgba(255,255,255,.1)';ctx.fillRect((cur.x+dx)*SZ+1,(gy+dy)*SZ+1,SZ-2,SZ-2);}
+  }));
+  // Next
+  nctx.fillStyle='#f8fafc';nctx.fillRect(0,0,80,80);
+  const ox=Math.floor((4-next.shape[0].length)/2)*SZ+10,oy=Math.floor((4-next.shape.length)/2)*SZ+10;
+  next.shape.forEach((row,dy)=>row.forEach((v,dx)=>{if(v){nctx.fillStyle=next.color;nctx.fillRect(ox+dx*SZ,oy+dy*SZ,SZ-2,SZ-2);}}));
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')move(-1,0);if(e.key==='ArrowRight')move(1,0);
+  if(e.key==='ArrowDown')move(0,1);if(e.key==='ArrowUp')rotate();
+  if(e.key===' '){e.preventDefault();hardDrop();}
+});
+start();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

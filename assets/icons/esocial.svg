@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#e8f0fe"/>
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5" stroke-opacity="0.3"/>
+  <text x="32" y="42" font-size="28" text-anchor="middle" font-family="system-ui,sans-serif">⚡</text>
+  <text x="32" y="58" font-size="7" text-anchor="middle" font-family="system-ui,sans-serif" fill="#1a73e8" font-weight="600">ESOCIAL</text>
+</svg>

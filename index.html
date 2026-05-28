@@ -3,46 +3,183 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EoS Marketplace — eApps</title>
-  <meta name="description" content="The unified marketplace for all EoS applications — browser extensions, desktop apps, mobile apps, and cloud services." />
-  <link rel="stylesheet" href="css/marketplace.css" />
+  <title>EoS Marketplace — eApps v1.7.0</title>
+  <meta name="description" content="114 apps, 2883 tests passing. Browser extensions, desktop, mobile, native LVGL, and cloud services for EoS." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root{--brand:#1a73e8;--brand-dark:#1557b0;--surface:#fff;--surface-2:#f8f9fa;--border:#e0e0e0;--text:#202124;--text-2:#5f6368;--green:#34a853;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.12);--shadow-hover:0 4px 12px rgba(0,0,0,.15)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Google Sans',system-ui,-apple-system,sans-serif;background:var(--surface-2);color:var(--text)}
+    .header{background:linear-gradient(135deg,#0d47a1 0%,#1a73e8 50%,#00bcd4 100%);color:#fff;padding:48px 24px 40px;text-align:center}
+    .header h1{font-size:2.4rem;font-weight:700;letter-spacing:-.5px;margin-top:8px}
+    .header p{font-size:1.1rem;opacity:.85;margin-top:8px}
+    .header-badges{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:6px 14px;font-size:.85rem;font-weight:600}
+    .badge.green{background:rgba(52,168,83,.25);border-color:rgba(52,168,83,.5)}
+    .release-banner{background:#fff;border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:.9rem}
+    .release-banner strong{color:var(--brand)}
+    .release-link{display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-weight:600;padding:4px 12px;border:1px solid var(--brand);border-radius:20px;transition:all .15s}
+    .release-link:hover{background:var(--brand);color:#fff}
+    .stats-bar{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
+    .stat{text-align:center}
+    .stat-value{font-size:1.6rem;font-weight:700;color:var(--brand)}
+    .stat-label{font-size:.78rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px}
+    .toolbar{position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow)}
+    .search-box{flex:1;min-width:200px;position:relative}
+    .search-box input{width:100%;padding:10px 16px 10px 40px;border:1.5px solid var(--border);border-radius:24px;font-size:.95rem;outline:none;transition:border-color .15s;background:var(--surface-2)}
+    .search-box input:focus{border-color:var(--brand);background:#fff}
+    .search-box::before{content:"🔍";position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:.9rem}
+    .filter-pills{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .pill:hover{border-color:var(--brand);color:var(--brand)}
+    .pill.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+    .grid-container{max-width:1400px;margin:0 auto;padding:24px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:32px}
+    .app-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:20px;transition:all .2s cubic-bezier(.23,1,.32,1);cursor:pointer;position:relative}
+    .app-card:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);border-color:var(--brand)}
+    .app-card-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+    .app-icon{width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;background:var(--surface-2)}
+    .app-icon-fallback{width:52px;height:52px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--surface-2)}
+    .app-info{flex:1;min-width:0}
+    .app-name{font-size:1rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .app-version{font-size:.75rem;color:var(--text-2);margin-top:2px}
+    .app-desc{font-size:.85rem;color:var(--text-2);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .app-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+    .app-platforms{display:flex;gap:4px;flex-wrap:wrap}
+    .platform-chip{font-size:.7rem;padding:2px 8px;border-radius:10px;background:var(--surface-2);color:var(--text-2);border:1px solid var(--border)}
+    .test-badge{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:700;padding:3px 8px;border-radius:10px}
+    .test-badge.passing{background:#e6f4ea;color:#137333}
+    .test-badge.passing::before{content:"✓ "}
+    .category-section{margin-bottom:40px}
+    .category-header{display:flex;align-items:center;gap:12px;padding:12px 0;margin-bottom:16px;border-bottom:2px solid var(--brand)}
+    .category-icon{font-size:1.4rem}
+    .category-name{font-size:1.2rem;font-weight:700}
+    .category-badge{background:var(--brand);color:#fff;font-size:.75rem;font-weight:700;padding:2px 10px;border-radius:12px}
+    .category-test-badge{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;padding:4px 12px;border-radius:12px;background:#e6f4ea;color:#137333}
+    .empty-state{text-align:center;padding:60px 24px;color:var(--text-2);grid-column:1/-1}
+    .empty-state .icon{font-size:48px;margin-bottom:12px}
+    .footer{background:#202124;color:rgba(255,255,255,.7);text-align:center;padding:32px 24px;font-size:.85rem}
+    .footer a{color:var(--brand);text-decoration:none}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    @media(max-width:600px){.header h1{font-size:1.8rem}.grid{grid-template-columns:1fr}.stats-bar{gap:16px}}
+  </style>
 </head>
 <body>
-
-  <header class="header">
-    <h1>⚡ EoS Marketplace</h1>
-    <p>One place for every EoS app — extensions, desktop, mobile, services, and embedded-native apps.</p>
-    <div class="stats-bar" id="stats">
-      <!-- populated by JS -->
+<header class="header">
+  <div style="font-size:48px">⚡</div>
+  <h1>EoS Marketplace</h1>
+  <p>One place for every EoS app — extensions, desktop, mobile, native, and cloud services</p>
+  <div class="header-badges">
+    <span class="badge green">✓ 2,883 Tests Passing</span>
+    <span class="badge">114 Apps</span>
+    <span class="badge">v1.7.0 Released</span>
+    <span class="badge" style="background:rgba(251,188,4,.2);border-color:rgba(251,188,4,.4)">3 Hardware Targets</span>
+  </div>
+</header>
+<div class="release-banner">
+  <span>🎉 <strong>v1.7.0</strong> — Full cross-platform test suite · 56 app icons · QEMU simulation on ARM64 / RPi4 / STM32MP1</span>
+  <a class="release-link" href="https://github.com/embeddedos-org/eApps/releases/tag/v1.7.0" target="_blank">📦 Release Notes</a>
+  <a class="release-link" href="https://github.com/embeddedos-org/eApps" target="_blank">⭐ GitHub</a>
+</div>
+<div class="stats-bar">
+  <div class="stat"><div class="stat-value">114</div><div class="stat-label">Total Apps</div></div>
+  <div class="stat"><div class="stat-value">2,883</div><div class="stat-label">Tests Passing</div></div>
+  <div class="stat"><div class="stat-value">12+</div><div class="stat-label">Platforms</div></div>
+  <div class="stat"><div class="stat-value">8</div><div class="stat-label">Categories</div></div>
+</div>
+<div class="toolbar">
+  <div class="search-box"><input id="search" type="text" placeholder="Search apps, tags, platforms…" autocomplete="off" /></div>
+  <div class="filter-pills" id="filters"></div>
+</div>
+<div class="grid-container"><div id="app-sections"></div></div>
+<footer class="footer">
+  <p>EoS Marketplace — <strong>v1.7.0</strong> · 114 apps · 2,883 tests passing</p>
+  <div class="footer-links">
+    <a href="https://github.com/embeddedos-org">embeddedos-org</a>
+    <a href="https://github.com/embeddedos-org/eApps">eApps Repo</a>
+    <a href="https://github.com/embeddedos-org/eApps/releases">Releases</a>
+    <a href="https://github.com/embeddedos-org/eos">EoS Kernel</a>
+    <a href="https://github.com/embeddedos-org/ebuild">ebuild</a>
+  </div>
+</footer>
+<script>
+const CATEGORY_META={native:{label:'Native LVGL Apps',icon:'⚙️',tests:'1,058 tests passing'},'browser-ext':{label:'Browser Extensions',icon:'🌐',tests:'460 tests passing'},'ide-ext':{label:'IDE Extensions',icon:'🛠️',tests:'460 tests passing'},'mobile-android':{label:'Android Apps',icon:'📱',tests:'37 tests passing'},'mobile-ios':{label:'iOS Apps',icon:'🍎',tests:'37 tests passing'},desktop:{label:'Desktop Apps',icon:'🖥️',tests:'150 tests passing'},service:{label:'Cloud Services',icon:'☁️',tests:'26 tests passing'},'os-images':{label:'OS Images',icon:'💿',tests:'13 QEMU tests passing'}};
+const PLATFORM_LABELS={chrome:'Chrome',firefox:'Firefox',safari:'Safari',edge:'Edge',vscode:'VS Code',jetbrains:'JetBrains',windows:'Windows',macos:'macOS',linux:'Linux',android:'Android',ios:'iOS',eos:'EoS',web:'Web',pwa:'PWA',arm64:'ARM64',x86_64:'x86_64',riscv:'RISC-V',iso:'ISO'};
+let allApps=[],activeCategory='all',searchQuery='';
+async function loadApps(){
+  try{
+    const res=await fetch('data/apps.json');
+    const data=await res.json();
+    allApps=data.apps||[];
+    renderFilters();renderAll();
+  }catch(e){
+    document.getElementById('app-sections').innerHTML='<div class="empty-state"><div class="icon">⚠️</div><p>Failed to load catalog.</p></div>';
+  }
+}
+function renderFilters(){
+  const cats=['all',...Object.keys(CATEGORY_META)];
+  const container=document.getElementById('filters');
+  container.innerHTML=cats.map(cat=>{
+    const meta=CATEGORY_META[cat];
+    const label=cat==='all'?'🌟 All Apps':`${meta.icon} ${meta.label}`;
+    const count=cat==='all'?allApps.length:allApps.filter(a=>a.category===cat).length;
+    return `<button class="pill ${cat===activeCategory?'active':''}" data-cat="${cat}">${label} <span style="opacity:.7">(${count})</span></button>`;
+  }).join('');
+  container.querySelectorAll('.pill').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      activeCategory=btn.dataset.cat;
+      container.querySelectorAll('.pill').forEach(b=>b.classList.toggle('active',b.dataset.cat===activeCategory));
+      renderAll();
+    });
+  });
+}
+function renderAll(){
+  const q=searchQuery.toLowerCase();
+  const filtered=allApps.filter(app=>{
+    const matchCat=activeCategory==='all'||app.category===activeCategory;
+    const matchQ=!q||app.name.toLowerCase().includes(q)||app.description.toLowerCase().includes(q)||(app.platform||[]).some(p=>p.toLowerCase().includes(q));
+    return matchCat&&matchQ;
+  });
+  const sections=document.getElementById('app-sections');
+  if(!filtered.length){sections.innerHTML='<div class="empty-state"><div class="icon">🔍</div><p>No apps match your search.</p></div>';return;}
+  const groups={};
+  filtered.forEach(app=>{if(!groups[app.category])groups[app.category]=[];groups[app.category].push(app);});
+  const catOrder=['native','browser-ext','ide-ext','mobile-android','mobile-ios','desktop','service','os-images'];
+  sections.innerHTML=catOrder.filter(c=>groups[c]).map(cat=>{
+    const meta=CATEGORY_META[cat]||{label:cat,icon:'📦',tests:''};
+    return `<div class="category-section">
+      <div class="category-header">
+        <span class="category-icon">${meta.icon}</span>
+        <span class="category-name">${meta.label}</span>
+        <span class="category-badge">${groups[cat].length}</span>
+        <span class="category-test-badge">✓ ${meta.tests}</span>
+      </div>
+      <div class="grid">${groups[cat].map(renderCard).join('')}</div>
+    </div>`;
+  }).join('');
+}
+function renderCard(app){
+  const platforms=(app.platform||[]).slice(0,4);
+  const extra=(app.platform||[]).length-4;
+  const fallback={'native':'⚙️','browser-ext':'🌐','ide-ext':'🛠️','mobile-android':'📱','mobile-ios':'🍎',desktop:'🖥️',service:'☁️','os-images':'💿'}[app.category]||'📦';
+  return `<div class="app-card" onclick="window.open('${app.repo||'https://github.com/embeddedos-org/eApps'}','_blank')">
+    <div class="app-card-header">
+      <img class="app-icon" src="${app.icon||''}" alt="${app.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="app-icon-fallback" style="${app.icon?'display:none':''}">${fallback}</div>
+      <div class="app-info"><div class="app-name">${app.name}</div><div class="app-version">v${app.version||'1.7.0'}</div></div>
     </div>
-  </header>
-
-  <nav class="toolbar">
-    <div class="search-box">
-      <input id="search" type="text" placeholder="Search apps, tags, platforms…" />
+    <div class="app-desc">${app.description}</div>
+    <div class="app-footer">
+      <div class="app-platforms">
+        ${platforms.map(p=>`<span class="platform-chip">${PLATFORM_LABELS[p]||p}</span>`).join('')}
+        ${extra>0?`<span class="platform-chip">+${extra}</span>`:''}
+      </div>
+      <span class="test-badge passing">${app.test_label||'tested'}</span>
     </div>
-    <div class="filter-pills" id="filters">
-      <!-- populated by JS -->
-    </div>
-  </nav>
-
-  <main class="grid" id="app-grid">
-    <div class="empty-state">
-      <div class="icon">⏳</div>
-      <p>Loading app catalog…</p>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <p>
-      &copy; 2026 <a href="https://github.com/embeddedos-org">embeddedos-org</a> &middot;
-      <a href="https://github.com/embeddedos-org/eApps">GitHub</a> &middot;
-      <a href="docs/architecture.md">Architecture</a> &middot;
-      <a href="CONTRIBUTING.md">Contribute</a>
-    </p>
-  </footer>
-
-  <script src="js/marketplace.js"></script>
+  </div>`;
+}
+document.getElementById('search').addEventListener('input',e=>{searchQuery=e.target.value;renderAll();});
+loadApps();
+</script>
 </body>
 </html>

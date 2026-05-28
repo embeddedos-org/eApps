@@ -1,41 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match-3 Puzzle — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eCrush — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ec4899">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fdf2f8;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{background:#ec4899;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.score-badge{background:rgba(255,255,255,.2);padding:3px 14px;border-radius:20px;font-size:14px;font-weight:600}
+.game-wrap{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+canvas{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);cursor:pointer}
+.hint{font-size:12px;color:#64748b}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Match-3 Puzzle</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Match-3 Puzzle</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>💎 eCrush</h1><span class="score-badge">Score: <span id="score">0</span></span></header>
+<div class="game-wrap">
+  <canvas id="c" width="280" height="280"></canvas>
+  <p class="hint">Click two adjacent gems to swap • Match 3+ to score</p>
+</div>
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d');
+const COLS=7,ROWS=7,SZ=38,PAD=3;
+const GEMS=['🔴','🟠','🟡','🟢','🔵','🟣','⚪'];
+let board,score,sel,animating;
+function rand(){return Math.floor(Math.random()*GEMS.length);}
+function newBoard(){
+  do{board=Array.from({length:ROWS},()=>Array.from({length:COLS},rand));}
+  while(findMatches().length>0);
+}
+function findMatches(){
+  const m=new Set();
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS-2;c++)if(board[r][c]===board[r][c+1]&&board[r][c]===board[r][c+2]){m.add(`${r},${c}`);m.add(`${r},${c+1}`);m.add(`${r},${c+2}`);}
+  for(let c=0;c<COLS;c++)for(let r=0;r<ROWS-2;r++)if(board[r][c]===board[r+1][c]&&board[r][c]===board[r+2][c]){m.add(`${r},${c}`);m.add(`${r+1},${c}`);m.add(`${r+2},${c}`);}
+  return[...m].map(s=>{const[r,c]=s.split(',').map(Number);return{r,c};});
+}
+function clearMatches(){
+  const matches=findMatches();if(!matches.length)return false;
+  score+=matches.length*10;document.getElementById('score').textContent=score;
+  matches.forEach(({r,c})=>board[r][c]=-1);
+  for(let c=0;c<COLS;c++){let empty=ROWS-1;for(let r=ROWS-1;r>=0;r--)if(board[r][c]!==-1){board[empty][c]=board[r][c];if(empty!==r)board[r][c]=-1;empty--;}for(let r=empty;r>=0;r--)board[r][c]=rand();}
+  return true;
+}
+function swap(r1,c1,r2,c2){const t=board[r1][c1];board[r1][c1]=board[r2][c2];board[r2][c2]=t;}
+function click(r,c){
+  if(animating)return;
+  if(!sel){sel={r,c};draw();return;}
+  const dr=Math.abs(r-sel.r),dc=Math.abs(c-sel.c);
+  if((dr===1&&dc===0)||(dr===0&&dc===1)){
+    swap(r,c,sel.r,sel.c);
+    if(!clearMatches()){swap(r,c,sel.r,sel.c);}
+    else{while(clearMatches());} // cascade
+  }
+  sel=null;draw();
+}
+function draw(){
+  ctx.clearRect(0,0,C.width,C.height);
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    const x=c*SZ+PAD,y=r*SZ+PAD;
+    ctx.fillStyle=(sel&&sel.r===r&&sel.c===c)?'#fce7f3':'#fff0f6';
+    ctx.beginPath();ctx.roundRect(x,y,SZ-PAD*2,SZ-PAD*2,6);ctx.fill();
+    if(board[r][c]>=0){ctx.font=`${SZ*0.55}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(GEMS[board[r][c]],x+(SZ-PAD*2)/2,y+(SZ-PAD*2)/2);}
+  }
+}
+C.addEventListener('click',e=>{const r=C.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;click(Math.floor(y/SZ),Math.floor(x/SZ));});
+score=0;newBoard();draw();
+C.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];C.dispatchEvent(new MouseEvent('click',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

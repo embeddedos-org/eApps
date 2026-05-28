@@ -34,6 +34,7 @@ class EDBConfig(BaseSettings):
     log_level: str = Field(default="INFO", description="Logging level")
     audit_enabled: bool = Field(default=True, description="Enable audit logging")
     create_admin: bool = Field(default=True, description="Auto-create default admin user")
+    admin_password: str = Field(default="", description="Default admin password (overrides EDB_ADMIN_PASSWORD env var)")
 
     rate_limit_enabled: bool = Field(default=True, description="Enable API rate limiting")
     rate_limit_requests: int = Field(default=100, description="Max requests per window")

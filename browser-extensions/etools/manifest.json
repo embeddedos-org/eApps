@@ -1,13 +1,30 @@
 {
   "manifest_version": 3,
-  "name": "Dev Toolkit — EoS",
-  "version": "1.0.0",
-  "description": "Dev Toolkit - EoS Browser Extension",
-  "permissions": ["storage", "activeTab"],
+  "name": "eTools Dev Kit",
+  "version": "1.7.0",
+  "description": "Developer tools: JSON formatter, color picker, regex tester",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "action": {
     "default_popup": "popup/popup.html",
-    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+    "default_title": "eTools Dev Kit",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
-  "background": { "service_worker": "background.js" },
-  "icons": { "16": "icons/icon16.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "minimum_chrome_version": "102"
 }

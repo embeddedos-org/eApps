@@ -139,6 +139,8 @@ class UserManager:
         )
         if row is None:
             password = os.environ.get("EDB_ADMIN_PASSWORD", "")
+            if not password and hasattr(self, "_config") and getattr(self._config, "admin_password", ""):
+                password = self._config.admin_password
             if not password:
                 password = secrets.token_urlsafe(16)
                 logger.warning(
