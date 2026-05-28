@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EoS Marketplace — eApps v1.7.0</title>
-  <meta name="description" content="114 apps, 2883 tests passing. Browser extensions, desktop, mobile, native LVGL, and cloud services for EoS." />
+  <title>EoS Marketplace — eApps v1.8.0</title>
+  <meta name="description" content="120 apps, 3128 tests passing. Health suite, browser extensions, desktop, mobile, native LVGL, and cloud services for EoS." />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <style>
     :root{--brand:#1a73e8;--brand-dark:#1557b0;--surface:#fff;--surface-2:#f8f9fa;--border:#e0e0e0;--text:#202124;--text-2:#5f6368;--green:#34a853;--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.12);--shadow-hover:0 4px 12px rgba(0,0,0,.15)}
@@ -70,22 +70,22 @@
   <h1>EoS Marketplace</h1>
   <p>One place for every EoS app — extensions, desktop, mobile, native, and cloud services</p>
   <div class="header-badges">
-    <span class="badge green">✓ 2,883 Tests Passing</span>
-    <span class="badge">114 Apps</span>
-    <span class="badge">v1.7.0 Released</span>
+    <span class="badge green">✓ 3,128 Tests Passing</span>
+    <span class="badge">120 Apps</span>
+    <span class="badge">v1.8.0 Released</span>
     <span class="badge" style="background:rgba(251,188,4,.2);border-color:rgba(251,188,4,.4)">3 Hardware Targets</span>
   </div>
 </header>
 <div class="release-banner">
-  <span>🎉 <strong>v1.7.0</strong> — Full cross-platform test suite · 56 app icons · QEMU simulation on ARM64 / RPi4 / STM32MP1</span>
-  <a class="release-link" href="https://github.com/embeddedos-org/eApps/releases/tag/v1.7.0" target="_blank">📦 Release Notes</a>
+  <span>🎉 <strong>v1.8.0</strong> — Full cross-platform test suite · 56 app icons · QEMU simulation on ARM64 / RPi4 / STM32MP1</span>
+  <a class="release-link" href="https://github.com/embeddedos-org/eApps/releases/tag/v1.8.0" target="_blank">📦 Release Notes</a>
   <a class="release-link" href="https://github.com/embeddedos-org/eApps" target="_blank">⭐ GitHub</a>
 </div>
 <div class="stats-bar">
-  <div class="stat"><div class="stat-value">114</div><div class="stat-label">Total Apps</div></div>
-  <div class="stat"><div class="stat-value">2,883</div><div class="stat-label">Tests Passing</div></div>
+  <div class="stat"><div class="stat-value">120</div><div class="stat-label">Total Apps</div></div>
+  <div class="stat"><div class="stat-value">3,128</div><div class="stat-label">Tests Passing</div></div>
   <div class="stat"><div class="stat-value">12+</div><div class="stat-label">Platforms</div></div>
-  <div class="stat"><div class="stat-value">8</div><div class="stat-label">Categories</div></div>
+  <div class="stat"><div class="stat-value">9</div><div class="stat-label">Categories</div></div>
 </div>
 <div class="toolbar">
   <div class="search-box"><input id="search" type="text" placeholder="Search apps, tags, platforms…" autocomplete="off" /></div>
@@ -93,7 +93,7 @@
 </div>
 <div class="grid-container"><div id="app-sections"></div></div>
 <footer class="footer">
-  <p>EoS Marketplace — <strong>v1.7.0</strong> · 114 apps · 2,883 tests passing</p>
+  <p>EoS Marketplace — <strong>v1.8.0</strong> · 120 apps · 3,128 tests passing</p>
   <div class="footer-links">
     <a href="https://github.com/embeddedos-org">embeddedos-org</a>
     <a href="https://github.com/embeddedos-org/eApps">eApps Repo</a>
@@ -103,7 +103,7 @@
   </div>
 </footer>
 <script>
-const CATEGORY_META={native:{label:'Native LVGL Apps',icon:'⚙️',tests:'1,058 tests passing'},'browser-ext':{label:'Browser Extensions',icon:'🌐',tests:'460 tests passing'},'ide-ext':{label:'IDE Extensions',icon:'🛠️',tests:'460 tests passing'},'mobile-android':{label:'Android Apps',icon:'📱',tests:'37 tests passing'},'mobile-ios':{label:'iOS Apps',icon:'🍎',tests:'37 tests passing'},desktop:{label:'Desktop Apps',icon:'🖥️',tests:'150 tests passing'},service:{label:'Cloud Services',icon:'☁️',tests:'26 tests passing'},'os-images':{label:'OS Images',icon:'💿',tests:'13 QEMU tests passing'}};
+const CATEGORY_META={health:{label:'Health Suite',icon:'❤️',tests:'141 tests passing'},native:{label:'Native LVGL Apps',icon:'⚙️',tests:'1,058 tests passing'},'browser-ext':{label:'Browser Extensions',icon:'🌐',tests:'460 tests passing'},'ide-ext':{label:'IDE Extensions',icon:'🛠️',tests:'460 tests passing'},'mobile-android':{label:'Android Apps',icon:'📱',tests:'37 tests passing'},'mobile-ios':{label:'iOS Apps',icon:'🍎',tests:'37 tests passing'},desktop:{label:'Desktop Apps',icon:'🖥️',tests:'150 tests passing'},service:{label:'Cloud Services',icon:'☁️',tests:'26 tests passing'},'os-images':{label:'OS Images',icon:'💿',tests:'13 QEMU tests passing'}};
 const PLATFORM_LABELS={chrome:'Chrome',firefox:'Firefox',safari:'Safari',edge:'Edge',vscode:'VS Code',jetbrains:'JetBrains',windows:'Windows',macos:'macOS',linux:'Linux',android:'Android',ios:'iOS',eos:'EoS',web:'Web',pwa:'PWA',arm64:'ARM64',x86_64:'x86_64',riscv:'RISC-V',iso:'ISO'};
 let allApps=[],activeCategory='all',searchQuery='';
 async function loadApps(){
@@ -144,7 +144,7 @@ function renderAll(){
   if(!filtered.length){sections.innerHTML='<div class="empty-state"><div class="icon">🔍</div><p>No apps match your search.</p></div>';return;}
   const groups={};
   filtered.forEach(app=>{if(!groups[app.category])groups[app.category]=[];groups[app.category].push(app);});
-  const catOrder=['native','browser-ext','ide-ext','mobile-android','mobile-ios','desktop','service','os-images'];
+  const catOrder=['health','native','browser-ext','ide-ext','mobile-android','mobile-ios','desktop','service','os-images'];
   sections.innerHTML=catOrder.filter(c=>groups[c]).map(cat=>{
     const meta=CATEGORY_META[cat]||{label:cat,icon:'📦',tests:''};
     return `<div class="category-section">
@@ -161,7 +161,7 @@ function renderAll(){
 function renderCard(app){
   const platforms=(app.platform||[]).slice(0,4);
   const extra=(app.platform||[]).length-4;
-  const fallback={'native':'⚙️','browser-ext':'🌐','ide-ext':'🛠️','mobile-android':'📱','mobile-ios':'🍎',desktop:'🖥️',service:'☁️','os-images':'💿'}[app.category]||'📦';
+  const fallback={'health':'❤️','native':'⚙️','browser-ext':'🌐','ide-ext':'🛠️','mobile-android':'📱','mobile-ios':'🍎',desktop:'🖥️',service:'☁️','os-images':'💿'}[app.category]||'📦';
   return `<div class="app-card" onclick="window.open('${app.repo||'https://github.com/embeddedos-org/eApps'}','_blank')">
     <div class="app-card-header">
       <img class="app-icon" src="${app.icon||''}" alt="${app.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">

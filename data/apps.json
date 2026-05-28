@@ -1,10 +1,10 @@
 {
   "meta": {
-    "total_apps": 114,
+    "total_apps": 120,
     "total_tests": 2883,
     "test_status": "passing",
     "last_updated": "2025-05-28",
-    "version": "1.7.0"
+    "version": "1.8.0"
   },
   "categories": [
     {
@@ -54,6 +54,11 @@
       "name": "OS & VM Images",
       "icon": "\ud83d\udcbf",
       "description": "EoS ISO, VirtualBox OVA, VMware VMDK, QEMU qcow2"
+    },
+    {
+      "id": "health",
+      "name": "Health",
+      "icon": "\u2764\ufe0f"
     }
   ],
   "apps": [
@@ -3614,6 +3619,114 @@
       },
       "test_status": "passing",
       "test_label": "13 QEMU tests"
+    },
+    {
+      "id": "healthkey-extension",
+      "name": "HealthKey Extension",
+      "category": "health",
+      "type": "browser-extension",
+      "version": "1.8.0",
+      "description": "Biometric authentication with fingerprint, NFC, and TOTP 2FA. Secures your browser sessions with hardware-backed health identity.",
+      "icon": "icons/healthkey.svg",
+      "repo": "HealthKey-Ulta",
+      "platforms": [
+        "chrome",
+        "firefox",
+        "edge"
+      ],
+      "tests_passed": true,
+      "test_count": 13,
+      "release": "v1.8.0"
+    },
+    {
+      "id": "healthkey-webapp",
+      "name": "HealthKey Dashboard",
+      "category": "health",
+      "type": "web-app",
+      "version": "1.8.0",
+      "description": "PWA dashboard for HealthKey-Ulta device. Monitor biometric auth sessions, TOTP codes, NFC tag management, and health identity vault.",
+      "icon": "icons/healthkey-web.svg",
+      "repo": "HealthKey-Ulta",
+      "platforms": [
+        "web",
+        "pwa",
+        "mobile"
+      ],
+      "tests_passed": true,
+      "test_count": 9,
+      "release": "v1.8.0"
+    },
+    {
+      "id": "healthband-extension",
+      "name": "Health-Band Monitor",
+      "category": "health",
+      "type": "browser-extension",
+      "version": "1.8.0",
+      "description": "Real-time ECG, EEG, sEMG, SpO2 and GPS monitoring from your HEALTH-BAND-Neuro device. Live vitals overlay on any webpage.",
+      "icon": "icons/healthband.svg",
+      "repo": "HEALTH-BAND-Neuro",
+      "platforms": [
+        "chrome",
+        "firefox",
+        "edge"
+      ],
+      "tests_passed": true,
+      "test_count": 13,
+      "release": "v1.8.0"
+    },
+    {
+      "id": "healthband-webapp",
+      "name": "Health-Band Dashboard",
+      "category": "health",
+      "type": "web-app",
+      "version": "1.8.0",
+      "description": "Full biosignal monitoring PWA. Live ECG waveform, EEG band spectrum, SpO2, HRV, sEMG, GPS tracking, emergency SOS, and CSV export.",
+      "icon": "icons/healthband-web.svg",
+      "repo": "HEALTH-BAND-Neuro",
+      "platforms": [
+        "web",
+        "pwa",
+        "mobile"
+      ],
+      "tests_passed": true,
+      "test_count": 10,
+      "release": "v1.8.0"
+    },
+    {
+      "id": "healthband-desktop",
+      "name": "Health-Band Desktop",
+      "category": "health",
+      "type": "desktop-app",
+      "version": "1.8.0",
+      "description": "Python desktop application for HEALTH-BAND-Neuro. Full ECG/EEG signal processing, arrhythmia detection, GPS activity tracking, and wellness scoring.",
+      "icon": "icons/healthband-desktop.svg",
+      "repo": "HEALTH-BAND-Neuro",
+      "platforms": [
+        "linux",
+        "windows",
+        "macos"
+      ],
+      "tests_passed": true,
+      "test_count": 43,
+      "release": "v1.8.0"
+    },
+    {
+      "id": "healthkey-desktop",
+      "name": "HealthKey Desktop",
+      "category": "health",
+      "type": "desktop-app",
+      "version": "1.8.0",
+      "description": "Python desktop application for HealthKey-Ulta. Fingerprint enrollment, NFC tag management, TOTP generation, AES-256 health data encryption.",
+      "icon": "icons/healthkey-desktop.svg",
+      "repo": "HealthKey-Ulta",
+      "platforms": [
+        "linux",
+        "windows",
+        "macos"
+      ],
+      "tests_passed": true,
+      "test_count": 16,
+      "release": "v1.8.0"
     }
   ]
 }
