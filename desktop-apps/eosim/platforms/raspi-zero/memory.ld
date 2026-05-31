@@ -1,0 +1,1 @@
+/* raspi-zero linker script */

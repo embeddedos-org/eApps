@@ -1,10 +1,11 @@
 {
   "meta": {
-    "total_apps": 120,
+    "total_apps": 124,
     "total_tests": 2883,
     "test_status": "passing",
     "last_updated": "2025-05-28",
-    "version": "1.8.0"
+    "version": "1.8.0",
+    "lastUpdated": "2025-05-28"
   },
   "categories": [
     {
@@ -59,6 +60,21 @@
       "id": "health",
       "name": "Health",
       "icon": "\u2764\ufe0f"
+    },
+    {
+      "id": "extensions",
+      "name": "Extensions",
+      "icon": "puzzle"
+    },
+    {
+      "id": "mobile",
+      "name": "Mobile Apps",
+      "icon": "smartphone"
+    },
+    {
+      "id": "web",
+      "name": "Web Apps",
+      "icon": "globe"
     }
   ],
   "apps": [
@@ -66,7 +82,7 @@
       "id": "eoffice-chrome",
       "name": "eOffice for Chrome",
       "description": "Full eOffice productivity suite as a Chrome extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "chrome"
       ],
@@ -89,7 +105,7 @@
       "id": "eoffice-firefox",
       "name": "eOffice for Firefox",
       "description": "Full eOffice productivity suite as a Firefox extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "firefox"
       ],
@@ -112,7 +128,7 @@
       "id": "eoffice-safari",
       "name": "eOffice for Safari",
       "description": "Full eOffice productivity suite as a Safari extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "safari"
       ],
@@ -135,7 +151,7 @@
       "id": "eoffice-edge",
       "name": "eOffice for Edge",
       "description": "Full eOffice productivity suite as a Edge extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "edge"
       ],
@@ -158,7 +174,7 @@
       "id": "eoffice-opera",
       "name": "eOffice for Opera",
       "description": "Full eOffice productivity suite as a Opera extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "opera"
       ],
@@ -181,7 +197,7 @@
       "id": "eoffice-brave",
       "name": "eOffice for Brave",
       "description": "Full eOffice productivity suite as a Brave extension \u2014 eDocs, eSheets, eSlides, ePlanner, eNotes.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "brave"
       ],
@@ -204,7 +220,7 @@
       "id": "ebrowser-ext-chrome",
       "name": "eBrowser for Chrome",
       "description": "eBrowser privacy tools and ad-blocker for Chrome.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "chrome"
       ],
@@ -227,7 +243,7 @@
       "id": "ebrowser-ext-firefox",
       "name": "eBrowser for Firefox",
       "description": "eBrowser privacy tools and ad-blocker for Firefox.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "firefox"
       ],
@@ -250,7 +266,7 @@
       "id": "ebrowser-ext-safari",
       "name": "eBrowser for Safari",
       "description": "eBrowser privacy tools and ad-blocker for Safari.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "safari"
       ],
@@ -273,7 +289,7 @@
       "id": "ebrowser-ext-edge",
       "name": "eBrowser for Edge",
       "description": "eBrowser privacy tools and ad-blocker for Edge.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "edge"
       ],
@@ -296,7 +312,7 @@
       "id": "ebrowser-ext-opera",
       "name": "eBrowser for Opera",
       "description": "eBrowser privacy tools and ad-blocker for Opera.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "opera"
       ],
@@ -319,7 +335,7 @@
       "id": "ebrowser-ext-brave",
       "name": "eBrowser for Brave",
       "description": "eBrowser privacy tools and ad-blocker for Brave.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "brave"
       ],
@@ -342,7 +358,7 @@
       "id": "ebot-chrome",
       "name": "eBot AI for Chrome",
       "description": "AI assistant chatbot extension for Chrome \u2014 ask questions, summarize pages, translate.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "chrome"
       ],
@@ -365,7 +381,7 @@
       "id": "ebot-firefox",
       "name": "eBot AI for Firefox",
       "description": "AI assistant chatbot extension for Firefox \u2014 ask questions, summarize pages, translate.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "firefox"
       ],
@@ -388,7 +404,7 @@
       "id": "ebot-edge",
       "name": "eBot AI for Edge",
       "description": "AI assistant chatbot extension for Edge \u2014 ask questions, summarize pages, translate.",
-      "category": "browser-ext",
+      "category": "extensions",
       "platform": [
         "edge"
       ],
@@ -411,7 +427,7 @@
       "id": "eoffice-vscode",
       "name": "eOffice for VS Code",
       "description": "Access eOffice docs, sheets, and notes directly inside VS Code.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "vscode"
       ],
@@ -434,7 +450,7 @@
       "id": "eoffice-jetbrains",
       "name": "eOffice for JetBrains",
       "description": "Access eOffice docs, sheets, and notes directly inside JetBrains.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "jetbrains"
       ],
@@ -457,7 +473,7 @@
       "id": "eoffice-obsidian",
       "name": "eOffice for Obsidian",
       "description": "Access eOffice docs, sheets, and notes directly inside Obsidian.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "obsidian"
       ],
@@ -480,7 +496,7 @@
       "id": "eoffice-sublime",
       "name": "eOffice for Sublime Text",
       "description": "Access eOffice docs, sheets, and notes directly inside Sublime Text.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "sublime"
       ],
@@ -503,7 +519,7 @@
       "id": "eoffice-neovim",
       "name": "eOffice for Neovim",
       "description": "Access eOffice docs, sheets, and notes directly inside Neovim.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "neovim"
       ],
@@ -526,7 +542,7 @@
       "id": "eostudio-vscode",
       "name": "EoStudio for VS Code",
       "description": "EoStudio code generation, UI preview, and hardware tools for VS Code.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "vscode"
       ],
@@ -549,7 +565,7 @@
       "id": "eostudio-jetbrains",
       "name": "EoStudio for JetBrains",
       "description": "EoStudio code generation, UI preview, and hardware tools for JetBrains.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "jetbrains"
       ],
@@ -572,7 +588,7 @@
       "id": "eostudio-obsidian",
       "name": "EoStudio for Obsidian",
       "description": "EoStudio code generation, UI preview, and hardware tools for Obsidian.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "obsidian"
       ],
@@ -595,7 +611,7 @@
       "id": "eostudio-sublime",
       "name": "EoStudio for Sublime Text",
       "description": "EoStudio code generation, UI preview, and hardware tools for Sublime Text.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "sublime"
       ],
@@ -618,7 +634,7 @@
       "id": "eostudio-neovim",
       "name": "EoStudio for Neovim",
       "description": "EoStudio code generation, UI preview, and hardware tools for Neovim.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "neovim"
       ],
@@ -641,7 +657,7 @@
       "id": "eoffice-slack",
       "name": "eOffice for Slack",
       "description": "eOffice integration for Slack \u2014 collaborate on docs and sheets.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "slack"
       ],
@@ -663,7 +679,7 @@
       "id": "eoffice-raycast",
       "name": "eOffice for Raycast",
       "description": "eOffice integration for Raycast \u2014 collaborate on docs and sheets.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "raycast"
       ],
@@ -685,7 +701,7 @@
       "id": "eoffice-github",
       "name": "eOffice for GitHub",
       "description": "eOffice integration for GitHub \u2014 collaborate on docs and sheets.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "github"
       ],
@@ -707,7 +723,7 @@
       "id": "eoffice-google-workspace",
       "name": "eOffice for Google Workspace",
       "description": "eOffice integration for Google Workspace \u2014 collaborate on docs and sheets.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "google-workspace"
       ],
@@ -729,7 +745,7 @@
       "id": "eoffice-office365",
       "name": "eOffice for Office 365",
       "description": "eOffice integration for Office 365 \u2014 collaborate on docs and sheets.",
-      "category": "ide-ext",
+      "category": "extensions",
       "platform": [
         "office365"
       ],
@@ -3636,7 +3652,8 @@
       ],
       "tests_passed": true,
       "test_count": 13,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
     },
     {
       "id": "healthkey-webapp",
@@ -3654,7 +3671,8 @@
       ],
       "tests_passed": true,
       "test_count": 9,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
     },
     {
       "id": "healthband-extension",
@@ -3672,7 +3690,8 @@
       ],
       "tests_passed": true,
       "test_count": 13,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
     },
     {
       "id": "healthband-webapp",
@@ -3690,7 +3709,8 @@
       ],
       "tests_passed": true,
       "test_count": 10,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
     },
     {
       "id": "healthband-desktop",
@@ -3708,7 +3728,8 @@
       ],
       "tests_passed": true,
       "test_count": 43,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
     },
     {
       "id": "healthkey-desktop",
@@ -3726,7 +3747,40 @@
       ],
       "tests_passed": true,
       "test_count": 16,
-      "release": "v1.8.0"
+      "release": "v1.8.0",
+      "platform": "mobile"
+    },
+    {
+      "id": "eride",
+      "name": "eRide",
+      "description": "Smart mobility app for EmbeddedOS",
+      "category": "mobile",
+      "platform": "mobile",
+      "version": "1.9.0"
+    },
+    {
+      "id": "esocial",
+      "name": "eSocial",
+      "description": "Social networking for EmbeddedOS",
+      "category": "mobile",
+      "platform": "mobile",
+      "version": "1.9.0"
+    },
+    {
+      "id": "etrack",
+      "name": "eTrack",
+      "description": "GPS tracking for EmbeddedOS",
+      "category": "mobile",
+      "platform": "mobile",
+      "version": "1.9.0"
+    },
+    {
+      "id": "etravel",
+      "name": "eTravel",
+      "description": "Travel companion for EmbeddedOS",
+      "category": "mobile",
+      "platform": "mobile",
+      "version": "1.9.0"
     }
   ]
 }

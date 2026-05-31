@@ -52,7 +52,7 @@ def app_client():
     app = create_app(config)
 
     state = AppState(config)
-    state.user_manager.ensure_admin_exists()
+    state.user_manager.ensure_admin_exists("admin", "AdminPass123!@#")
     app.state.edb = state
 
     client = TestClient(app)
@@ -66,5 +66,5 @@ def app_client():
 @pytest.fixture
 def admin_token(app_client):
     """Get an admin JWT token for integration tests."""
-    resp = app_client.post("/auth/login", json={"username": "admin", "password": "admin1234"})
+    resp = app_client.post("/auth/login", json={"username": "admin", "password": "AdminPass123!@#"})
     return resp.json()["access_token"]

@@ -124,9 +124,8 @@ class TestNativeAppBuildability:
         lvgl_h = os.path.join(stub_dir, "lvgl")
         os.makedirs(lvgl_h, exist_ok=True)
         stub_lvgl = os.path.join(lvgl_h, "lvgl.h")
-        if not os.path.exists(stub_lvgl):
-            with open(stub_lvgl, "w") as f:
-                f.write("""
+        with open(stub_lvgl, "w") as f:
+            f.write("""
 #pragma once
 #include <stdint.h>
 #include <stdbool.h>
@@ -172,11 +171,53 @@ static inline void lv_timer_pause(lv_timer_t*t){(void)t;}
 static inline void lv_timer_resume(lv_timer_t*t){(void)t;}
 static inline int lv_snprintf(char*b,int n,const char*f,...){(void)b;(void)n;(void)f;return 0;}
 static inline char* lv_strncat(char*d,const char*s,int n){(void)n;return strncat(d,s,n);}
+#define LV_SYMBOL_OK "\xEF\x80\x80"
+#define LV_SYMBOL_PAUSE "\xEF\x80\x81"
+#define LV_SYMBOL_STOP "\xEF\x80\x82"
+#define LV_SYMBOL_PLAY "\xEF\x80\x83"
+#define LV_SYMBOL_CLOSE "\xEF\x80\x84"
+#define LV_SYMBOL_WARNING "\xEF\x80\x85"
+#define LV_SYMBOL_SETTINGS "\xEF\x80\x86"
+#define LV_SYMBOL_HOME "\xEF\x80\x87"
+#define LV_SYMBOL_WIFI "\xEF\x80\x88"
+#define LV_SYMBOL_BATTERY_FULL "\xEF\x80\x89"
+static inline void lv_obj_set_width(lv_obj_t*o,int w){(void)o;(void)w;}
+static inline lv_obj_t* lv_event_get_target(lv_event_t*e){(void)e;return 0;}
+static inline uint16_t lv_dropdown_get_selected(lv_obj_t*o){(void)o;return 0;}
+static inline void lv_dropdown_set_selected(lv_obj_t*o,uint16_t s){(void)o;(void)s;}
+static inline lv_obj_t* lv_dropdown_create(lv_obj_t*p){(void)p;return 0;}
+static inline void lv_dropdown_set_options(lv_obj_t*o,const char*s){(void)o;(void)s;}
+static inline void lv_obj_center(lv_obj_t*o){(void)o;}
+static inline void lv_obj_set_flex_flow(lv_obj_t*o,int f){(void)o;(void)f;}
+static inline void lv_obj_set_flex_align(lv_obj_t*o,int m,int c,int t){(void)o;(void)m;(void)c;(void)t;}
+static inline void lv_obj_set_style_pad_all(lv_obj_t*o,int p,int s){(void)o;(void)p;(void)s;}
+static inline void lv_obj_set_style_pad_row(lv_obj_t*o,int p,int s){(void)o;(void)p;(void)s;}
+static inline void lv_obj_set_style_pad_column(lv_obj_t*o,int p,int s){(void)o;(void)p;(void)s;}
+static inline void lv_obj_set_style_bg_color(lv_obj_t*o,lv_color_t c,int s){(void)o;(void)c;(void)s;}
+static inline void lv_obj_set_style_text_color(lv_obj_t*o,lv_color_t c,int s){(void)o;(void)c;(void)s;}
+static inline void lv_obj_set_style_border_width(lv_obj_t*o,int w,int s){(void)o;(void)w;(void)s;}
+static inline void lv_obj_set_style_radius(lv_obj_t*o,int r,int s){(void)o;(void)r;(void)s;}
+static inline void lv_obj_remove_style_all(lv_obj_t*o){(void)o;}
+static inline void lv_obj_clear_flag(lv_obj_t*o,int f){(void)o;(void)f;}
+static inline void lv_obj_add_flag(lv_obj_t*o,int f){(void)o;(void)f;}
+#define LV_FLEX_FLOW_COLUMN 0
+#define LV_FLEX_FLOW_ROW 1
+#define LV_FLEX_ALIGN_CENTER 0
+#define LV_FLEX_ALIGN_START 1
+#define LV_FLEX_ALIGN_END 2
+#define LV_OBJ_FLAG_HIDDEN 1
+#define LV_STATE_DEFAULT 0
+#define lv_font_montserrat_16 (*((void*)0))
+#define lv_font_montserrat_14 (*((void*)0))
+#define lv_font_montserrat_12 (*((void*)0))
+#define lv_color_make(r,g,b) ((lv_color_t)0)
+#define lv_color_hex(c) ((lv_color_t)0)
+#define lv_color_white() ((lv_color_t)0)
+#define lv_color_black() ((lv_color_t)0)
 """)
         stub_core = os.path.join(stub_dir, "eapps_core.h")
-        if not os.path.exists(stub_core):
-            with open(stub_core, "w") as f:
-                f.write("""
+        with open(stub_core, "w") as f:
+            f.write("""
 #pragma once
 #include <stdbool.h>
 #include "lvgl/lvgl.h"

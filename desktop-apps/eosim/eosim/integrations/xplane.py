@@ -1,0 +1,1 @@
+class XplaneIntegration: pass
