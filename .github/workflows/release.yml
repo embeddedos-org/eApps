@@ -128,7 +128,7 @@ jobs:
           tar czf eapps-${{ steps.version.outputs.version }}-linux-x86_64.tar.gz -C staging .
 
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: eapps-*
           merge-multiple: true
