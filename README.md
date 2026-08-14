@@ -27,13 +27,13 @@ eApps is the unified marketplace, monorepo, and automated app store for the enti
 | Category | Folder | Count | Technologies | Artifacts |
 |---|---|---|---|---|
 | ⚙️ **Native Apps** | `apps/` | 46 | C + LVGL (cross-platform via CMake) | Binaries, WASM |
-| 🖥️ **Desktop Apps** | `desktop-apps/` | 1 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
-| 📱 **Mobile Apps** | `mobile-apps/` | 32 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
-| 🌐 **Web Apps** | `web-apps/` | 34 | HTML5/JS/WASM PWA | GitHub Pages PWA |
+| 🖥️ **Desktop Apps** | `desktop-apps/` | 5 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
+| 📱 **Mobile Apps** | `mobile-apps/` | 36 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
+| 🌐 **Web Apps** | `web-apps/` | 33 | HTML5/JS/WASM PWA | GitHub Pages PWA |
 | 🧩 **Browser Extensions** | `browser-extensions/` | 20 | WebExtensions Manifest V3 | `.zip` `.crx` `.xpi` |
 | 🛠️ **Dev Tools** | `dev-tools/` | 14 | VS Code TS, JetBrains Kotlin, Vim | `.vsix` `.jar` |
 | ⌨️ **CLI Tools** | `cli-tools/` | 22 | Node.js, Python | npm, pip, Homebrew |
-| 🏢 **Enterprise** | `enterprise/` | 16 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
+| 🏢 **Enterprise** | `enterprise/` | 12 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
 
 
 > **Total: 46 native apps + desktop/mobile/web/CLI/dev tools across all platforms**
@@ -134,15 +134,15 @@ eApps/
 │   ├── eosim/                      #   Python/QEMU hardware simulator (63+ platforms)
 │   └── ebrowser/                   #   C/SDL2 browser engine
 │
-├── mobile-apps/                    # 📱 32 Flutter mobile apps (incl. eServiceApps)
-├── web-apps/                       # 🌐 34 PWA web apps (HTML5/JS/WASM)
+├── mobile-apps/                    # 📱 36 Flutter mobile apps (incl. eServiceApps)
+├── web-apps/                       # 🌐 33 PWA web apps (HTML5/JS/WASM)
 ├── browser-extensions/             # 🧩 20 browser extensions (Manifest V3)
 ├── dev-tools/                      # 🛠️ 14 IDE extensions (VS Code, JetBrains)
 ├── cli-tools/                      # ⌨️ 22 CLI tools (Node.js, Python)
-├── enterprise/                     # 🏢 16 enterprise deployments (Docker, Helm, MSI)
+├── enterprise/                     # 🏢 12 enterprise deployments (Docker, Helm, MSI)
 ├── shared/                         # 🔗 Reusable code (JS, Flutter, C, Python)
 │
-├── apps/                           # ⚙️ 40+ native LVGL apps (original eApps)
+├── apps/                           # ⚙️ 46 native LVGL apps (original eApps)
 ├── core/                           # Native shared core (C)
 ├── cmake/                          # Cross-platform CMake toolchains
 ├── port/                           # Platform ports (SDL2, Android, iOS, Web, EoS)
