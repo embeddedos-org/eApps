@@ -95,7 +95,7 @@ jobs:
         continue-on-error: true
 
       - name: Build Docker image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: enterprise/${{ matrix.app }}
           file: enterprise/${{ matrix.app }}/docker/Dockerfile
