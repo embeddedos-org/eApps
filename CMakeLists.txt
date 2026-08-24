@@ -41,12 +41,36 @@ endif()
 # --- LVGL ---
 set(LV_CONF_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extern/lv_conf.h" CACHE STRING "" FORCE)
 add_definitions(-DLV_CONF_INCLUDE_SIMPLE=1)
+add_definitions(-DLV_USE_DRAW_SW_COMPLEX=0)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/extern/lvgl/CMakeLists.txt")
+    message(STATUS "Using LVGL from extern/lvgl/ submodule")
+    set(LV_USE_DRAW_SW_ASM "none" CACHE STRING "" FORCE)
     add_subdirectory(extern/lvgl)
 else()
-    message(STATUS "LVGL submodule not found — using stub target")
-    add_library(lvgl INTERFACE)
-    target_include_directories(lvgl INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/extern)
+    # The previous fallback was an INTERFACE target pointing at extern/, which
+    # never satisfied the app headers and left every app failing to compile.
+    # Fetch the real LVGL instead, matching how eBrowser acquires it.
+    message(STATUS "LVGL submodule not found - auto-downloading via FetchContent...")
+    include(FetchContent)
+    FetchContent_Declare(lvgl
+        GIT_REPOSITORY https://github.com/lvgl/lvgl.git
+        GIT_TAG        release/v9.2
+        GIT_SHALLOW    TRUE
+    )
+    set(LV_USE_DRAW_SW_ASM "none" CACHE STRING "" FORCE)
+    FetchContent_MakeAvailable(lvgl)
+    # Apple's assembler cannot handle LVGL's Helium/NEON .S files
+    if(APPLE OR NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64|ARM")
+        get_target_property(_lvgl_srcs lvgl SOURCES)
+        if(_lvgl_srcs)
+            list(FILTER _lvgl_srcs EXCLUDE REGEX "\\.S$")
+            set_target_properties(lvgl PROPERTIES SOURCES "${_lvgl_srcs}")
+        endif()
+    endif()
+endif()
+
+if(WIN32 AND TARGET lvgl)
+    target_compile_definitions(lvgl PUBLIC LV_ATTRIBUTE_EXTERN_DATA=)
 endif()
 
 # --- Core libraries ---

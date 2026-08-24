@@ -1,6 +1,9 @@
 #ifndef LV_CONF_H
 #define LV_CONF_H
 
+/* eapps_tick_get_ms() below is declared with uint32_t. */
+#include <stdint.h>
+
 #define LV_COLOR_DEPTH          16
 #define LV_COLOR_16_SWAP        0
 
@@ -29,6 +32,7 @@ extern uint32_t eapps_tick_get_ms(void);
 #define LV_FONT_MONTSERRAT_20   1
 #define LV_FONT_MONTSERRAT_24   1
 #define LV_FONT_MONTSERRAT_28   1
+#define LV_FONT_MONTSERRAT_48   1
 #define LV_FONT_DEFAULT         &lv_font_montserrat_16
 
 #define LV_USE_BTNMATRIX        1
