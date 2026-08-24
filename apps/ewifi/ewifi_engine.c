@@ -64,7 +64,10 @@ int ewifi_rssi_to_pct(int rssi)
 static ewifi_network_t g_networks[EWIFI_MAX_NETWORKS];
 static int g_network_count = 0;
 
-#define SCPY(d,s) strncpy(d,s,sizeof(d)-1)
+/* snprintf rather than strncpy: a 17-character BSSID exactly fills
+ * EWIFI_BSSID_LEN - 1, so strncpy copies no terminator and correctness rests on
+ * the caller having memset the struct first. snprintf always terminates. */
+#define SCPY(d,s) snprintf((d), sizeof(d), "%s", (s))
 
 void ewifi_engine_init(void)
 {

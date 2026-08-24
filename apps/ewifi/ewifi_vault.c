@@ -193,32 +193,60 @@ const char *ewifi_ac_state_str(ewifi_ac_state_t s)
     return (s <= EWIFI_AC_FAILED) ? names[s] : "?";
 }
 
-/* Platform-specific WiFi connect */
+/* Platform-specific WiFi connect.
+ *
+ * ssid comes from a scan, so it is chosen by whoever is broadcasting it. It
+ * used to be interpolated into a double-quoted shell string, which let an SSID
+ * of  x" ; rm -rf ~ ; "  close the quote and run arbitrary commands through
+ * system(). Both arguments are now quoted, or the call is refused. */
 bool ewifi_ac_connect(const char *ssid, const char *password)
 {
-    char cmd[256];
-    (void)password;
+    char cmd[512];
+    bool have_pass;
+
+    if (!ssid || ssid[0] == '\0') return false;
+    have_pass = (password && password[0] != '\0');
 
 #ifdef _WIN32
+    if (!ewifi_shell_arg_is_safe_win(ssid)) return false;
     snprintf(cmd, sizeof(cmd), "netsh wlan connect name=\"%s\" 2>nul", ssid);
-#elif defined(__linux__)
-    if (password && strlen(password) > 0)
-        snprintf(cmd, sizeof(cmd),
-                 "nmcli device wifi connect \"%s\" password \"%s\" 2>/dev/null",
-                 ssid, password);
-    else
-        snprintf(cmd, sizeof(cmd),
-                 "nmcli connection up \"%s\" 2>/dev/null", ssid);
-#elif defined(__APPLE__)
-    if (password && strlen(password) > 0)
-        snprintf(cmd, sizeof(cmd),
-                 "networksetup -setairportnetwork en0 \"%s\" \"%s\" 2>/dev/null",
-                 ssid, password);
-    else
-        snprintf(cmd, sizeof(cmd),
-                 "networksetup -setairportnetwork en0 \"%s\" 2>/dev/null", ssid);
+#elif defined(__linux__) || defined(__APPLE__)
+    {
+        char q_ssid[128];
+        char q_pass[192];
+
+        if (!ewifi_shell_quote_posix(ssid, q_ssid, sizeof(q_ssid)))
+            return false;
+        if (have_pass &&
+            !ewifi_shell_quote_posix(password, q_pass, sizeof(q_pass)))
+            return false;
+
+#if defined(__linux__)
+        if (have_pass)
+            snprintf(cmd, sizeof(cmd),
+                     "nmcli device wifi connect %s password %s 2>/dev/null",
+                     q_ssid, q_pass);
+        else
+            snprintf(cmd, sizeof(cmd),
+                     "nmcli connection up %s 2>/dev/null", q_ssid);
+#else
+        if (have_pass)
+            snprintf(cmd, sizeof(cmd),
+                     "networksetup -setairportnetwork en0 %s %s 2>/dev/null",
+                     q_ssid, q_pass);
+        else
+            snprintf(cmd, sizeof(cmd),
+                     "networksetup -setairportnetwork en0 %s 2>/dev/null",
+                     q_ssid);
+#endif
+        /* The quoted passphrase is still visible in the process argument list
+         * while the command runs; that is inherent to driving these tools
+         * through a shell and is not fixed here. */
+        memset(q_pass, 0, sizeof(q_pass));
+    }
 #else
     (void)cmd;
+    (void)have_pass;
     return true;
 #endif
 
