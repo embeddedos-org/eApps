@@ -29,6 +29,7 @@
 /* ---- Capacity limits ---------------------------------------------------- */
 
 #define EREMOTE_IR_DB_SIZE   16   /**< Code-database rows; init() fills 6.   */
+#define MAX_DEVICES          16   /**< Configured devices; init() fills 2.   */
 #define MAX_LEARNED          16   /**< Learned codes retained per device.    */
 #define MAX_SCENES            8   /**< Scene slots; init() fills 3.          */
 #define MAX_SCHEDULES         8   /**< Schedule slots; init() fills 2.       */
@@ -121,6 +122,13 @@ typedef struct {
     bool                  two_way;   /**< Transport reports device state. */
     eremote_ir_code_t     learned[MAX_LEARNED];
     int                   learned_count;
+    /* Last known device state. Only meaningful when two_way is set; for
+     * send-only transports these track what we last commanded. */
+    bool                  power_on;
+    uint8_t               volume;      /**< 0-100. */
+    uint16_t              channel;     /**< 1-based; 0 means unknown. */
+    int8_t                temperature; /**< Degrees C; AC devices only. */
+    uint8_t               fan_speed;   /**< 0 = auto; AC devices only. */
 } eremote_device_t;
 
 /** One row of the shipped code database. */
