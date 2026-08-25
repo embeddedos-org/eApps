@@ -238,8 +238,14 @@ typedef struct {
 } eapps_app_lifecycle_t;
 """)
         result = subprocess.run(
+            # The stub is written to <stub_dir>/lvgl/lvgl.h, but the app sources
+            # do `#include "lvgl.h"`. With only -I<stub_dir> on the command line
+            # that never resolved, so every app in this class failed with
+            # "fatal error: lvgl.h: No such file or directory" and the failure
+            # was reported as the app's own syntax error.
             ["gcc", "-fsyntax-only", "-std=c11", "-Wall",
              f"-I{stub_dir}",
+             f"-I{os.path.join(stub_dir, 'lvgl')}",
              f"-I{os.path.join(APPS_DIR, app_id)}",
              src_path],
             capture_output=True, text=True, timeout=10
