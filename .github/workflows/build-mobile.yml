@@ -14,12 +14,22 @@ on:
         required: true
         type: choice
         options: [eride, esocial, etrack, etravel, ewallet]
+  workflow_call:
+    inputs:
+      app:
+        description: 'App to build'
+        required: false
+        type: string
 
 permissions:
   contents: write
 
 env:
   FLUTTER_VERSION: '3.24.0'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   parse:

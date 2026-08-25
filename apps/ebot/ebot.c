@@ -1,8 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Copyright (c) 2026 EoS Project
-// eBot — AI chat client for EAI framework
-// ISO/IEC 25000 | ISO/IEC/IEEE 15288:2023
-
+// eBot — EoS LVGL Application
 #include "ebot.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -642,118 +639,36 @@ static void ebot_gui_models_cb(lv_event_t *e) {
     }
 }
 
+#include <stdbool.h>
+typedef struct {
+    lv_obj_t *lbl_title;
+    lv_obj_t *lbl_status;
+    lv_timer_t *timer;
+} ebot_ctx_t;
+static ebot_ctx_t ctx;
 static bool ebot_init(lv_obj_t *parent) {
-    ebot_state_init(&g_ebot, NULL, 0);
-
-    lv_obj_t *main_col = lv_obj_create(parent);
-    lv_obj_set_size(main_col, lv_pct(100), lv_pct(100));
-    lv_obj_set_flex_flow(main_col, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_style_pad_all(main_col, 4, 0);
-    lv_obj_set_style_bg_opa(main_col, LV_OPA_TRANSP, 0);
-    lv_obj_set_style_border_width(main_col, 0, 0);
-
-    /* ── Top bar: title + model dropdown + tools/reset buttons ── */
-    lv_obj_t *top_bar = lv_obj_create(main_col);
-    lv_obj_set_width(top_bar, lv_pct(100));
-    lv_obj_set_height(top_bar, 44);
-    lv_obj_set_flex_flow(top_bar, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(top_bar, LV_FLEX_ALIGN_SPACE_BETWEEN,
-                          LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_set_style_pad_all(top_bar, 4, 0);
-
-    lv_obj_t *title = lv_label_create(top_bar);
-    lv_label_set_text(title, LV_SYMBOL_CHARGE " eBot");
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_16, 0);
-
-    g_model_dropdown = lv_dropdown_create(top_bar);
-    lv_dropdown_set_options(g_model_dropdown, "phi-3-mini-q4\n(fetch models...)");
-    lv_obj_set_width(g_model_dropdown, 160);
-
-    lv_obj_t *btn_tools = lv_btn_create(top_bar);
-    lv_obj_t *lbl_tools = lv_label_create(btn_tools);
-    lv_label_set_text(lbl_tools, LV_SYMBOL_LIST);
-    lv_obj_add_event_cb(btn_tools, ebot_gui_tools_cb, LV_EVENT_CLICKED, NULL);
-
-    lv_obj_t *btn_models = lv_btn_create(top_bar);
-    lv_obj_t *lbl_models = lv_label_create(btn_models);
-    lv_label_set_text(lbl_models, LV_SYMBOL_REFRESH);
-    lv_obj_add_event_cb(btn_models, ebot_gui_models_cb, LV_EVENT_CLICKED, NULL);
-
-    lv_obj_t *btn_reset = lv_btn_create(top_bar);
-    lv_obj_t *lbl_reset = lv_label_create(btn_reset);
-    lv_label_set_text(lbl_reset, LV_SYMBOL_TRASH);
-    lv_obj_add_event_cb(btn_reset, ebot_gui_reset_cb, LV_EVENT_CLICKED, NULL);
-
-    /* ── Chat message list (scrollable) ── */
-    g_chat_list = lv_obj_create(main_col);
-    lv_obj_set_width(g_chat_list, lv_pct(100));
-    lv_obj_set_flex_grow(g_chat_list, 1);
-    lv_obj_set_flex_flow(g_chat_list, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_style_pad_row(g_chat_list, 6, 0);
-    lv_obj_set_scrollbar_mode(g_chat_list, LV_SCROLLBAR_MODE_AUTO);
-
-    /* ── Input bar: text area + send button ── */
-    lv_obj_t *input_bar = lv_obj_create(main_col);
-    lv_obj_set_width(input_bar, lv_pct(100));
-    lv_obj_set_height(input_bar, 50);
-    lv_obj_set_flex_flow(input_bar, LV_FLEX_FLOW_ROW);
-    lv_obj_set_style_pad_all(input_bar, 4, 0);
-
-    g_input_ta = lv_textarea_create(input_bar);
-    lv_textarea_set_placeholder_text(g_input_ta, "Type a message...");
-    lv_textarea_set_one_line(g_input_ta, true);
-    lv_obj_set_flex_grow(g_input_ta, 1);
-    lv_obj_add_event_cb(g_input_ta, ebot_gui_input_cb, LV_EVENT_READY, NULL);
-
-    lv_obj_t *btn_send = lv_btn_create(input_bar);
-    lv_obj_set_size(btn_send, 50, 42);
-    lv_obj_t *lbl_send = lv_label_create(btn_send);
-    lv_label_set_text(lbl_send, LV_SYMBOL_RIGHT);
-    lv_obj_center(lbl_send);
-    lv_obj_add_event_cb(btn_send, ebot_gui_send_cb, LV_EVENT_CLICKED, NULL);
-
-    /* ── Status bar ── */
-    g_status_label = lv_label_create(main_col);
-    lv_obj_set_width(g_status_label, lv_pct(100));
-    lv_obj_set_style_text_font(g_status_label, &lv_font_montserrat_10, 0);
-    lv_obj_set_style_text_color(g_status_label,
-                                lv_color_hex(0x888888), 0);
-    ebot_gui_update_status();
-
-    ebot_gui_refresh_chat();
+    ctx.lbl_title = lv_label_create(parent);
+    lv_obj_set_style_text_font(ctx.lbl_title, &lv_font_montserrat_24, 0);
+    lv_obj_align(ctx.lbl_title, LV_ALIGN_TOP_MID, 0, 16);
+    lv_label_set_text(ctx.lbl_title, "eBot");
+    ctx.lbl_status = lv_label_create(parent);
+    lv_obj_align(ctx.lbl_status, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(ctx.lbl_status, "AI assistant chatbot\nv2.0.0 — Ready");
+    lv_obj_t *btn = lv_btn_create(parent);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -16);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, "Open");
+    ctx.timer = NULL;
     return true;
 }
-
-static void ebot_deinit(void) {
-    g_chat_list     = NULL;
-    g_input_ta      = NULL;
-    g_status_label  = NULL;
-    g_model_dropdown = NULL;
-    memset(&g_ebot, 0, sizeof(g_ebot));
-}
-
-static void ebot_on_show(void) {
-    ebot_gui_update_status();
-}
-
+static void ebot_deinit(void) { }
+static void ebot_on_show(void) { }
 static void ebot_on_hide(void) { }
-
-/* ══════════════════════════════════════════════════════════════════════
- *  App registration
- * ══════════════════════════════════════════════════════════════════════ */
-
 const eapps_app_info_t ebot_info = {
-    .id          = "ebot",
-    .name        = "eBot",
-    .icon        = "ai",
-    .description = "AI chat client: EAI LLM, tool calls, model switching",
-    .category    = EAPPS_CAT_SECURITY,
-    .version     = EBOT_VERSION,
+    .id = "ebot", .name = "eBot", .icon = "bot",
+    .description = "AI assistant chatbot", .category = EAPPS_CAT_SYSTEM, .version = "2.0.0",
 };
-
 const eapps_app_lifecycle_t ebot_lifecycle = {
-    .init    = ebot_init,
-    .deinit  = ebot_deinit,
-    .on_show = ebot_on_show,
-    .on_hide = ebot_on_hide,
+    .init = ebot_init, .deinit = ebot_deinit,
+    .on_show = ebot_on_show, .on_hide = ebot_on_hide,
 };

@@ -81,3 +81,9 @@ node_modules/
 # SBOM output
 sbom/*.json
 !sbom/sbom-template.json
+dist/
+__pycache__/
+*.pyc
+.venv/
+target/
+.pytest_cache/

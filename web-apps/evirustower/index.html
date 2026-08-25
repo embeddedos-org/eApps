@@ -1,41 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tower Defense — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eVirus Tower Defense — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#dc2626">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fef2f2;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{background:#dc2626;color:white;width:100%;padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{font-size:16px;font-weight:700;margin-right:auto}
+.hud-item{background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600}
+.game-wrap{padding:12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+canvas{border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);cursor:crosshair}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tower-btn{border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.tower-btn.active{outline:3px solid #1e293b}
+.hint{font-size:11px;color:#64748b;text-align:center}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Tower Defense</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Tower Defense</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header>
+  <h1>🦠 eVirus Tower Defense</h1>
+  <span class="hud-item">❤️ <span id="lives">20</span></span>
+  <span class="hud-item">💰 <span id="gold">150</span></span>
+  <span class="hud-item">Wave <span id="wave">1</span></span>
+  <span class="hud-item">Score <span id="score">0</span></span>
+</header>
+<div class="game-wrap">
+  <canvas id="c" width="320" height="320"></canvas>
+  <div class="toolbar">
+    <button class="tower-btn active" data-type="basic" style="background:#3b82f6;color:white">🔵 Basic ($30)</button>
+    <button class="tower-btn" data-type="sniper" style="background:#a855f7;color:white">🟣 Sniper ($60)</button>
+    <button class="tower-btn" data-type="splash" style="background:#f97316;color:white">🟠 Splash ($80)</button>
+    <button class="tower-btn" data-type="start" style="background:#dc2626;color:white">▶ Start Wave</button>
+  </div>
+  <p class="hint">Click grid to place tower • Start Wave to begin</p>
+</div>
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d');
+const COLS=10,ROWS=10,SZ=32;
+// Path: left to right zigzag
+const PATH=[[0,4],[1,4],[2,4],[2,3],[2,2],[3,2],[4,2],[4,3],[4,4],[4,5],[4,6],[5,6],[6,6],[6,5],[6,4],[6,3],[7,3],[8,3],[8,4],[8,5],[8,6],[9,6]];
+const PATH_SET=new Set(PATH.map(([r,c])=>`${r},${c}`));
+const TOWER_DEFS={basic:{color:'#3b82f6',range:2.5,damage:10,rate:60,cost:30},sniper:{color:'#a855f7',range:5,damage:40,rate:120,cost:60},splash:{color:'#f97316',range:2,damage:20,rate:80,cost:80,splash:1.5}};
+let towers=[],enemies=[],bullets=[],lives=20,gold=150,wave=1,score=0,waveRunning=false,spawnTimer=0,spawnCount=0,selectedType='basic';
+function dist(a,b){return Math.sqrt((a.x-b.x)**2+(a.y-b.y)**2);}
+function spawnEnemy(){
+  const hp=20+wave*15;
+  enemies.push({pathIdx:0,x:PATH[0][1]*SZ+SZ/2,y:PATH[0][0]*SZ+SZ/2,hp,maxHp:hp,speed:0.6+wave*0.1});
+}
+function startWave(){if(waveRunning)return;waveRunning=true;spawnCount=0;spawnTimer=0;}
+function update(){
+  if(waveRunning){
+    spawnTimer++;
+    if(spawnTimer>60&&spawnCount<5+wave*2){spawnEnemy();spawnCount++;spawnTimer=0;}
+    if(spawnCount>=5+wave*2&&!enemies.length){waveRunning=false;wave++;gold+=30;document.getElementById('wave').textContent=wave;document.getElementById('gold').textContent=gold;}
+  }
+  // Move enemies
+  enemies.forEach(e=>{
+    if(e.pathIdx>=PATH.length-1){lives--;document.getElementById('lives').textContent=lives;e.dead=true;return;}
+    const[tr,tc]=PATH[e.pathIdx+1];const tx=tc*SZ+SZ/2,ty=tr*SZ+SZ/2;
+    const dx=tx-e.x,dy=ty-e.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<e.speed){e.x=tx;e.y=ty;e.pathIdx++;}else{e.x+=dx/d*e.speed;e.y+=dy/d*e.speed;}
+  });
+  enemies=enemies.filter(e=>!e.dead&&e.hp>0);
+  // Towers shoot
+  towers.forEach(t=>{
+    t.cooldown=(t.cooldown||0)-1;if(t.cooldown>0)return;
+    const def=TOWER_DEFS[t.type];
+    const target=enemies.find(e=>dist({x:t.x,y:t.y},e)<def.range*SZ);
+    if(target){
+      bullets.push({x:t.x,y:t.y,tx:target,damage:def.damage,speed:4,color:def.color,splash:def.splash});
+      t.cooldown=def.rate;
+    }
+  });
+  // Move bullets
+  bullets.forEach(b=>{
+    const dx=b.tx.x-b.x,dy=b.tx.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<b.speed){
+      if(b.splash){enemies.forEach(e=>{if(dist(e,b.tx)<b.splash*SZ){e.hp-=b.damage;}});}
+      else b.tx.hp-=b.damage;
+      if(b.tx.hp<=0){score+=10;document.getElementById('score').textContent=score;gold+=5;document.getElementById('gold').textContent=gold;}
+      b.dead=true;
+    }else{b.x+=dx/d*b.speed;b.y+=dy/d*b.speed;}
+  });
+  bullets=bullets.filter(b=>!b.dead);
+  if(lives<=0){alert('Game Over! Score: '+score);resetGame();}
+}
+function resetGame(){towers=[];enemies=[];bullets=[];lives=20;gold=150;wave=1;score=0;waveRunning=false;document.getElementById('lives').textContent=20;document.getElementById('gold').textContent=150;document.getElementById('wave').textContent=1;document.getElementById('score').textContent=0;}
+function draw(){
+  ctx.fillStyle='#fef2f2';ctx.fillRect(0,0,C.width,C.height);
+  // Grid
+  for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){
+    ctx.fillStyle=PATH_SET.has(`${r},${c}`)?'#fca5a5':'#fee2e2';
+    ctx.fillRect(c*SZ,r*SZ,SZ,SZ);
+    ctx.strokeStyle='#fecaca';ctx.lineWidth=0.5;ctx.strokeRect(c*SZ,r*SZ,SZ,SZ);
+  }
+  // Path arrows
+  ctx.fillStyle='#ef4444';ctx.font='10px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  PATH.forEach(([r,c],i)=>{if(i>0&&i<PATH.length-1)ctx.fillText('→',c*SZ+SZ/2,r*SZ+SZ/2);});
+  // Towers
+  towers.forEach(t=>{
+    const def=TOWER_DEFS[t.type];
+    ctx.fillStyle=def.color;ctx.beginPath();ctx.arc(t.x,t.y,12,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='white';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(t.type[0].toUpperCase(),t.x,t.y);
+  });
+  // Enemies
+  enemies.forEach(e=>{
+    ctx.fillStyle='#dc2626';ctx.beginPath();ctx.arc(e.x,e.y,10,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='white';ctx.font='8px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🦠',e.x,e.y);
+    // HP bar
+    ctx.fillStyle='#fca5a5';ctx.fillRect(e.x-10,e.y-16,20,4);
+    ctx.fillStyle='#16a34a';ctx.fillRect(e.x-10,e.y-16,20*(e.hp/e.maxHp),4);
+  });
+  // Bullets
+  bullets.forEach(b=>{ctx.fillStyle=b.color;ctx.beginPath();ctx.arc(b.x,b.y,4,0,Math.PI*2);ctx.fill();});
+}
+function gameLoop(){update();draw();requestAnimationFrame(gameLoop);}
+C.addEventListener('click',e=>{
+  if(selectedType==='start'){startWave();return;}
+  const r=C.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;
+  const gc=Math.floor(x/SZ),gr=Math.floor(y/SZ);
+  if(PATH_SET.has(`${gr},${gc}`))return;
+  if(towers.some(t=>t.gc===gc&&t.gr===gr))return;
+  const def=TOWER_DEFS[selectedType];if(gold<def.cost)return;
+  gold-=def.cost;document.getElementById('gold').textContent=gold;
+  towers.push({x:gc*SZ+SZ/2,y:gr*SZ+SZ/2,gc,gr,type:selectedType,cooldown:0});
+});
+document.querySelectorAll('.tower-btn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tower-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');selectedType=b.dataset.type;
+}));
+gameLoop();
+C.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];C.dispatchEvent(new MouseEvent('click',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

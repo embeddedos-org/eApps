@@ -1,13 +1,27 @@
 {
-  "name": "Drawing & Image Editor — EoS",
-  "short_name": "epaint",
-  "description": "Drawing & Image Editor - EoS Progressive Web App",
-  "start_url": ".",
+  "name": "ePaint Canvas",
+  "short_name": "ePaint",
+  "description": "ePaint Canvas \u2014 EoS Progressive Web App",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1976D2",
+  "orientation": "any",
+  "background_color": "#f0fdfa",
+  "theme_color": "#0f766e",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "lang": "en"
 }

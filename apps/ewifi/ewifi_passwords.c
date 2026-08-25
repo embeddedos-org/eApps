@@ -68,6 +68,12 @@ static int extract_profiles_win(ewifi_saved_cred_t *out, int max)
 static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cred)
 {
     char cmd[256];
+
+    /* The profile name originates from netsh output, which in turn reflects
+     * SSIDs the machine has seen, so it is not trustworthy input. Fail closed
+     * rather than let it reach the command line unchecked. */
+    if (!ssid || !ewifi_shell_arg_is_safe_win(ssid)) return false;
+
     snprintf(cmd, sizeof(cmd),
              "netsh wlan show profile name=\"%s\" key=clear", ssid);
 
@@ -158,11 +164,17 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
         memset(&out[count], 0, sizeof(ewifi_saved_cred_t));
         strncpy(out[count].ssid, line, EWIFI_SSID_MAX - 1);
 
-        /* Get password: nmcli -s -g 802-11-wireless-security.psk connection show "SSID" */
+        /* A saved profile name is just an SSID the machine once joined, so it
+         * is no more trustworthy than a scan result. Quote it before it
+         * reaches the shell; skip the entry if it cannot be quoted. */
+        char q_ssid[128];
         char cmd[256];
+        if (!ewifi_shell_quote_posix(out[count].ssid, q_ssid, sizeof(q_ssid)))
+            continue;
+
         snprintf(cmd, sizeof(cmd),
-                 "nmcli -s -g 802-11-wireless-security.psk connection show \"%s\" 2>/dev/null",
-                 out[count].ssid);
+                 "nmcli -s -g 802-11-wireless-security.psk connection show %s 2>/dev/null",
+                 q_ssid);
         FILE *fp2 = popen(cmd, "r");
         if (fp2) {
             char pass[EWIFI_PASS_MAX] = {0};
@@ -178,8 +190,8 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
 
         /* Get auth type */
         snprintf(cmd, sizeof(cmd),
-                 "nmcli -g 802-11-wireless-security.key-mgmt connection show \"%s\" 2>/dev/null",
-                 out[count].ssid);
+                 "nmcli -g 802-11-wireless-security.key-mgmt connection show %s 2>/dev/null",
+                 q_ssid);
         FILE *fp3 = popen(cmd, "r");
         if (fp3) {
             char auth[24] = {0};
@@ -198,13 +210,19 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
 
 bool ewifi_extract_password_for_ssid(const char *ssid, ewifi_saved_cred_t *out)
 {
+    char q_ssid[128];
+    char cmd[256];
+
+    if (!ssid || !out) return false;
     memset(out, 0, sizeof(*out));
     strncpy(out->ssid, ssid, EWIFI_SSID_MAX - 1);
 
-    char cmd[256];
+    /* ssid is attacker-chosen: it comes from a scan. Quote it. */
+    if (!ewifi_shell_quote_posix(ssid, q_ssid, sizeof(q_ssid))) return false;
+
     snprintf(cmd, sizeof(cmd),
-             "nmcli -s -g 802-11-wireless-security.psk connection show \"%s\" 2>/dev/null",
-             ssid);
+             "nmcli -s -g 802-11-wireless-security.psk connection show %s 2>/dev/null",
+             q_ssid);
     FILE *fp = popen(cmd, "r");
     if (!fp) return false;
 
@@ -241,12 +259,18 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
         memset(&out[count], 0, sizeof(ewifi_saved_cred_t));
         strncpy(out[count].ssid, line, EWIFI_SSID_MAX - 1);
 
-        /* Try to get password from keychain */
+        /* Try to get password from keychain. A preferred-network name is an
+         * SSID the machine once joined, so quote it before it reaches the
+         * shell; skip the entry if it cannot be quoted. */
+        char q_ssid[128];
         char cmd[256];
+        if (!ewifi_shell_quote_posix(out[count].ssid, q_ssid, sizeof(q_ssid)))
+            continue;
+
         snprintf(cmd, sizeof(cmd),
                  "security find-generic-password "
-                 "-D \"AirPort network password\" -a \"%s\" -w 2>/dev/null",
-                 out[count].ssid);
+                 "-D \"AirPort network password\" -a %s -w 2>/dev/null",
+                 q_ssid);
         FILE *fp2 = popen(cmd, "r");
         if (fp2) {
             char pass[EWIFI_PASS_MAX] = {0};
@@ -269,14 +293,20 @@ int ewifi_extract_saved_passwords(ewifi_saved_cred_t *out, int max)
 
 bool ewifi_extract_password_for_ssid(const char *ssid, ewifi_saved_cred_t *out)
 {
+    char q_ssid[128];
+    char cmd[256];
+
+    if (!ssid || !out) return false;
     memset(out, 0, sizeof(*out));
     strncpy(out->ssid, ssid, EWIFI_SSID_MAX - 1);
 
-    char cmd[256];
+    /* ssid is attacker-chosen: it comes from a scan. Quote it. */
+    if (!ewifi_shell_quote_posix(ssid, q_ssid, sizeof(q_ssid))) return false;
+
     snprintf(cmd, sizeof(cmd),
              "security find-generic-password "
-             "-D \"AirPort network password\" -a \"%s\" -w 2>/dev/null",
-             ssid);
+             "-D \"AirPort network password\" -a %s -w 2>/dev/null",
+             q_ssid);
     FILE *fp = popen(cmd, "r");
     if (!fp) return false;
 

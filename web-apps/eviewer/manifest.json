@@ -1,13 +1,27 @@
 {
-  "name": "Document Viewer — EoS",
-  "short_name": "eviewer",
-  "description": "Document Viewer - EoS Progressive Web App",
-  "start_url": ".",
+  "name": "eViewer Image",
+  "short_name": "eViewer",
+  "description": "eViewer Image \u2014 EoS Progressive Web App",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1976D2",
+  "orientation": "any",
+  "background_color": "#fdf2f8",
+  "theme_color": "#be185d",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "lang": "en"
 }

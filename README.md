@@ -1,8 +1,18 @@
 # ⚡ eApps — EoS Unified Marketplace & App Store
 
+<!-- begin: org-uniform badges (audit-2026-05) -->
+[![CI](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/embeddedos-org/eApps/badge)](https://securityscorecards.dev/viewer/?uri=github.com/embeddedos-org/eApps)
+[![Release](https://img.shields.io/github/v/tag/embeddedos-org/eApps?label=release&sort=semver)](https://github.com/embeddedos-org/eApps/releases)
+[![License](https://img.shields.io/github/license/embeddedos-org/eApps)](LICENSE)
+<!-- end: org-uniform badges (audit-2026-05) -->
+
+
 [![Marketplace](https://img.shields.io/badge/🏪_Marketplace-Live-blue?logo=github)](https://embeddedos-org.github.io/eApps/)
 [![License](https://img.shields.io/badge/License-Apache_2.0-green.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/embeddedos-org/eApps/ci-native.yml?label=CI&logo=github)](https://github.com/embeddedos-org/eApps/actions)
+[![Book](https://github.com/embeddedos-org/eApps/actions/workflows/book-build.yml/badge.svg)](https://github.com/embeddedos-org/eApps/actions/workflows/book-build.yml)
 
 **One repository. Every EoS app. All platforms. Automated delivery.**
 
@@ -17,13 +27,13 @@ eApps is the unified marketplace, monorepo, and automated app store for the enti
 | Category | Folder | Count | Technologies | Artifacts |
 |---|---|---|---|---|
 | ⚙️ **Native Apps** | `apps/` | 46 | C + LVGL (cross-platform via CMake) | Binaries, WASM |
-| 🖥️ **Desktop Apps** | `desktop-apps/` | 1 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
-| 📱 **Mobile Apps** | `mobile-apps/` | 32 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
-| 🌐 **Web Apps** | `web-apps/` | 34 | HTML5/JS/WASM PWA | GitHub Pages PWA |
+| 🖥️ **Desktop Apps** | `desktop-apps/` | 5 | Electron, Python/Tkinter, Python/QEMU, C/SDL2 | `.exe` `.dmg` `.AppImage` `.deb` `.eapp` |
+| 📱 **Mobile Apps** | `mobile-apps/` | 36 | Flutter (Android + iOS) | `.apk` `.aab` `.ipa` (TestFlight) |
+| 🌐 **Web Apps** | `web-apps/` | 33 | HTML5/JS/WASM PWA | GitHub Pages PWA |
 | 🧩 **Browser Extensions** | `browser-extensions/` | 20 | WebExtensions Manifest V3 | `.zip` `.crx` `.xpi` |
 | 🛠️ **Dev Tools** | `dev-tools/` | 14 | VS Code TS, JetBrains Kotlin, Vim | `.vsix` `.jar` |
 | ⌨️ **CLI Tools** | `cli-tools/` | 22 | Node.js, Python | npm, pip, Homebrew |
-| 🏢 **Enterprise** | `enterprise/` | 16 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
+| 🏢 **Enterprise** | `enterprise/` | 12 | Docker, Helm, MSI, MDM | Docker images, Helm charts, `.msi` |
 
 
 > **Total: 46 native apps + desktop/mobile/web/CLI/dev tools across all platforms**
@@ -124,15 +134,15 @@ eApps/
 │   ├── eosim/                      #   Python/QEMU hardware simulator (63+ platforms)
 │   └── ebrowser/                   #   C/SDL2 browser engine
 │
-├── mobile-apps/                    # 📱 32 Flutter mobile apps (incl. eServiceApps)
-├── web-apps/                       # 🌐 34 PWA web apps (HTML5/JS/WASM)
+├── mobile-apps/                    # 📱 36 Flutter mobile apps (incl. eServiceApps)
+├── web-apps/                       # 🌐 33 PWA web apps (HTML5/JS/WASM)
 ├── browser-extensions/             # 🧩 20 browser extensions (Manifest V3)
 ├── dev-tools/                      # 🛠️ 14 IDE extensions (VS Code, JetBrains)
 ├── cli-tools/                      # ⌨️ 22 CLI tools (Node.js, Python)
-├── enterprise/                     # 🏢 16 enterprise deployments (Docker, Helm, MSI)
+├── enterprise/                     # 🏢 12 enterprise deployments (Docker, Helm, MSI)
 ├── shared/                         # 🔗 Reusable code (JS, Flutter, C, Python)
 │
-├── apps/                           # ⚙️ 40+ native LVGL apps (original eApps)
+├── apps/                           # ⚙️ 46 native LVGL apps (original eApps)
 ├── core/                           # Native shared core (C)
 ├── cmake/                          # Cross-platform CMake toolchains
 ├── port/                           # Platform ports (SDL2, Android, iOS, Web, EoS)
@@ -273,6 +283,26 @@ Each tag → **build → test → package → sign → release → update `apps.
 
 > Configure secrets in **Settings → Secrets and variables → Actions** on GitHub.
 
+### Security Practices
+
+- **No hardcoded secrets** — all signing keys, API tokens, and passwords are loaded from environment variables or CI/CD secrets
+- **Default admin password** — the eDB admin user reads its password from the `EDB_ADMIN_PASSWORD` environment variable; if unset, a secure random password is generated and logged
+- **Auto-update manifests** — served over HTTPS from GitHub Pages; Chrome and Firefox enforce signature verification on extensions
+- **Supply chain** — Dependabot, CodeQL, and OpenSSF Scorecard workflows run on every push
+- **Native apps** — static buffer allocations follow LVGL best practices for embedded targets; no dynamic allocation in render paths
+
+### Reporting Vulnerabilities
+
+If you discover a security vulnerability, please **do not** open a public issue. Instead, email **security@embeddedos.org** with:
+
+1. Description of the vulnerability
+2. Steps to reproduce
+3. Affected versions
+
+We aim to acknowledge reports within 48 hours and provide a fix within 7 days for critical issues.
+
+See [SECURITY.md](SECURITY.md) for the full security policy.
+
 ---
 
 ## 🔗 Shared Code
@@ -356,3 +386,16 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines. In summary:
   <strong>🏪 <a href="https://embeddedos-org.github.io/eApps/">Visit the EoS App Store</a></strong><br/>
   Built with ❤️ by <a href="https://github.com/embeddedos-org">embeddedos-org</a>
 </p>
+
+<!-- begin: release-model (audit-2026-05) -->
+## Release model
+
+`master` is the line of development; every PR lands here. `release` is a
+rolling pointer to the latest released `vX.Y.Z` tag, updated automatically
+by [`.github/workflows/sync-release-branch.yml`](.github/workflows/sync-release-branch.yml).
+Tags are immutable.
+
+See [embeddedos-org/.github/STANDARDS.md](https://github.com/embeddedos-org/.github/blob/master/STANDARDS.md)
+for the org-wide tag scheme, release model, and the compliance frameworks
+every product targets.
+<!-- end: release-model (audit-2026-05) -->

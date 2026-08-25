@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xsi:type="TaskPaneApp">
+  <Id>eoffice-office365</Id><Version>1.9.0</Version><ProviderName>EmbeddedOS</ProviderName>
+</OfficeApp>

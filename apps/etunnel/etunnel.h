@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-#ifndef EAPPS_APP_ETUNNEL_H
-#define EAPPS_APP_ETUNNEL_H
-#include "eapps/types.h"
+// eTunnel — EoS LVGL Application
+#pragma once
+#include "lvgl.h"
+#include "eapps_core.h"
 extern const eapps_app_info_t etunnel_info;
 extern const eapps_app_lifecycle_t etunnel_lifecycle;
-#endif

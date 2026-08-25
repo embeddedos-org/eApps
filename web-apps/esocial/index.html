@@ -1,41 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Network — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eSocial Network — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6366f1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#eef2ff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{background:#6366f1;color:white;padding:14px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+header .logo{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+header h1{font-size:17px;font-weight:600}
+header .pwa-badge{margin-left:auto;background:rgba(255,255,255,.2);padding:3px 10px;border-radius:12px;font-size:11px}
+.app-body{flex:1;padding:20px;max-width:700px;margin:0 auto;width:100%}
+.btn{cursor:pointer;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:500;transition:all .15s}
+.btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
+.btn.primary{background:#6366f1;color:white}
+.btn:not(.primary){background:white;color:#374151;border:1px solid #e5e7eb}
+.btn.large{padding:12px 32px;font-size:15px}
+input,textarea,select{width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:9px 12px;font-size:13px;background:white;color:#1e293b;outline:none;font-family:inherit}
+input:focus,textarea:focus{border-color:#6366f1;box-shadow:0 0 0 3px #6366f122}
+/* Clock styles */
+.time-hero{font-size:56px;font-weight:700;text-align:center;color:#6366f1;margin:20px 0 4px;font-variant-numeric:tabular-nums}
+.date-sub{text-align:center;font-size:14px;color:#64748b;margin-bottom:20px}
+.tabs,.conv-tabs,.timer-mode-tabs{display:flex;gap:6px;margin-bottom:16px;background:white;padding:4px;border-radius:10px;border:1px solid #e5e7eb}
+.tab,.conv-tab,.mode-tab{flex:1;border:none;padding:7px;border-radius:7px;font-size:12px;cursor:pointer;background:transparent;color:#64748b;font-weight:500;transition:all .15s}
+.tab.active,.conv-tab.active,.mode-tab.active{background:#6366f1;color:white}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.tz-list{background:white;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb}
+.tz-row{display:flex;justify-content:space-between;padding:10px 14px;font-size:13px;border-bottom:1px solid #f1f5f9}
+.tz-row:last-child{border-bottom:none}
+.tz-time{font-weight:600;color:#6366f1}
+.sw-display{font-size:48px;font-weight:700;text-align:center;color:#6366f1;margin:16px 0;font-variant-numeric:tabular-nums}
+.btn-row{display:flex;gap:8px;margin-bottom:12px}
+.btn-row .btn{flex:1}
+.lap-item{list-style:none;padding:6px 0;font-size:13px;border-bottom:1px solid #f1f5f9;color:#374151}
+.time-input{margin-bottom:10px}
+/* Notes styles */
+.note-toolbar{display:flex;gap:8px;margin-bottom:12px}
+.note-title-input{flex:1}
+textarea{height:180px;resize:vertical;margin-bottom:12px}
+.notes-list{display:flex;flex-direction:column;gap:8px}
+.note-card{background:white;border-radius:10px;padding:12px 14px;border:1px solid #e5e7eb;cursor:pointer;position:relative;transition:border-color .15s}
+.note-card:hover,.note-card.active{border-color:#6366f1}
+.note-card-title{font-size:13px;font-weight:600;margin-bottom:4px}
+.note-card-preview{font-size:12px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-del{position:absolute;top:8px;right:8px;border:none;background:none;cursor:pointer;color:#94a3b8;font-size:14px}
+/* Tasks styles */
+.task-add-row{display:flex;gap:8px;margin-bottom:12px}
+.task-add-row input{flex:1}
+.task-add-row select{width:100px;flex-shrink:0}
+.task-filters{display:flex;gap:6px;margin-bottom:12px}
+.filter-btn{border:none;padding:5px 14px;border-radius:20px;font-size:12px;cursor:pointer;background:white;color:#374151;border:1px solid #e5e7eb}
+.filter-btn.active{background:#6366f1;color:white;border-color:#6366f1}
+.task-list{list-style:none}
+.task-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border-radius:8px;margin-bottom:6px;border:1px solid #e5e7eb}
+.task-item.done .task-text{text-decoration:line-through;color:#94a3b8}
+.task-item input[type=checkbox]{width:16px;height:16px;cursor:pointer}
+.task-text{flex:1;font-size:13px}
+.priority-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.task-del{border:none;background:none;cursor:pointer;color:#94a3b8;font-size:14px}
+.task-stats{text-align:center;font-size:12px;color:#64748b;margin-top:12px}
+/* Timer styles */
+.timer-circle{position:relative;display:flex;align-items:center;justify-content:center;margin:16px auto;width:200px;height:200px}
+.timer-inner{position:absolute;text-align:center}
+.timer-display{font-size:42px;font-weight:700;color:#6366f1;font-variant-numeric:tabular-nums}
+.timer-mode-label{font-size:12px;color:#64748b;margin-top:4px}
+.timer-controls{display:flex;gap:10px;justify-content:center;margin:16px 0}
+.session-counter{text-align:center;font-size:13px;color:#64748b}
+/* Converter styles */
+.conv-form{background:white;border-radius:12px;padding:16px;border:1px solid #e5e7eb}
+.conv-row{display:flex;gap:8px;margin-bottom:10px}
+.conv-row input{flex:1}
+.conv-row select{width:120px;flex-shrink:0}
+.conv-swap{text-align:center;margin-bottom:10px}
+.conv-swap button{background:none;border:1px solid #e5e7eb;border-radius:8px;padding:6px 16px;cursor:pointer;font-size:13px}
+.conv-result{text-align:center;font-size:15px;font-weight:600;color:#6366f1;margin-top:12px;padding:10px;background:white;border-radius:8px;border:1px solid #e5e7eb}
+/* Paint styles */
+.paint-body{padding:0;display:flex;flex-direction:column;height:calc(100vh - 60px)}
+.paint-toolbar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:white;border-bottom:1px solid #e5e7eb;flex-wrap:wrap}
+.tool-group{display:flex;gap:6px;align-items:center}
+.tool-btn{border:none;border-radius:8px;padding:7px 10px;cursor:pointer;background:#f1f5f9;font-size:16px;transition:all .15s}
+.tool-btn.active{background:#6366f1;color:white}
+input[type=color]{width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:2px}
+input[type=range]{width:80px}
+#paintCanvas{flex:1;cursor:crosshair;touch-action:none}
+/* Generic styles */
+.feature-hero{text-align:center;padding:32px 0 24px}
+.feature-icon{font-size:56px;margin-bottom:12px}
+.feature-hero h2{font-size:22px;font-weight:700;margin-bottom:8px}
+.feature-hero p{font-size:14px;color:#64748b}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.feature-card{background:white;border:1px solid #e5e7eb;border-radius:12px;padding:16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;font-weight:500;transition:all .15s}
+.feature-card:hover{border-color:#6366f1;background:#eef2ff}
+.feature-card:active{transform:scale(.97)}
+.action-area{display:flex;gap:8px;margin-bottom:12px}
+.action-area input{flex:1}
+.result-area{background:white;border-radius:10px;padding:14px;border:1px solid #e5e7eb;font-size:13px;color:#374151;min-height:60px}
+.empty-state{text-align:center;padding:24px;color:#94a3b8;font-size:13px}
+footer{padding:12px 20px;text-align:center;font-size:11px;color:#94a3b8;border-top:1px solid #f1f5f9;background:white}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Social Network</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Social Network</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header>
+  <div class="logo">E</div>
+  <h1>eSocial Network</h1>
+  <span class="pwa-badge">PWA</span>
+</header>
+
+<div class="app-body">
+  <div class="feature-hero">
+    <div class="feature-icon">⚡</div>
+    <h2>eSocial Network</h2>
+    <p>EoS Progressive Web App — works offline, installable on any device.</p>
+  </div>
+  <div class="feature-grid" id="featureGrid"></div>
+  <div class="action-area">
+    <input type="text" id="mainInput" placeholder="Enter text...">
+    <button class="btn primary" id="mainAction">Go</button>
+  </div>
+  <div class="result-area" id="resultArea"></div>
+</div>
+<footer>EmbeddedOS — eSocial Network v1.7.0 • Works offline</footer>
+<script>
+
+const features=[{'icon':'📋','label':'Copy to Clipboard','action':()=>{const t=document.getElementById('mainInput').value;navigator.clipboard.writeText(t).then(()=>show('Copied!'));}},{'icon':'🔍','label':'Search Web','action':()=>{const q=document.getElementById('mainInput').value;window.open('https://duckduckgo.com/?q='+encodeURIComponent(q),'_blank');}},{'icon':'📊','label':'Word Count','action':()=>{const t=document.getElementById('mainInput').value;const words=t.trim().split(/\s+/).filter(Boolean).length;show(`Words: ${words} | Chars: ${t.length}`);}},{'icon':'🔀','label':'Shuffle Text','action':()=>{const t=document.getElementById('mainInput').value.split('');for(let i=t.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[t[i],t[j]]=[t[j],t[i]];}show(t.join(''));}}];
+function show(msg){document.getElementById('resultArea').textContent=msg;}
+document.getElementById('featureGrid').innerHTML=features.map((f,i)=>`<button class="feature-card" onclick="features[${i}].action()">${f.icon}<span>${f.label}</span></button>`).join('');
+document.getElementById('mainAction').addEventListener('click',()=>show('Processing: '+document.getElementById('mainInput').value));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

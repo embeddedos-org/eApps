@@ -1,0 +1,1 @@
+name: eOffice GitHub App\non: [push, pull_request]\njobs:\n  check:\n    runs-on: ubuntu-latest

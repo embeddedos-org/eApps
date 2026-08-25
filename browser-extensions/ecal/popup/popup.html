@@ -1,24 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eCalendar</title>
   <style>
-    body { width: 320px; min-height: 200px; font-family: -apple-system, sans-serif; margin: 0; padding: 16px; background: #fafafa; }
-    .header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0; }
-    .header h1 { font-size: 16px; margin: 0; color: #1976D2; }
-    .content { text-align: center; padding: 24px 0; color: #666; }
-    .badge { background: #E3F2FD; color: #1976D2; padding: 4px 10px; border-radius: 12px; font-size: 11px; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 340px;
+      min-height: 220px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f9ff;
+      color: #1e293b;
+    }
+    .header {
+      background: #0ea5e9;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header .logo {
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+    }
+    .header h1 { font-size: 14px; font-weight: 600; }
+    .header .badge {
+      margin-left: auto;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+    }
+    .body { padding: 14px; }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    button:active { transform: scale(0.97); }
+    button.primary { background: #0ea5e9; color: white; }
+    button:not(.primary) { background: white; color: #374151; border: 1px solid #e5e7eb; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+      background: white;
+      color: #1e293b;
+      outline: none;
+    }
+    input:focus, textarea:focus { border-color: #0ea5e9; box-shadow: 0 0 0 2px #0ea5e922; }
+    .chat-area {
+      height: 140px;
+      overflow-y: auto;
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    .msg { margin-bottom: 8px; font-size: 12px; }
+    .msg.bot span { background: #0ea5e922; padding: 5px 10px; border-radius: 12px; display: inline-block; }
+    .msg.user span { background: #0ea5e9; color: white; padding: 5px 10px; border-radius: 12px; display: inline-block; float: right; }
+    .input-row { display: flex; gap: 6px; }
+    .input-row input { flex: 1; }
+    .time-display { font-size: 36px; font-weight: 700; text-align: center; color: #0ea5e9; margin: 10px 0 4px; }
+    .date-display { text-align: center; font-size: 12px; color: #64748b; margin-bottom: 12px; }
+    .tz-list { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; }
+    .tz-item { display: flex; justify-content: space-between; padding: 7px 12px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
+    .tz-item:last-child { border-bottom: none; }
+    .conv-row { display: flex; gap: 8px; margin-bottom: 8px; }
+    .conv-row select { width: 100px; flex-shrink: 0; }
+    .conv-arrow { text-align: center; font-size: 18px; color: #0ea5e9; margin: 4px 0; }
+    .timer-display { font-size: 48px; font-weight: 700; text-align: center; color: #0ea5e9; margin: 8px 0 4px; }
+    .timer-label { text-align: center; font-size: 11px; color: #64748b; margin-bottom: 12px; }
+    .btn-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .btn-row button { flex: 1; }
+    .stats-row { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; }
+    textarea { height: 100px; resize: none; margin-bottom: 8px; }
+    .saved-notes { margin-top: 10px; max-height: 80px; overflow-y: auto; }
+    .saved-notes .note-item { background: white; border-radius: 6px; padding: 6px 10px; font-size: 11px; margin-bottom: 4px; border: 1px solid #e5e7eb; }
+    .guard-status { display: flex; align-items: center; gap: 8px; background: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid #e5e7eb; font-size: 13px; font-weight: 500; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #d1d5db; }
+    .status-dot.active { background: #22c55e; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .stat { background: white; border-radius: 8px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; }
+    .stat-num { font-size: 24px; font-weight: 700; color: #0ea5e9; }
+    .stat-label { font-size: 11px; color: #64748b; }
+    .task-input-row { display: flex; gap: 6px; margin-bottom: 10px; }
+    .task-input-row input { flex: 1; }
+    .task-input-row button { padding: 7px 12px; background: #0ea5e9; color: white; font-size: 16px; }
+    .task-list { list-style: none; max-height: 120px; overflow-y: auto; margin-bottom: 8px; }
+    .task-list li { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: white; border-radius: 6px; margin-bottom: 4px; font-size: 12px; border: 1px solid #e5e7eb; }
+    .task-list li input[type=checkbox] { width: 14px; height: 14px; }
+    .task-footer { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b; }
+    .vpn-status { display: flex; align-items: center; gap: 8px; background: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; border: 1px solid #e5e7eb; font-size: 13px; font-weight: 600; }
+    .info-grid { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 12px; }
+    .info-row { display: flex; justify-content: space-between; padding: 7px 12px; font-size: 12px; border-bottom: 1px solid #f1f5f9; }
+    .info-row:last-child { border-bottom: none; }
+    .info-row span:last-child { font-weight: 600; color: #0ea5e9; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+    .tab { flex: 1; padding: 6px; font-size: 11px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; }
+    .tab.active { background: #0ea5e9; color: white; border-color: #0ea5e9; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .result-area { background: white; border-radius: 6px; padding: 8px; font-size: 11px; color: #64748b; border: 1px solid #e5e7eb; margin-top: 8px; min-height: 40px; }
+    .feature-list { display: flex; flex-direction: column; gap: 6px; }
+    .feature-btn { text-align: left; padding: 10px 14px; font-size: 12px; }
+    .footer {
+      padding: 8px 16px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #94a3b8;
+      background: white;
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <span style="font-size:20px">⚡</span>
-    <h1>Calendar Quick View</h1>
+    <div class="logo">E</div>
+    <h1>eCalendar</h1>
+    <span class="badge">EoS v1.7</span>
   </div>
-  <div class="content">
-    <p>Calendar Quick View</p>
-    <br>
-    <span class="badge">EoS Extension</span>
+  <div class="body">
+
+    <div class="feature-list">
+      <button class="feature-btn" id="btn0">Today's Events</button>
+      <button class="feature-btn" id="btn1">Add Event</button>
+      <button class="feature-btn" id="btn2">Reminders</button>
+    </div>
+    <div class="result-area" id="result"></div>
+  </div>
+  <div class="footer">
+    <span>EmbeddedOS Extension</span>
+    <span>v1.7.0</span>
   </div>
   <script src="popup.js"></script>
 </body>

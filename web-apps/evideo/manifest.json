@@ -1,13 +1,27 @@
 {
-  "name": "Video Player — EoS",
-  "short_name": "evideo",
-  "description": "Video Player - EoS Progressive Web App",
-  "start_url": ".",
+  "name": "eVideo Editor",
+  "short_name": "eVideo",
+  "description": "eVideo Editor \u2014 EoS Progressive Web App",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1976D2",
+  "orientation": "any",
+  "background_color": "#eff6ff",
+  "theme_color": "#1d4ed8",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "lang": "en"
 }

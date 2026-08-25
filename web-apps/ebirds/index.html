@@ -1,41 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flappy Birds — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eBirds — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16a34a">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0fdf4;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{background:#16a34a;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.score-badge{background:rgba(255,255,255,.2);padding:3px 14px;border-radius:20px;font-size:14px;font-weight:600}
+.game-wrap{padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+canvas{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15);display:block}
+.tap-hint{font-size:13px;color:#64748b}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Flappy Birds</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Flappy Birds</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>🐦 eBirds</h1><span class="score-badge">Score: <span id="score">0</span></span></header>
+<div class="game-wrap">
+  <canvas id="c" width="320" height="480"></canvas>
+  <p class="tap-hint">Tap / Space / Click to flap</p>
+</div>
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d');
+const W=320,H=480,PIPE_W=52,GAP=130,GRAVITY=0.35,FLAP=-7,PIPE_SPEED=2.2;
+let bird,pipes,score,best=0,state,frameId;
+function init(){
+  bird={x:80,y:H/2,vy:0,r:14};
+  pipes=[];score=0;state='start';
+  document.getElementById('score').textContent=0;
+  cancelAnimationFrame(frameId);loop();
+}
+function flap(){
+  if(state==='start'){state='play';addPipe();}
+  else if(state==='dead'){init();return;}
+  if(state==='play')bird.vy=FLAP;
+}
+function addPipe(){
+  const top=60+Math.random()*(H-GAP-120);
+  pipes.push({x:W,top,scored:false});
+}
+function loop(){
+  update();draw();frameId=requestAnimationFrame(loop);
+}
+function update(){
+  if(state!=='play')return;
+  bird.vy+=GRAVITY;bird.y+=bird.vy;
+  if(bird.y+bird.r>H||bird.y-bird.r<0){state='dead';if(score>best)best=score;return;}
+  pipes.forEach(p=>{p.x-=PIPE_SPEED;});
+  if(!pipes.length||pipes[pipes.length-1].x<W-180)addPipe();
+  pipes=pipes.filter(p=>p.x>-PIPE_W);
+  pipes.forEach(p=>{
+    if(!p.scored&&p.x+PIPE_W<bird.x){p.scored=true;score++;document.getElementById('score').textContent=score;}
+    if(bird.x+bird.r>p.x&&bird.x-bird.r<p.x+PIPE_W&&(bird.y-bird.r<p.top||bird.y+bird.r>p.top+GAP)){state='dead';if(score>best)best=score;}
+  });
+}
+function draw(){
+  // Sky
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#bfdbfe');grad.addColorStop(1,'#dbeafe');
+  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+  // Ground
+  ctx.fillStyle='#86efac';ctx.fillRect(0,H-30,W,30);
+  ctx.fillStyle='#4ade80';ctx.fillRect(0,H-30,W,6);
+  // Pipes
+  pipes.forEach(p=>{
+    ctx.fillStyle='#16a34a';
+    ctx.fillRect(p.x,0,PIPE_W,p.top);
+    ctx.fillRect(p.x,p.top+GAP,PIPE_W,H-p.top-GAP);
+    ctx.fillStyle='#15803d';
+    ctx.fillRect(p.x-4,p.top-20,PIPE_W+8,20);
+    ctx.fillRect(p.x-4,p.top+GAP,PIPE_W+8,20);
+  });
+  // Bird
+  ctx.save();ctx.translate(bird.x,bird.y);ctx.rotate(Math.min(Math.max(bird.vy*0.05,-0.5),0.5));
+  ctx.fillStyle='#fbbf24';ctx.beginPath();ctx.ellipse(0,0,bird.r,bird.r*0.85,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='white';ctx.beginPath();ctx.arc(6,-4,5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#1e293b';ctx.beginPath();ctx.arc(8,-4,2.5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#f97316';ctx.beginPath();ctx.moveTo(bird.r,0);ctx.lineTo(bird.r+8,3);ctx.lineTo(bird.r,-3);ctx.fill();
+  ctx.restore();
+  // Overlays
+  if(state==='start'){
+    ctx.fillStyle='rgba(0,0,0,.4)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='white';ctx.font='bold 28px sans-serif';ctx.textAlign='center';ctx.fillText('eBirds',W/2,H/2-30);
+    ctx.font='15px sans-serif';ctx.fillText('Tap to start',W/2,H/2+10);
+  }
+  if(state==='dead'){
+    ctx.fillStyle='rgba(0,0,0,.5)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='white';ctx.font='bold 26px sans-serif';ctx.textAlign='center';ctx.fillText('Game Over',W/2,H/2-40);
+    ctx.font='18px sans-serif';ctx.fillText('Score: '+score,W/2,H/2);
+    ctx.font='14px sans-serif';ctx.fillStyle='#fbbf24';ctx.fillText('Best: '+best,W/2,H/2+30);
+    ctx.fillStyle='white';ctx.font='13px sans-serif';ctx.fillText('Tap to restart',W/2,H/2+60);
+  }
+}
+C.addEventListener('click',flap);
+document.addEventListener('keydown',e=>{if(e.key===' '||e.key==='ArrowUp'){e.preventDefault();flap();}});
+C.addEventListener('touchstart',e=>{e.preventDefault();flap();},{passive:false});
+init();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

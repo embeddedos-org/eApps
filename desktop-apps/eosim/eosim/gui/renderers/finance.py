@@ -1,0 +1,1 @@
+class FinanceRenderer: pass

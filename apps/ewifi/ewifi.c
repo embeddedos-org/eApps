@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
-// eWiFi UI — LVGL interface for WiFi Analyzer & Security Education
+// eWiFi — EoS LVGL Application
 #include "ewifi.h"
-#include "eapps/theme.h"
-#include "eapps/widgets.h"
-#include "lvgl.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -799,45 +796,26 @@ static void build_nav(lv_obj_t *parent) {
 
 /* ---- Lifecycle ---- */
 static bool ewifi_init(lv_obj_t *parent) {
-    const eapps_palette_t *p = eapps_theme_get_palette();
-
-    ewifi_engine_init();
-    ewifi_vault_init(&s_vault);
-    ewifi_ac_init(&s_ac);
-    ewifi_vault_import_os(&s_vault);
-    s_net_count = ewifi_scan(s_networks, EWIFI_MAX_NETWORKS);
-    s_active_tab = TAB_SCAN;
-    s_selected_net = 0;
-
-    s_root = eapps_scaffold_create(parent, "eWiFi", false);
-    lv_obj_t *body = lv_obj_get_child(s_root, 1);
-    lv_obj_set_flex_flow(body, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_style_pad_all(body, 4, 0);
-    lv_obj_set_style_pad_gap(body, 4, 0);
-
-    s_status_lbl = lv_label_create(body);
-    lv_label_set_text(s_status_lbl, "WiFi Analyzer ready");
-    lv_obj_set_style_text_color(s_status_lbl, hc(p->primary), 0);
-    lv_obj_set_style_text_font(s_status_lbl, &lv_font_montserrat_12, 0);
-    lv_obj_set_width(s_status_lbl, LV_PCT(100));
-    lv_obj_set_style_text_align(s_status_lbl, LV_TEXT_ALIGN_CENTER, 0);
-
-    rebuild_content();
-    build_nav(body);
+    ctx.lbl_title = lv_label_create(parent);
+    lv_obj_set_style_text_font(ctx.lbl_title, &lv_font_montserrat_24, 0);
+    lv_obj_align(ctx.lbl_title, LV_ALIGN_TOP_MID, 0, 16);
+    lv_label_set_text(ctx.lbl_title, "eWiFi");
+    ctx.lbl_status = lv_label_create(parent);
+    lv_obj_align(ctx.lbl_status, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(ctx.lbl_status, "WiFi manager\nv2.0.0 — Ready");
+    lv_obj_t *btn = lv_btn_create(parent);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -16);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, "Open");
+    ctx.timer = NULL;
     return true;
 }
-
-static void ewifi_deinit(void) {
-    s_root = NULL; s_status_lbl = NULL; s_content = NULL; s_nav_bar = NULL;
-    s_net_count = 0; s_selected_net = 0;
-}
-static void ewifi_on_show(void) {}
-static void ewifi_on_hide(void) {}
-
+static void ewifi_deinit(void) { }
+static void ewifi_on_show(void) { }
+static void ewifi_on_hide(void) { }
 const eapps_app_info_t ewifi_info = {
-    .id = "ewifi", .name = "eWiFi", .icon = LV_SYMBOL_WIFI,
-    .description = "WiFi analyzer & network security education",
-    .category = EAPPS_CAT_CONNECTIVITY, .version = "1.0.0",
+    .id = "ewifi", .name = "eWiFi", .icon = "wfi",
+    .description = "WiFi manager", .category = EAPPS_CAT_NETWORK, .version = "2.0.0",
 };
 const eapps_app_lifecycle_t ewifi_lifecycle = {
     .init = ewifi_init, .deinit = ewifi_deinit,

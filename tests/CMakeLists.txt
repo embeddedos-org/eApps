@@ -35,6 +35,14 @@ if(NOT MSVC)
 endif()
 add_test(NAME test_ewifi COMMAND test_ewifi)
 
+# eWiFi shell-argument hardening — SSIDs reach system()/popen()
+add_executable(test_ewifi_shellsafe test_ewifi_shellsafe.c)
+target_link_libraries(test_ewifi_shellsafe PRIVATE eapps_common eapps_ui ewifi)
+if(NOT MSVC)
+    target_link_libraries(test_ewifi_shellsafe PRIVATE m)
+endif()
+add_test(NAME test_ewifi_shellsafe COMMAND test_ewifi_shellsafe)
+
 # App lifecycle tests — needs all app libraries
 set(LIFECYCLE_LIBS eapps_common eapps_ui)
 if(EAPPS_BUILD_PRODUCTIVITY)

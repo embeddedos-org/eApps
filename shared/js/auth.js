@@ -5,7 +5,7 @@
 
 export class EosAuth {
   constructor(config = {}) {
-    this.baseUrl = config.baseUrl || 'https://api.embeddedos.org';
+    this.baseUrl = config.baseUrl || 'https://embeddedos-org.github.io/api';
     this.tokenKey = config.tokenKey || 'eos_auth_token';
   }
 

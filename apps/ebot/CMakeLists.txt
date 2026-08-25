@@ -1,6 +1,7 @@
-# Only build ebot if real LVGL is available (not the stub interface target)
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../../extern/lvgl/CMakeLists.txt")
-    message(STATUS "LVGL submodule not found - skipping ebot build")
+# LVGL is provided either by the extern/lvgl submodule or by FetchContent, so
+# test for the target rather than for the submodule directory.
+if(NOT TARGET lvgl)
+    message(STATUS "LVGL target unavailable - skipping ebot build")
     return()
 endif()
 

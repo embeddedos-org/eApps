@@ -1,41 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Block Puzzle — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eBlocks — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0891b2">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#ecfeff;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{background:#0891b2;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.score-badge{background:rgba(255,255,255,.2);padding:3px 14px;border-radius:20px;font-size:14px;font-weight:600}
+.game-wrap{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+canvas{border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.hint{font-size:12px;color:#64748b;text-align:center}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Block Puzzle</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Block Puzzle</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>🟦 eBlocks</h1><span class="score-badge">Score: <span id="score">0</span></span></header>
+<div class="game-wrap">
+  <canvas id="c" width="300" height="400"></canvas>
+  <p class="hint">Drag blocks to the grid • Complete rows to score</p>
+</div>
+<script>
+// Block puzzle: drag pieces from tray onto a 8x8 grid, clear full rows/cols
+const C=document.getElementById('c'),ctx=C.getContext('2d');
+const GRID=8,SZ=34,OX=10,OY=10;
+let grid,score,pieces,dragging,dragPiece,dragX,dragY;
+const SHAPES=[
+  {cells:[[0,0],[0,1],[0,2]],color:'#0891b2'},
+  {cells:[[0,0],[1,0],[2,0]],color:'#ef4444'},
+  {cells:[[0,0],[0,1],[1,0],[1,1]],color:'#f59e0b'},
+  {cells:[[0,0],[0,1],[0,2],[1,2]],color:'#22c55e'},
+  {cells:[[0,0],[1,0],[1,1],[1,2]],color:'#a855f7'},
+  {cells:[[0,0],[0,1],[0,2],[0,3]],color:'#ec4899'},
+  {cells:[[0,0]],color:'#6366f1'},
+  {cells:[[0,0],[0,1]],color:'#f97316'},
+];
+function randPiece(){return JSON.parse(JSON.stringify(SHAPES[Math.floor(Math.random()*SHAPES.length)]));}
+function newGame(){grid=Array.from({length:GRID},()=>Array(GRID).fill(0));score=0;pieces=[randPiece(),randPiece(),randPiece()];dragging=false;document.getElementById('score').textContent=0;draw();}
+function canPlace(piece,gr,gc){return piece.cells.every(([r,c])=>{const nr=gr+r,nc=gc+c;return nr>=0&&nr<GRID&&nc>=0&&nc<GRID&&!grid[nr][nc];});}
+function place(piece,gr,gc){piece.cells.forEach(([r,c])=>grid[gr+r][gc+c]=piece.color);checkLines();}
+function checkLines(){
+  let cleared=0;
+  for(let r=0;r<GRID;r++)if(grid[r].every(c=>c)){grid[r]=Array(GRID).fill(0);cleared++;}
+  for(let c=0;c<GRID;c++)if(grid.every(r=>r[c])){grid.forEach(r=>r[c]=0);cleared++;}
+  if(cleared){score+=cleared*10*cleared;document.getElementById('score').textContent=score;}
+}
+function getCell(px,py){const c=Math.floor((px-OX)/SZ),r=Math.floor((py-OY)/SZ);return{r,c};}
+function draw(){
+  ctx.clearRect(0,0,C.width,C.height);
+  // Grid bg
+  ctx.fillStyle='#f0f9ff';ctx.fillRect(OX,OY,GRID*SZ,GRID*SZ);
+  for(let r=0;r<=GRID;r++){ctx.strokeStyle='#e0f2fe';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(OX,OY+r*SZ);ctx.lineTo(OX+GRID*SZ,OY+r*SZ);ctx.stroke();}
+  for(let c=0;c<=GRID;c++){ctx.beginPath();ctx.moveTo(OX+c*SZ,OY);ctx.lineTo(OX+c*SZ,OY+GRID*SZ);ctx.stroke();}
+  // Filled cells
+  for(let r=0;r<GRID;r++)for(let c=0;c<GRID;c++)if(grid[r][c]){ctx.fillStyle=grid[r][c];ctx.fillRect(OX+c*SZ+1,OY+r*SZ+1,SZ-2,SZ-2);}
+  // Tray pieces
+  const ty=OY+GRID*SZ+12;
+  pieces.forEach((p,i)=>{
+    if(!p)return;
+    const tx=20+i*90;
+    p.cells.forEach(([r,c])=>{ctx.fillStyle=p.color;ctx.fillRect(tx+c*20,ty+r*20,18,18);});
+  });
+  // Drag ghost
+  if(dragging&&dragPiece){
+    const {r,c}=getCell(dragX,dragY);
+    const ok=canPlace(dragPiece,r,c);
+    dragPiece.cells.forEach(([dr,dc])=>{
+      ctx.fillStyle=ok?dragPiece.color+'aa':'#ef444466';
+      ctx.fillRect(OX+(c+dc)*SZ+1,OY+(r+dr)*SZ+1,SZ-2,SZ-2);
+    });
+  }
+}
+function getTrayPiece(x,y){
+  const ty=OY+GRID*SZ+12;
+  for(let i=0;i<pieces.length;i++){
+    if(!pieces[i])continue;
+    const tx=20+i*90;
+    const maxR=Math.max(...pieces[i].cells.map(([r])=>r));
+    const maxC=Math.max(...pieces[i].cells.map(([,c])=>c));
+    if(x>=tx&&x<=tx+(maxC+1)*20&&y>=ty&&y<=ty+(maxR+1)*20)return i;
+  }
+  return -1;
+}
+C.addEventListener('mousedown',e=>{const r=C.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;const idx=getTrayPiece(x,y);if(idx>=0){dragging=true;dragPiece=pieces[idx];dragX=x;dragY=y;draw();}});
+C.addEventListener('mousemove',e=>{if(!dragging)return;const r=C.getBoundingClientRect();dragX=e.clientX-r.left;dragY=e.clientY-r.top;draw();});
+C.addEventListener('mouseup',e=>{
+  if(!dragging)return;
+  const r=C.getBoundingClientRect();const x=e.clientX-r.left,y=e.clientY-r.top;
+  const {r:gr,c:gc}=getCell(x,y);
+  const idx=pieces.indexOf(dragPiece);
+  if(canPlace(dragPiece,gr,gc)){place(dragPiece,gr,gc);pieces[idx]=null;if(pieces.every(p=>!p))pieces=[randPiece(),randPiece(),randPiece()];}
+  dragging=false;dragPiece=null;draw();
+});
+newGame();
+C.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];C.dispatchEvent(new MouseEvent('click',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

@@ -22,6 +22,9 @@ typedef enum {
     EAPPS_CAT_CONNECTIVITY,
     EAPPS_CAT_SECURITY,
     EAPPS_CAT_WEB,
+    EAPPS_CAT_SYSTEM,
+    EAPPS_CAT_NETWORK,
+    EAPPS_CAT_COMMUNICATION,
     EAPPS_CAT_COUNT
 } eapps_category_t;
 
@@ -58,6 +61,9 @@ static inline const char *eapps_category_str(eapps_category_t cat) {
         case EAPPS_CAT_CONNECTIVITY: return "Connectivity";
         case EAPPS_CAT_SECURITY:     return "Security";
         case EAPPS_CAT_WEB:          return "Web";
+        case EAPPS_CAT_SYSTEM:       return "System";
+        case EAPPS_CAT_NETWORK:      return "Network";
+        case EAPPS_CAT_COMMUNICATION: return "Communication";
         default:                      return "Unknown";
     }
 }

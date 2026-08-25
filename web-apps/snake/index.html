@@ -1,41 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Snake — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#16a34a">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f0fdf4;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:-apple-system,sans-serif}
+header{background:#16a34a;color:white;width:100%;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.score-badge{background:rgba(255,255,255,.2);padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600}
+.game-wrap{padding:20px;display:flex;flex-direction:column;align-items:center;gap:16px}
+canvas{border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.15);background:#1e293b;display:block}
+.controls{display:flex;flex-direction:column;align-items:center;gap:8px}
+.ctrl-row{display:flex;gap:8px}
+.ctrl-btn{width:52px;height:52px;border:none;border-radius:10px;background:#16a34a;color:white;font-size:20px;cursor:pointer;transition:transform .1s}
+.ctrl-btn:active{transform:scale(.9)}
+.info{font-size:13px;color:#64748b;text-align:center}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;border-radius:12px}
+.overlay h2{color:white;font-size:28px}
+.overlay p{color:#94a3b8;font-size:14px}
+.start-btn{background:#16a34a;color:white;border:none;padding:12px 32px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+.canvas-wrap{position:relative}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Snake Game</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Snake Game</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>🐍 Snake</h1><span class="score-badge">Score: <span id="score">0</span></span></header>
+<div class="game-wrap">
+  <div class="canvas-wrap">
+    <canvas id="c" width="320" height="320"></canvas>
+    <div class="overlay" id="overlay">
+      <h2>Snake</h2><p>Use arrow keys or buttons below</p>
+      <button class="start-btn" onclick="startGame()">Start Game</button>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="ctrl-row"><button class="ctrl-btn" onclick="setDir(0,-1)">▲</button></div>
+    <div class="ctrl-row">
+      <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
+      <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
+      <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
+    </div>
+  </div>
+  <p class="info">Arrow keys or tap buttons • Eat 🍎 to grow</p>
+</div>
+<script>
+const C=document.getElementById('c'),ctx=C.getContext('2d'),CELL=20,COLS=16,ROWS=16;
+let snake,dir,food,score,loop,running=false;
+function startGame(){
+  document.getElementById('overlay').style.display='none';
+  snake=[{x:8,y:8},{x:7,y:8},{x:6,y:8}];
+  dir={x:1,y:0};score=0;
+  document.getElementById('score').textContent=0;
+  placeFood();running=true;
+  clearInterval(loop);loop=setInterval(tick,130);
+}
+function placeFood(){
+  do{food={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)}}
+  while(snake.some(s=>s.x===food.x&&s.y===food.y));
+}
+function setDir(x,y){if(!running)return;if(x&&!dir.x)dir={x,y};if(y&&!dir.y)dir={x,y};}
+function tick(){
+  const head={x:(snake[0].x+dir.x+COLS)%COLS,y:(snake[0].y+dir.y+ROWS)%ROWS};
+  if(snake.some(s=>s.x===head.x&&s.y===head.y)){
+    running=false;clearInterval(loop);
+    const ov=document.getElementById('overlay');
+    ov.innerHTML=`<h2 style="color:white">Game Over</h2><p style="color:#94a3b8">Score: ${score}</p><button class="start-btn" onclick="startGame()">Play Again</button>`;
+    ov.style.display='flex';return;
+  }
+  snake.unshift(head);
+  if(head.x===food.x&&head.y===food.y){score++;document.getElementById('score').textContent=score;placeFood();}
+  else snake.pop();
+  draw();
+}
+function draw(){
+  ctx.fillStyle='#1e293b';ctx.fillRect(0,0,C.width,C.height);
+  ctx.fillStyle='#ef4444';ctx.beginPath();ctx.arc((food.x+.5)*CELL,(food.y+.5)*CELL,CELL*.4,0,Math.PI*2);ctx.fill();
+  snake.forEach((s,i)=>{
+    ctx.fillStyle=i===0?'#16a34a':'#4ade80';
+    ctx.beginPath();ctx.roundRect(s.x*CELL+1,s.y*CELL+1,CELL-2,CELL-2,4);ctx.fill();
+  });
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')setDir(-1,0);if(e.key==='ArrowRight')setDir(1,0);
+  if(e.key==='ArrowUp')setDir(0,-1);if(e.key==='ArrowDown')setDir(0,1);
+});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

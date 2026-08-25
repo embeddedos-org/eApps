@@ -1,219 +1,262 @@
 // SPDX-License-Identifier: MIT
-#ifndef EAPPS_APP_EREMOTE_H
-#define EAPPS_APP_EREMOTE_H
-#include "eapps/types.h"
-#include <stdint.h>
+// eRemote — EoS LVGL Application
+
+/**
+ * @file eremote.h
+ * @brief Public API for the eRemote universal-remote app and its engine.
+ *
+ * The engine in eremote_engine.c implements four IR protocols, a Pronto-style
+ * code database, a learning mode, a command dispatcher across IR/BLE/Wi-Fi and
+ * a hub relay, plus scene and schedule tables. Every declaration below is
+ * reconstructed from that translation unit's own usage; the header had been
+ * reduced to the app-registration boilerplate, which left the engine
+ * uncompilable.
+ *
+ * Command ordering is load-bearing: eremote_dispatch_cmd() indexes an
+ * eremote_ir_db_entry_t::codes[] array directly with an eremote_cmd_id_t, and
+ * the database in eremote_ir_db_init() stores Power, Vol+, Vol-, Ch+ and Ch-
+ * at indices 0-4. Do not reorder the first five enumerators.
+ */
+
+#pragma once
+
+#include "lvgl.h"
+#include "eapps_core.h"
+
 #include <stdbool.h>
+#include <stdint.h>
 
-/* ================================================================
- * eRemote — Universal Smart Remote
- *
- * Supports two operation modes:
- *   1. Direct Mode  — Phone IR blaster / BLE / Wi-Fi to device
- *   2. Hub Mode     — Phone → Wi-Fi → eRemote Hub → IR/RF blast
- *
- * IR Protocols:  NEC, RC5 (Philips), Sony SIRC, RAW (learned)
- * Smart Protos:  BLE GATT, Wi-Fi (SSDP/UPnP), mDNS
- * ================================================================ */
+/* ---- Capacity limits ---------------------------------------------------- */
 
-/* ---- IR Protocol Types ---- */
+#define EREMOTE_IR_DB_SIZE   16   /**< Code-database rows; init() fills 6.   */
+#define MAX_LEARNED          16   /**< Learned codes retained per device.    */
+#define MAX_SCENES            8   /**< Scene slots; init() fills 3.          */
+#define MAX_SCHEDULES         8   /**< Schedule slots; init() fills 2.       */
+#define MAX_SCENE_STEPS       8   /**< Steps per scene; longest built-in = 3.*/
+#define EREMOTE_MAX_PULSES  256   /**< Raw capture buffer, mark/space pairs. */
+#define EREMOTE_HEX_LEN      24   /**< Room for Pronto hex and LEARN_xxxx.   */
+#define EREMOTE_NAME_LEN     32   /**< strncpy(..., 31) throughout engine.   */
 
+/** Default IR carrier used when a learned frame has no decoded protocol. */
+#define IR_CARRIER_FREQ_HZ  38000u
+
+/* ---- IR protocols ------------------------------------------------------- */
+
+/** Wire protocol of a stored or captured IR frame. */
 typedef enum {
-    IR_PROTO_NEC,
-    IR_PROTO_RC5,
-    IR_PROTO_SONY_SIRC,
-    IR_PROTO_RAW,
-    IR_PROTO_COUNT,
+    IR_PROTO_NEC = 0,   /**< 38 kHz, 9ms+4.5ms leader, 32-bit frame.  */
+    IR_PROTO_RC5,       /**< 36 kHz, Manchester, 889us half-bit.      */
+    IR_PROTO_SONY_SIRC, /**< 40 kHz, 2400us leader, 12/15/20-bit.     */
+    IR_PROTO_RAW,       /**< Undecoded pulse train from learning mode.*/
+    IR_PROTO_COUNT
 } eremote_ir_proto_t;
 
-/* ---- IR Signal Representation ---- */
-
-#define IR_RAW_MAX_PULSES 256
-#define IR_CARRIER_FREQ_HZ 38000
-
+/** A single IR command: protocol-specific fields plus a printable hex form. */
 typedef struct {
     eremote_ir_proto_t proto;
     uint32_t           carrier_hz;
+    char               hex_code[EREMOTE_HEX_LEN];
     union {
+        struct { uint8_t address, address_inv, command, command_inv; } nec;
+        struct { uint8_t toggle, address, command; }                  rc5;
+        struct { uint8_t command, address, bit_count; }               sirc;
         struct {
-            uint8_t  address;
-            uint8_t  address_inv;
-            uint8_t  command;
-            uint8_t  command_inv;
-        } nec;
-        struct {
-            uint8_t  toggle;
-            uint8_t  address;
-            uint8_t  command;
-        } rc5;
-        struct {
-            uint8_t  command;
-            uint8_t  address;
-            uint8_t  extended;
-            uint8_t  bit_count;
-        } sirc;
-        struct {
-            uint16_t pulses[IR_RAW_MAX_PULSES];
+            uint16_t pulses[EREMOTE_MAX_PULSES]; /**< Durations in us. */
             uint16_t pulse_count;
         } raw;
     };
-    char hex_code[64];
 } eremote_ir_code_t;
 
-/* ---- Connection / Transport ---- */
+/* ---- Devices ----------------------------------------------------------- */
 
+/** Device class, which selects the on-screen remote layout. */
 typedef enum {
-    EREMOTE_CONN_NONE    = 0,
-    EREMOTE_CONN_IR      = (1 << 0),
-    EREMOTE_CONN_BLE     = (1 << 1),
-    EREMOTE_CONN_WIFI    = (1 << 2),
-    EREMOTE_CONN_RF433   = (1 << 3),
-} eremote_conn_mode_t;
-
-typedef enum {
-    EREMOTE_MODE_DIRECT,
-    EREMOTE_MODE_HUB,
-} eremote_op_mode_t;
-
-/* ---- Device Types ---- */
-
-typedef enum {
-    EREMOTE_DEV_TV,
+    EREMOTE_DEV_TV = 0,
     EREMOTE_DEV_SOUNDBAR,
     EREMOTE_DEV_STREAMING,
     EREMOTE_DEV_AC,
-    EREMOTE_DEV_FAN,
-    EREMOTE_DEV_PROJECTOR,
-    EREMOTE_DEV_STB,
     EREMOTE_DEV_CUSTOM,
-    EREMOTE_DEV_TYPE_COUNT,
+    EREMOTE_DEV_COUNT
 } eremote_device_type_t;
 
-/* ---- Command IDs ---- */
+/** Transport flags; a device may advertise several at once. */
+#define EREMOTE_CONN_IR    0x01u
+#define EREMOTE_CONN_BLE   0x02u
+#define EREMOTE_CONN_WIFI  0x04u
 
+/** Whether commands are emitted locally or relayed through an eRemote Hub. */
 typedef enum {
-    CMD_POWER,
-    CMD_VOL_UP, CMD_VOL_DOWN, CMD_MUTE,
-    CMD_CH_UP, CMD_CH_DOWN,
-    CMD_UP, CMD_DOWN, CMD_LEFT, CMD_RIGHT, CMD_OK,
-    CMD_MENU, CMD_BACK, CMD_HOME, CMD_INPUT,
-    CMD_NUM_0, CMD_NUM_1, CMD_NUM_2, CMD_NUM_3,
-    CMD_NUM_4, CMD_NUM_5, CMD_NUM_6, CMD_NUM_7,
-    CMD_NUM_8, CMD_NUM_9,
-    CMD_PLAY, CMD_PAUSE, CMD_STOP,
-    CMD_FF, CMD_REW, CMD_SKIP,
-    CMD_TEMP_UP, CMD_TEMP_DOWN,
-    CMD_FAN_SPEED, CMD_AC_MODE, CMD_SWING,
-    CMD_COUNT,
+    EREMOTE_MODE_DIRECT = 0,
+    EREMOTE_MODE_HUB
+} eremote_op_mode_t;
+
+/**
+ * Commands addressable on a device.
+ *
+ * The first five enumerators must stay in this order — see the file comment.
+ * Only the enumerators referenced by the engine are defined; extending the
+ * on-screen layouts described in README.md will require adding more, which
+ * must be appended after CMD_TEMP_DOWN so database indices stay valid.
+ */
+typedef enum {
+    CMD_POWER = 0,
+    CMD_VOL_UP,
+    CMD_VOL_DOWN,
+    CMD_CH_UP,
+    CMD_CH_DOWN,
+    CMD_INPUT,
+    CMD_TEMP_UP,
+    CMD_TEMP_DOWN,
+    CMD_COUNT
 } eremote_cmd_id_t;
 
-/* ---- IR Code Database Entry ---- */
-
-#define EREMOTE_MAX_CODES_PER_DEVICE 40
-
+/** A configured device: identity, transports, and any learned codes. */
 typedef struct {
-    const char         *brand;
-    const char         *model;
+    char                  name[EREMOTE_NAME_LEN];
+    char                  brand[EREMOTE_NAME_LEN];
+    char                  model[EREMOTE_NAME_LEN];
     eremote_device_type_t type;
-    eremote_ir_code_t  codes[EREMOTE_MAX_CODES_PER_DEVICE];
-    int                code_count;
-} eremote_ir_db_entry_t;
-
-/* ---- Device Instance ---- */
-
-#define MAX_DEVICES     8
-#define MAX_LEARNED     16
-
-typedef struct {
-    char                  name[32];
-    char                  brand[24];
-    char                  model[24];
-    eremote_device_type_t type;
-    uint8_t               conn;
+    uint8_t               conn;      /**< Bitwise OR of EREMOTE_CONN_*.  */
     eremote_op_mode_t     op_mode;
-    bool                  power_on;
-    int                   volume;
-    int                   channel;
-    int                   temperature;
-    int                   fan_speed;
-    int                   ac_mode;
-    bool                  two_way;
-    int                   db_index;
+    bool                  two_way;   /**< Transport reports device state. */
     eremote_ir_code_t     learned[MAX_LEARNED];
     int                   learned_count;
 } eremote_device_t;
 
-/* ---- Scene / Macro ---- */
+/** One row of the shipped code database. */
+typedef struct {
+    const char           *brand;
+    const char           *model;
+    eremote_device_type_t type;
+    eremote_ir_code_t     codes[CMD_COUNT];
+    int                   code_count;
+} eremote_ir_db_entry_t;
 
-#define MAX_SCENES       8
-#define MAX_SCENE_STEPS  8
+/* ---- Learning mode ----------------------------------------------------- */
 
+/** Learning-mode progression: idle → waiting → capturing → done. */
+typedef enum {
+    LEARN_IDLE = 0,
+    LEARN_WAITING,
+    LEARN_CAPTURING,
+    LEARN_DONE
+} eremote_learn_state_t;
+
+/* ---- Scenes and schedules ---------------------------------------------- */
+
+/** One command in a scene macro, with a pre-delay in milliseconds. */
 typedef struct {
     int              device_idx;
     eremote_cmd_id_t cmd;
-    int              param;
-    uint16_t         delay_ms;
+    int              param;     /**< Target value, e.g. volume or degrees. */
+    int              delay_ms;  /**< Wait before issuing this step.        */
 } eremote_scene_step_t;
 
+/** A named macro: an ordered list of device commands. */
 typedef struct {
-    char                 name[32];
+    char                 name[EREMOTE_NAME_LEN];
     eremote_scene_step_t steps[MAX_SCENE_STEPS];
     int                  step_count;
 } eremote_scene_t;
 
-/* ---- Schedule ---- */
-
-#define MAX_SCHEDULES 8
-
+/** A time-of-day automation entry. */
 typedef struct {
-    char    name[32];
-    uint8_t hour;
-    uint8_t minute;
-    uint8_t days;
-    int     device_idx;
+    char             name[EREMOTE_NAME_LEN];
+    uint8_t          hour;       /**< 0-23. */
+    uint8_t          minute;     /**< 0-59. */
+    uint8_t          days;       /**< Bit 0 = Monday; 0x7F = daily.  */
+    int              device_idx;
     eremote_cmd_id_t cmd;
-    int     param;
-    bool    enabled;
+    int              param;
+    bool             enabled;
 } eremote_schedule_t;
 
-/* ---- Learning Mode State ---- */
+/* ---- Engine API -------------------------------------------------------- */
 
-typedef enum {
-    LEARN_IDLE,
-    LEARN_WAITING,
-    LEARN_CAPTURING,
-    LEARN_DONE,
-    LEARN_FAILED,
-} eremote_learn_state_t;
-
-/* ---- IR DB Size ---- */
-
-#define EREMOTE_IR_DB_SIZE 6
-
-/* ---- Engine API ---- */
-
+/**
+ * Human-readable protocol name.
+ * @param p Protocol to name.
+ * @return "NEC", "RC5", "SIRC", "RAW", or "?" if @p p is out of range.
+ */
 const char *eremote_proto_name(eremote_ir_proto_t p);
-const char *eremote_conn_label(uint8_t conn);
+
+/**
+ * Human-readable transport summary for a connection bitmask.
+ * @param c Bitwise OR of EREMOTE_CONN_* flags.
+ * @return A static string such as "IR+BLE", or "None" if no flag is set.
+ */
+const char *eremote_conn_label(uint8_t c);
+
+/**
+ * Render a decoded description of an IR code.
+ * @param code Code to describe.
+ * @param out  Destination buffer.
+ * @param len  Size of @p out in bytes.
+ */
 void eremote_ir_dispatch(const eremote_ir_code_t *code, char *out, int len);
+
+/** Populate the built-in code database. Call once before eremote_ir_db_find(). */
 void eremote_ir_db_init(void);
+
+/**
+ * Look up a database row.
+ * @param brand Brand string, matched exactly.
+ * @param type  Device class to match.
+ * @return The matching row, or NULL if none matches.
+ */
 const eremote_ir_db_entry_t *eremote_ir_db_find(const char *brand,
-                                                  eremote_device_type_t type);
+                                                eremote_device_type_t type);
+
+/** @return The current learning-mode state. */
 eremote_learn_state_t eremote_learn_get_state(void);
+
+/**
+ * Arm learning mode for one command.
+ * @param cmd Command the next captured frame will be bound to.
+ */
 void eremote_learn_start(eremote_cmd_id_t cmd);
+
+/** Inject a synthetic NEC pulse train; advances LEARN_WAITING to LEARN_DONE. */
 void eremote_learn_simulate_capture(void);
+
+/**
+ * Commit a completed capture to a device.
+ * @param dev Device receiving the learned code.
+ * @return true on success; false if no capture is pending or @p dev is full.
+ */
 bool eremote_learn_store(eremote_device_t *dev);
+
+/**
+ * Send a command over the device's best available transport.
+ * @param dev Target device.
+ * @param cmd Command to send.
+ * @param fb  Buffer receiving user-facing feedback text.
+ * @param len Size of @p fb in bytes.
+ */
 void eremote_dispatch_cmd(eremote_device_t *dev, eremote_cmd_id_t cmd,
-                           char *fb, int len);
+                          char *fb, int len);
+
+/** Populate the built-in scene table. */
 void eremote_scenes_init(void);
-int  eremote_scene_count(void);
+/** @return Number of populated scenes. */
+int eremote_scene_count(void);
+/**
+ * @param idx Zero-based scene index.
+ * @return The scene, or NULL if @p idx is out of range.
+ */
 const eremote_scene_t *eremote_scene_get(int idx);
+
+/** Populate the built-in schedule table. */
 void eremote_schedules_init(void);
-int  eremote_schedule_count(void);
+/** @return Number of populated schedules. */
+int eremote_schedule_count(void);
+/**
+ * @param idx Zero-based schedule index.
+ * @return The schedule, or NULL if @p idx is out of range.
+ */
 const eremote_schedule_t *eremote_schedule_get(int idx);
 
-/* ---- App Registration ---- */
+/* ---- App registration -------------------------------------------------- */
 
 extern const eapps_app_info_t      eremote_info;
 extern const eapps_app_lifecycle_t eremote_lifecycle;
-
-#endif

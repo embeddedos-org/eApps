@@ -6,7 +6,8 @@ on:
         description: 'Mobile app to build (leave empty to skip)'
         required: false
         type: choice
-        options: ['', eride, esocial, etrack, etravel, ewallet, emaps]
+        options: ['none', 'eride', 'esocial', 'etrack', 'etravel', 'ewallet', 'emaps']
+        default: 'none'
       build_browser_extensions:
         description: 'Build browser extensions'
         required: false
@@ -44,9 +45,13 @@ permissions:
   id-token: write
   packages: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   mobile:
-    if: inputs.mobile_app != ''
+    if: inputs.mobile_app != 'none'
     uses: ./.github/workflows/build-mobile.yml
     with:
       app: ${{ inputs.mobile_app }}

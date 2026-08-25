@@ -1,13 +1,27 @@
 {
-  "name": "Media Player — EoS",
-  "short_name": "eplay",
-  "description": "Media Player - EoS Progressive Web App",
-  "start_url": ".",
+  "name": "ePlay Video",
+  "short_name": "ePlay",
+  "description": "ePlay Video \u2014 EoS Progressive Web App",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#1976D2",
+  "orientation": "any",
+  "background_color": "#f5f3ff",
+  "theme_color": "#7c3aed",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "lang": "en"
 }

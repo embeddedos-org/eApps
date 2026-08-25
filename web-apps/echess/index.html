@@ -1,41 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Game — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>eChess — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e293b">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8fafc;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{background:#1e293b;color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.status-bar{background:rgba(255,255,255,.15);padding:3px 12px;border-radius:20px;font-size:12px}
+.game-wrap{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+#board{display:grid;grid-template-columns:repeat(8,44px);grid-template-rows:repeat(8,44px);border:2px solid #1e293b;border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.sq{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;transition:background .1s;user-select:none}
+.sq.light{background:#f0d9b5}.sq.dark{background:#b58863}
+.sq.selected{background:#7fc97f!important}.sq.legal{background:#7fc97f88!important}
+.sq.last-move{filter:brightness(.85)}
+.info-row{display:flex;gap:16px;font-size:13px;color:#374151}
+.info-row span{background:white;padding:5px 14px;border-radius:8px;border:1px solid #e5e7eb}
+.btn-row{display:flex;gap:8px}
+.btn{border:none;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn.primary{background:#1e293b;color:white}.btn{background:white;color:#374151;border:1px solid #e5e7eb}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Chess Game</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Chess Game</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>♟ eChess</h1><span class="status-bar" id="statusBar">White to move</span></header>
+<div class="game-wrap">
+  <div id="board"></div>
+  <div class="info-row">
+    <span>♟ Captured: <b id="wCap">0</b></span>
+    <span>♙ Captured: <b id="bCap">0</b></span>
+    <span>Score: <b id="moveCount">0</b></span>
+  </div>
+  <div class="btn-row">
+    <button class="btn primary" onclick="newGame()">New Game</button>
+    <button class="btn" onclick="undoMove()">Undo</button>
+  </div>
+</div>
+<script>
+const PIECES={
+  wK:'♔',wQ:'♕',wR:'♖',wB:'♗',wN:'♘',wP:'♙',
+  bK:'♚',bQ:'♛',bR:'♜',bB:'♝',bN:'♞',bP:'♟'
+};
+const INIT=[
+  'bR','bN','bB','bQ','bK','bB','bN','bR',
+  'bP','bP','bP','bP','bP','bP','bP','bP',
+  '','','','','','','','',
+  '','','','','','','','',
+  '','','','','','','','',
+  '','','','','','','','',
+  'wP','wP','wP','wP','wP','wP','wP','wP',
+  'wR','wN','wB','wQ','wK','wB','wN','wR'
+];
+let board,turn,selected,legalMoves,history,wCap,bCap,moves;
+function newGame(){
+  board=[...INIT];turn='w';selected=null;legalMoves=[];history=[];wCap=0;bCap=0;moves=0;
+  document.getElementById('statusBar').textContent='White to move';
+  document.getElementById('wCap').textContent=0;
+  document.getElementById('bCap').textContent=0;
+  document.getElementById('moveCount').textContent=0;
+  render();
+}
+function isOwn(idx){return board[idx]&&board[idx][0]===turn;}
+function isEnemy(idx){return board[idx]&&board[idx][0]!==(turn==='w'?'b':'w');}
+function getLegal(idx){
+  const p=board[idx];if(!p)return[];
+  const type=p[1],color=p[0];
+  const row=Math.floor(idx/8),col=idx%8;
+  const moves=[];
+  const add=(r,c)=>{if(r>=0&&r<8&&c>=0&&c<8){const ni=r*8+c;if(!board[ni]||board[ni][0]!==color)moves.push(ni);}};
+  const slide=(dr,dc)=>{let r=row+dr,c=col+dc;while(r>=0&&r<8&&c>=0&&c<8){const ni=r*8+c;if(board[ni]){if(board[ni][0]!==color)moves.push(ni);break;}moves.push(ni);r+=dr;c+=dc;}};
+  if(type==='P'){
+    const dir=color==='w'?-1:1;const start=color==='w'?6:1;
+    const fwd=idx+dir*8;if(fwd>=0&&fwd<64&&!board[fwd]){moves.push(fwd);if(row===start&&!board[fwd+dir*8])moves.push(fwd+dir*8);}
+    [[dir,-1],[dir,1]].forEach(([dr,dc])=>{const nr=row+dr,nc=col+dc;if(nr>=0&&nr<8&&nc>=0&&nc<8){const ni=nr*8+nc;if(board[ni]&&board[ni][0]!==color)moves.push(ni);}});
+  }else if(type==='N'){[[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc])=>add(row+dr,col+dc));}
+  else if(type==='B'){[[-1,-1],[-1,1],[1,-1],[1,1]].forEach(([dr,dc])=>slide(dr,dc));}
+  else if(type==='R'){[[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>slide(dr,dc));}
+  else if(type==='Q'){[[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]].forEach(([dr,dc])=>slide(dr,dc));}
+  else if(type==='K'){[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].forEach(([dr,dc])=>add(row+dr,col+dc));}
+  return moves;
+}
+function clickSq(idx){
+  if(selected!==null&&legalMoves.includes(idx)){
+    // Make move
+    const captured=board[idx];
+    history.push({board:[...board],turn,wCap,bCap,moves});
+    if(captured){if(turn==='w'){wCap++;document.getElementById('wCap').textContent=wCap;}else{bCap++;document.getElementById('bCap').textContent=bCap;}}
+    // Pawn promotion
+    board[idx]=board[selected];
+    if(board[idx]==='wP'&&Math.floor(idx/8)===0)board[idx]='wQ';
+    if(board[idx]==='bP'&&Math.floor(idx/8)===7)board[idx]='bQ';
+    board[selected]='';
+    moves++;document.getElementById('moveCount').textContent=moves;
+    turn=turn==='w'?'b':'w';
+    document.getElementById('statusBar').textContent=(turn==='w'?'White':'Black')+' to move';
+    selected=null;legalMoves=[];render();return;
+  }
+  if(isOwn(idx)){selected=idx;legalMoves=getLegal(idx);}
+  else{selected=null;legalMoves=[];}
+  render();
+}
+function undoMove(){if(!history.length)return;const s=history.pop();board=s.board;turn=s.turn;wCap=s.wCap;bCap=s.bCap;moves=s.moves;document.getElementById('wCap').textContent=wCap;document.getElementById('bCap').textContent=bCap;document.getElementById('moveCount').textContent=moves;document.getElementById('statusBar').textContent=(turn==='w'?'White':'Black')+' to move';selected=null;legalMoves=[];render();}
+function render(){
+  const el=document.getElementById('board');el.innerHTML='';
+  for(let i=0;i<64;i++){
+    const r=Math.floor(i/8),c=i%8;
+    const div=document.createElement('div');
+    div.className='sq '+(((r+c)%2===0)?'light':'dark');
+    if(i===selected)div.classList.add('selected');
+    if(legalMoves.includes(i))div.classList.add('legal');
+    if(board[i])div.textContent=PIECES[board[i]]||'';
+    div.onclick=()=>clickSq(i);
+    el.appendChild(div);
+  }
+}
+newGame();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

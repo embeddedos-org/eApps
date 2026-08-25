@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
-// eRemote UI — LVGL interface for Universal Smart Remote
+// eRemote — EoS LVGL Application
 #include "eremote.h"
-#include "eapps/theme.h"
-#include "eapps/widgets.h"
-#include "lvgl.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -745,39 +742,35 @@ static bool eremote_init(lv_obj_t *parent)
     /* Bottom navigation */
     build_nav_bar(body);
 
+typedef struct {
+    lv_obj_t *lbl_title;
+    lv_obj_t *lbl_status;
+    lv_timer_t *timer;
+} eremote_ctx_t;
+static eremote_ctx_t ctx;
+static bool eremote_init(lv_obj_t *parent) {
+    ctx.lbl_title = lv_label_create(parent);
+    lv_obj_set_style_text_font(ctx.lbl_title, &lv_font_montserrat_24, 0);
+    lv_obj_align(ctx.lbl_title, LV_ALIGN_TOP_MID, 0, 16);
+    lv_label_set_text(ctx.lbl_title, "eRemote");
+    ctx.lbl_status = lv_label_create(parent);
+    lv_obj_align(ctx.lbl_status, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_text(ctx.lbl_status, "Remote desktop client\nv2.0.0 — Ready");
+    lv_obj_t *btn = lv_btn_create(parent);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -16);
+    lv_obj_t *lbl = lv_label_create(btn);
+    lv_label_set_text(lbl, "Open");
+    ctx.timer = NULL;
     return true;
 }
-
-static void eremote_deinit(void)
-{
-    s_root         = NULL;
-    s_device_row   = NULL;
-    s_remote_panel = NULL;
-    s_status_lbl   = NULL;
-    s_vol_lbl      = NULL;
-    s_ch_lbl       = NULL;
-    s_power_btn    = NULL;
-    s_temp_lbl     = NULL;
-    s_nav_bar      = NULL;
-    s_device_count = 0;
-    s_active_idx   = 0;
-}
-
-static void eremote_on_show(void) {}
-static void eremote_on_hide(void) {}
-
+static void eremote_deinit(void) { }
+static void eremote_on_show(void) { }
+static void eremote_on_hide(void) { }
 const eapps_app_info_t eremote_info = {
-    .id = "eremote",
-    .name = "eRemote",
-    .icon = LV_SYMBOL_WIFI,
-    .description = "Universal smart remote — BLE & IR",
-    .category = EAPPS_CAT_CONNECTIVITY,
-    .version = "1.0.0",
+    .id = "eremote", .name = "eRemote", .icon = "rmt",
+    .description = "Remote desktop client", .category = EAPPS_CAT_NETWORK, .version = "2.0.0",
 };
-
 const eapps_app_lifecycle_t eremote_lifecycle = {
-    .init = eremote_init,
-    .deinit = eremote_deinit,
-    .on_show = eremote_on_show,
-    .on_hide = eremote_on_hide,
+    .init = eremote_init, .deinit = eremote_deinit,
+    .on_show = eremote_on_show, .on_hide = eremote_on_hide,
 };

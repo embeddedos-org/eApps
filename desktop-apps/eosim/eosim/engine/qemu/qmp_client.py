@@ -1,0 +1,1 @@
+class QMPClient: pass

@@ -46,7 +46,7 @@ class QueryPlanner:
         store = self._db.sql
 
         if q.action == "select":
-            rows = store.select(
+            qr = store.select(
                 table=q.table,
                 columns=q.columns,
                 where=q.where,
@@ -54,6 +54,7 @@ class QueryPlanner:
                 limit=q.limit,
                 offset=q.offset,
             )
+            rows = qr.rows if hasattr(qr, 'rows') else qr
             columns = list(rows[0].keys()) if rows else []
             return UnifiedQueryResult(
                 query_type=QueryType.SQL,
@@ -69,7 +70,8 @@ class QueryPlanner:
                     query_type=QueryType.SQL,
                     error="Insert requires 'data'",
                 )
-            last_row_id = store.insert(q.table, q.data)
+            result = store.insert(q.table, q.data)
+            last_row_id = result.affected_rows if hasattr(result, "affected_rows") else result
             return UnifiedQueryResult(
                 query_type=QueryType.SQL,
                 data={"last_row_id": last_row_id},
@@ -83,7 +85,8 @@ class QueryPlanner:
                     query_type=QueryType.SQL,
                     error="Update requires 'data' and 'where'",
                 )
-            affected = store.update(q.table, q.data, q.where)
+            ur = store.update(q.table, q.data, q.where)
+            affected = ur.affected_rows if hasattr(ur, "affected_rows") else ur
             return UnifiedQueryResult(
                 query_type=QueryType.SQL,
                 row_count=affected,
@@ -96,7 +99,8 @@ class QueryPlanner:
                     query_type=QueryType.SQL,
                     error="Delete requires 'where'",
                 )
-            deleted = store.delete(q.table, q.where)
+            dr = store.delete(q.table, q.where)
+            deleted = dr.affected_rows if hasattr(dr, "affected_rows") else dr
             return UnifiedQueryResult(
                 query_type=QueryType.SQL,
                 row_count=deleted,

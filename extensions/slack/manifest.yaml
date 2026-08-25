@@ -1,0 +1,5 @@
+display_information:
+  name: eOffice for Slack
+features:
+  app_home:
+    home_tab_enabled: true

@@ -1,41 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dice Game — EoS Web App</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1976D2">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background: #1976D2; color: white; padding: 16px 24px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        header h1 { font-size: 20px; font-weight: 600; }
-        main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; }
-        .card { background: white; border-radius: 12px; padding: 48px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; }
-        .card .icon { font-size: 64px; margin-bottom: 16px; }
-        .card h2 { font-size: 24px; margin-bottom: 8px; }
-        .card p { color: #666; line-height: 1.5; }
-        .badge { display: inline-block; background: #E3F2FD; color: #1976D2; padding: 4px 12px; border-radius: 16px; font-size: 12px; margin-top: 16px; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dice Roller — EoS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f59e0b">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fffbeb;font-family:-apple-system,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+header{background:#f59e0b;color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:18px;font-weight:700}
+.app-body{padding:20px;max-width:500px;margin:0 auto;width:100%;display:flex;flex-direction:column;align-items:center;gap:20px}
+canvas{border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.15);background:white}
+.config-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.config-row label{font-size:13px;color:#374151;font-weight:500}
+.config-row input[type=number]{width:60px;border:1px solid #e5e7eb;border-radius:8px;padding:7px;font-size:14px;text-align:center}
+.config-row select{border:1px solid #e5e7eb;border-radius:8px;padding:7px 10px;font-size:13px}
+.roll-btn{background:#f59e0b;color:white;border:none;padding:14px 40px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;transition:transform .1s;box-shadow:0 4px 12px rgba(245,158,11,.4)}
+.roll-btn:active{transform:scale(.95)}
+.result-box{background:white;border-radius:12px;padding:16px 24px;border:1px solid #e5e7eb;text-align:center;width:100%}
+.result-total{font-size:48px;font-weight:700;color:#f59e0b}
+.result-detail{font-size:13px;color:#64748b;margin-top:4px}
+.history{width:100%;background:white;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden}
+.history h3{padding:10px 14px;font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #f1f5f9}
+.hist-item{padding:8px 14px;font-size:13px;border-bottom:1px solid #f1f5f9;display:flex;justify-content:space-between}
+.hist-item:last-child{border-bottom:none}
+</style>
 </head>
 <body>
-    <header>
-        <span style="font-size:24px">⚡</span>
-        <h1>Dice Game</h1>
-    </header>
-    <main>
-        <div class="card">
-            <div class="icon">🚀</div>
-            <h2>Dice Game</h2>
-            <p>EoS Progressive Web App — works offline, installable on any device.</p>
-            <span class="badge">PWA Ready</span>
-        </div>
-    </main>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(() => {});
-        }
-    </script>
-</body>
-</html>
+<header><h1>🎲 Dice Roller</h1></header>
+<div class="app-body">
+  <canvas id="c" width="280" height="140"></canvas>
+  <div class="config-row">
+    <label>Dice: <input type="number" id="numDice" value="2" min="1" max="10"></label>
+    <label>Type: <select id="diceType"><option value="6">d6</option><option value="4">d4</option><option value="8">d8</option><option value="10">d10</option><option value="12">d12</option><option value="20">d20</option><option value="100">d100</option></select></label>
+    <label>Modifier: <input type="number" id="modifier" value="0" min="-20" max="20"></label>
+  </div>
+  <button class="roll-btn" id="rollBtn">🎲 Roll!</button>
+  <div class="result-box">
+    <div class="result-total" id="resultTotal">—</div>
+    <div class="result-detail" id="resultDetail">Press Roll to start</div>
+  </div>
+  <div class="history"><h3>Roll History</h3><div id="histList"></div></div>
+</div>
+<script>
+const DOTS={1:[[50,50]],2:[[25,50],[75,50]],3:[[25,25],[50,50],[75,75]],4:[[25,25],[75,25],[25,75],[75,75]],5:[[25,25],[75,25],[50,50],[25,75],[75,75]],6:[[25,20],[75,20],[25,50],[75,50],[25,80],[75,80]]};
+let rolls=[],history=[];
+function drawDice(ctx,x,y,size,val,color){
+  ctx.fillStyle=color||'#1e293b';
+  ctx.beginPath();ctx.roundRect(x,y,size,size,size*0.15);ctx.fill();
+  ctx.fillStyle='white';
+  if(DOTS[val]){DOTS[val].forEach(([dx,dy])=>{ctx.beginPath();ctx.arc(x+dx*size/100,y+dy*size/100,size*0.08,0,Math.PI*2);ctx.fill();});}
+  else{ctx.font=`bold ${size*0.4}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(val,x+size/2,y+size/2);}
+}
+function roll(){
+  const n=Math.min(10,parseInt(document.getElementById('numDice').value)||1);
+  const sides=parseInt(document.getElementById('diceType').value)||6;
+  const mod=parseInt(document.getElementById('modifier').value)||0;
+  rolls=Array.from({length:n},()=>Math.floor(Math.random()*sides)+1);
+  const sum=rolls.reduce((a,b)=>a+b,0)+mod;
+  // Draw
+  const canvas=document.getElementById('c');
+  const ctx=canvas.getContext('2d');
+  const sz=Math.min(100,Math.floor(260/n)-8);
+  canvas.width=Math.max(280,(sz+8)*n+8);canvas.height=sz+20;
+  ctx.fillStyle='#fffbeb';ctx.fillRect(0,0,canvas.width,canvas.height);
+  const colors=['#f59e0b','#ef4444','#3b82f6','#22c55e','#a855f7','#ec4899','#0891b2','#f97316','#14b8a6','#6366f1'];
+  rolls.forEach((v,i)=>drawDice(ctx,8+i*(sz+8),10,sz,v,colors[i%colors.length]));
+  document.getElementById('resultTotal').textContent=sum+(mod!==0?` (${mod>0?'+':''}${mod})`:'');
+  document.getElementById('resultDetail').textContent=`${n}d${sides}: [${rolls.join(', ')}]${mod!==0?` + ${mod}`:''} = ${sum}`;
+  history.unshift({rolls:[...rolls],sides,mod,sum,time:new Date().toLocaleTimeString()});
+  if(history.length>10)history.pop();
+  document.getElementById('histList').innerHTML=history.map(h=>`<div class="hist-item"><span>[${h.rolls.join(',')}] d${h.sides}${h.mod?` ${h.mod>0?'+':''}${h.mod}`:''}</span><span><b>${h.sum}</b> · ${h.time}</span></div>`).join('');
+}
+document.getElementById('rollBtn').addEventListener('click',roll);
+document.addEventListener('keydown',e=>{if(e.key===' '||e.key==='r')roll();});
+// Initial draw
+const ctx=document.getElementById('c').getContext('2d');
+ctx.fillStyle='#f1f5f9';ctx.fillRect(0,0,280,140);
+ctx.fillStyle='#94a3b8';ctx.font='14px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Press Roll to start',140,70);
+C.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];C.dispatchEvent(new MouseEvent('click',{clientX:t.clientX,clientY:t.clientY}));},{passive:false});
+if('serviceWorker' in navigator)navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+</script>
+</body></html>

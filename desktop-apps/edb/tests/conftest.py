@@ -47,11 +47,12 @@ def app_client():
     with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
         db_path = f.name
 
-    config = EDBConfig(db_path=db_path, create_admin=True, jwt_secret="test-secret")
+    import os; os.environ["EDB_ADMIN_PASSWORD"] = "admin1234"
+    config = EDBConfig(db_path=db_path, create_admin=True, jwt_secret="test-secret-key-for-edb-integration-tests")
     app = create_app(config)
 
     state = AppState(config)
-    state.user_manager.ensure_admin_exists()
+    state.user_manager.ensure_admin_exists("admin", "AdminPass123!@#")
     app.state.edb = state
 
     client = TestClient(app)
@@ -65,5 +66,5 @@ def app_client():
 @pytest.fixture
 def admin_token(app_client):
     """Get an admin JWT token for integration tests."""
-    resp = app_client.post("/auth/login", json={"username": "admin", "password": "admin1234"})
+    resp = app_client.post("/auth/login", json={"username": "admin", "password": "AdminPass123!@#"})
     return resp.json()["access_token"]
