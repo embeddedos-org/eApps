@@ -58,7 +58,11 @@ Desktop.ini
 
 # Debug
 *.dSYM/
-core
+# Core dumps. A bare "core" rule silently ignored the entire core/ source
+# tree, which is why core/common/include/eapps_core.h - included by all 44
+# app targets - was never committed and every app failed to build.
+core.[0-9]*
+vgcore.*
 vgcore.*
 
 # Test artifacts
