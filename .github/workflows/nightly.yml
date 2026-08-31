@@ -99,7 +99,7 @@ jobs:
         with:
           submodules: recursive
       - name: Setup Emscripten
-        uses: mymindstorm/setup-emsdk@v14
+        uses: mymindstorm/setup-emsdk@v16
       - name: Configure
         run: emcmake cmake -B build-web
       - name: Build

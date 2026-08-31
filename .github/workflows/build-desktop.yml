@@ -303,7 +303,7 @@ jobs:
         with:
           submodules: recursive
 
-      - uses: mymindstorm/setup-emsdk@v14
+      - uses: mymindstorm/setup-emsdk@v16
 
       - name: Build WASM
         working-directory: desktop-apps/ebrowser
