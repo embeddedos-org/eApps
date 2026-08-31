@@ -37,7 +37,7 @@ jobs:
     name: CI Validation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install dependencies
@@ -76,7 +76,7 @@ jobs:
             pkg: gcc-riscv64-linux-gnu
             cc: riscv64-linux-gnu-gcc
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install cross-compiler
@@ -94,7 +94,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install SDL2 (Linux)
@@ -125,7 +125,7 @@ jobs:
           - esp32
           - nrf52
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -145,7 +145,7 @@ jobs:
     needs: [validate-ci, validate-cross, validate-platforms, validate-eosim]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install dependencies
@@ -172,7 +172,7 @@ jobs:
     needs: [validate-ci, validate-cross, validate-platforms, validate-eosim]
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Build
@@ -198,7 +198,7 @@ jobs:
     needs: [validate-ci, validate-cross, validate-platforms, validate-eosim]
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install SDL2
@@ -238,7 +238,7 @@ jobs:
             pkg: gcc-riscv64-linux-gnu
             cc: riscv64-linux-gnu-gcc
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install cross-compiler
@@ -265,7 +265,7 @@ jobs:
     needs: [validate-ci, validate-cross, validate-platforms, validate-eosim]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - uses: mymindstorm/setup-emsdk@v14
@@ -296,7 +296,7 @@ jobs:
     if: ${{ !inputs.dry_run }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
