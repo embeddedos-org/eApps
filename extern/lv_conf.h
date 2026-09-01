@@ -27,6 +27,8 @@ extern uint32_t eapps_tick_get_ms(void);
 #define LV_USE_ASSERT_MEM_INTEGRITY 0
 #define LV_USE_ASSERT_OBJ           0
 
+/* 12 is used by apps/etrack and apps/ewifi; without it they fail to build. */
+#define LV_FONT_MONTSERRAT_12   1
 #define LV_FONT_MONTSERRAT_14   1
 #define LV_FONT_MONTSERRAT_16   1
 #define LV_FONT_MONTSERRAT_20   1
