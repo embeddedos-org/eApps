@@ -25,7 +25,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install dependencies (Linux)
@@ -61,7 +61,7 @@ jobs:
           - category: web
             flags: -DEAPPS_BUILD_PRODUCTIVITY=OFF -DEAPPS_BUILD_MEDIA=OFF -DEAPPS_BUILD_GAMES=OFF -DEAPPS_BUILD_CONNECTIVITY=OFF -DEAPPS_BUILD_SECURITY=OFF -DEAPPS_BUILD_WEB=ON
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install dependencies
@@ -75,7 +75,7 @@ jobs:
     name: Sanitizers
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - name: Install dependencies
@@ -95,7 +95,7 @@ jobs:
     name: JS/TS lane (web-apps + browser-extensions + desktop-apps)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: recursive
       - uses: actions/setup-node@v4
