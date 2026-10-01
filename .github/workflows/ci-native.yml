@@ -60,7 +60,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
-      - uses: mymindstorm/setup-emsdk@v14
+      - uses: mymindstorm/setup-emsdk@v16
       - name: Build WASM
         run: |
           cmake -B build-web -DCMAKE_TOOLCHAIN_FILE=cmake/emscripten.cmake
