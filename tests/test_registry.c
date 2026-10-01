@@ -29,7 +29,10 @@ int main(void) {
 
     const eapps_registry_entry_t *e = eapps_registry_find("test1");
     EAPPS_ASSERT(e != NULL, "find test1");
-    EAPPS_ASSERT(strcmp(e->info.name, "Test App 1") == 0, "find test1 name");
+    /* EAPPS_ASSERT records a failure and carries on, so the dereference below
+       is guarded: without it a failed lookup crashes on the next line and the
+       message explaining why is never printed. */
+    EAPPS_ASSERT(e != NULL && strcmp(e->info.name, "Test App 1") == 0, "find test1 name");
 
     EAPPS_ASSERT(eapps_registry_find("nonexistent") == NULL, "find missing");
 

@@ -61,6 +61,9 @@ static void test_scenes(void) {
 
     const eremote_scene_t *s = eremote_scene_get(0);
     ASSERT_NOT_NULL(s, "scene_get(0) non-NULL");
+    /* ASSERT_NOT_NULL records a failure and carries on, so stop before the
+       dereference below rather than crashing the suite on the next line. */
+    if (s == NULL) return;
     ASSERT_STR_EQ(s->name, "Movie Mode", "scene 0 name is Movie Mode");
 }
 
