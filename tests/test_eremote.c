@@ -61,7 +61,9 @@ static void test_scenes(void) {
 
     const eremote_scene_t *s = eremote_scene_get(0);
     ASSERT_NOT_NULL(s, "scene_get(0) non-NULL");
-    ASSERT_STR_EQ(s->name, "Movie Mode", "scene 0 name is Movie Mode");
+    if (s != NULL) {
+        ASSERT_STR_EQ(s->name, "Movie Mode", "scene 0 name is Movie Mode");
+    }
 }
 
 /* ---- Schedule Tests ---- */

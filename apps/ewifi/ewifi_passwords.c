@@ -65,6 +65,26 @@ static int extract_profiles_win(ewifi_saved_cred_t *out, int max)
     return count;
 }
 
+/* ---- Windows profile parsing ------------------------------------------- */
+
+/* Map a netsh "Security"/"Cipher" value to the security enum. Unknown or
+ * missing values fall back to OPEN so callers never read garbage. */
+static ewifi_security_t ewifi_security_from_str(const char *s)
+{
+    if (!s || !*s) return EWIFI_SEC_OPEN;
+    if (strstr(s, "WPA3")) {
+        return (strstr(s, "Enterprise") || strstr(s, "enterprise"))
+            ? EWIFI_SEC_WPA3_ENT : EWIFI_SEC_WPA3_SAE;
+    }
+    if (strstr(s, "WPA2")) {
+        return (strstr(s, "Enterprise") || strstr(s, "enterprise"))
+            ? EWIFI_SEC_WPA2_ENT : EWIFI_SEC_WPA2_PSK;
+    }
+    if (strstr(s, "WPA"))  return EWIFI_SEC_WPA;
+    if (strstr(s, "WEP"))  return EWIFI_SEC_WEP;
+    return EWIFI_SEC_OPEN;
+}
+
 static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cred)
 {
     char cmd[256];
@@ -81,6 +101,7 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
     if (!fp) return false;
 
     char line[256];
+    bool security_set = false;
     memset(cred, 0, sizeof(*cred));
     strncpy(cred->ssid, ssid, sizeof(cred->ssid) - 1);
     cred->ssid[sizeof(cred->ssid) - 1] = '\0';
@@ -108,15 +129,16 @@ static bool extract_key_for_profile_win(const char *ssid, ewifi_saved_cred_t *cr
                 cred->auth_type[sizeof(cred->auth_type) - 1] = '\0';
             }
         }
-        /* Cipher / Security */
-        if (strstr(line, "Cipher") || strstr(line, "cipher") ||
-            strstr(line, "Security") || strstr(line, "security")) {
+        /* Cipher / Security -> security enum. */
+        if (!security_set &&
+            (strstr(line, "Cipher") || strstr(line, "cipher") ||
+             strstr(line, "Security") || strstr(line, "security"))) {
             char *val = strstr(line, ": ");
-            if (val && strlen(cred->security) == 0) {
+            if (val) {
                 val += 2;
                 trim(val);
-                strncpy(cred->security, val, sizeof(cred->security) - 1);
-                cred->security[sizeof(cred->security) - 1] = '\0';
+                cred->security = ewifi_security_from_str(val);
+                security_set = true;
             }
         }
     }

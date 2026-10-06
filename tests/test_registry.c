@@ -29,7 +29,9 @@ int main(void) {
 
     const eapps_registry_entry_t *e = eapps_registry_find("test1");
     EAPPS_ASSERT(e != NULL, "find test1");
-    EAPPS_ASSERT(strcmp(e->info.name, "Test App 1") == 0, "find test1 name");
+    if (e != NULL) {
+        EAPPS_ASSERT(strcmp(e->info.name, "Test App 1") == 0, "find test1 name");
+    }
 
     EAPPS_ASSERT(eapps_registry_find("nonexistent") == NULL, "find missing");
 

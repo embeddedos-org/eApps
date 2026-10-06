@@ -1,1 +1,0 @@
-/* jetson-xavier linker script */

@@ -135,7 +135,7 @@ static void refresh_labels(void)
     }
     if (s_temp_lbl) {
         char buf[16];
-        snprintf(buf, sizeof(buf), "%d" LV_SYMBOL_DEGREE_SIGN "C", dev->temperature);
+        snprintf(buf, sizeof(buf), "%d C", dev->temperature);
         lv_label_set_text(s_temp_lbl, buf);
     }
     if (s_power_btn) {
@@ -557,7 +557,7 @@ static void build_ac_controls(lv_obj_t *parent, uint32_t btn_bg, uint32_t btn_fg
     make_icon_btn(row, "-", 48, 44, btn_bg, btn_fg, temp_down_cb, NULL);
 
     s_temp_lbl = lv_label_create(row);
-    lv_label_set_text(s_temp_lbl, "24" LV_SYMBOL_DEGREE_SIGN "C");
+    lv_label_set_text(s_temp_lbl, "24 C");
     lv_obj_set_style_text_color(s_temp_lbl, hc(p->on_surface), 0);
     lv_obj_set_style_text_font(s_temp_lbl, &lv_font_montserrat_16, 0);
     lv_obj_set_style_min_width(s_temp_lbl, 72, 0);
@@ -742,33 +742,24 @@ static bool eremote_init(lv_obj_t *parent)
     /* Bottom navigation */
     build_nav_bar(body);
 
-typedef struct {
-    lv_obj_t *lbl_title;
-    lv_obj_t *lbl_status;
-    lv_timer_t *timer;
-} eremote_ctx_t;
-static eremote_ctx_t ctx;
-static bool eremote_init(lv_obj_t *parent) {
-    ctx.lbl_title = lv_label_create(parent);
-    lv_obj_set_style_text_font(ctx.lbl_title, &lv_font_montserrat_24, 0);
-    lv_obj_align(ctx.lbl_title, LV_ALIGN_TOP_MID, 0, 16);
-    lv_label_set_text(ctx.lbl_title, "eRemote");
-    ctx.lbl_status = lv_label_create(parent);
-    lv_obj_align(ctx.lbl_status, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_text(ctx.lbl_status, "Remote desktop client\nv2.0.0 — Ready");
-    lv_obj_t *btn = lv_btn_create(parent);
-    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, -16);
-    lv_obj_t *lbl = lv_label_create(btn);
-    lv_label_set_text(lbl, "Open");
-    ctx.timer = NULL;
     return true;
 }
+
+/* The remainder of this file was a second, unrelated stub implementation
+ * pasted over the tail of eremote_init(): its own eremote_ctx_t, a
+ * placeholder init drawing three labels and a button, and a duplicate
+ * eremote_init symbol. The real init above had lost its `return true; }` to
+ * that paste. Restored here, and the duplicate init and ctx removed. The
+ * lifecycle block below is kept: the real implementation defined none of it.
+ */
+
 static void eremote_deinit(void) { }
 static void eremote_on_show(void) { }
 static void eremote_on_hide(void) { }
 const eapps_app_info_t eremote_info = {
     .id = "eremote", .name = "eRemote", .icon = "rmt",
-    .description = "Remote desktop client", .category = EAPPS_CAT_NETWORK, .version = "2.0.0",
+    .description = "IR/WiFi remote for TVs, soundbars, streamers and AC",
+    .category = EAPPS_CAT_CONNECTIVITY, .version = "2.0.0",
 };
 const eapps_app_lifecycle_t eremote_lifecycle = {
     .init = eremote_init, .deinit = eremote_deinit,

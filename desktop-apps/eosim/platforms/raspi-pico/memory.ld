@@ -1,1 +1,0 @@
-/* raspi-pico linker script */

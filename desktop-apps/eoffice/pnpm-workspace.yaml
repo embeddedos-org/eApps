@@ -1,1 +1,3 @@
-packages:\n  - "packages/*"\n  - "apps/*"
+packages:
+  - "packages/*"
+  - "apps/*"
