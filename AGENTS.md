@@ -1,98 +1,50 @@
-<!-- generated: eos-ai-scaffold -->
-# Agent Responsibilities
+# Repository Guidance for Agents
 
-Each role owns a slice of the work and does only that slice. Full briefs are in
-[.ai/](./.ai/). These are responsibilities, not a required agent count — one
-agent may hold several roles on a small change. Split when the roles need
-genuinely different context, not by default.
+## Scope and architecture
 
-One rule is structural rather than stylistic: **whoever implements does not
-approve.** Review is a separate role because self-review reliably misses the
-thing the implementer already believes is correct.
+eApps is the EmbeddedOS marketplace and application monorepo. Treat each product
+surface as an independent delivery target: native LVGL applications live in
+`apps/`, shared native code in `core/` and `shared/`, browser extensions in
+`browser-extensions/`, web applications in `web-apps/`, mobile applications in
+`mobile-apps/`, desktop applications in `desktop-apps/`, developer tools in
+`dev-tools/`, command-line tools in `cli-tools/`, and deployment assets in
+`enterprise/`. The marketplace catalog in `data/apps.json` and the storefront in
+`index.html`, `css/`, and `js/` are user-facing release surfaces.
 
-## Planner — [.ai/planner.md](./.ai/planner.md)
+Follow the specialist role briefs in [`.ai/`](./.ai/) and the handoff protocol in
+[`HANDOFF.md`](./HANDOFF.md). The implementer must not act as the approving
+reviewer. Keep changes inside the affected product surface unless a shared
+contract genuinely requires a coordinated update.
 
-- Understand the request.
-- Break work into tasks.
-- Assign work.
+## Build and validation
 
-## Architect — [.ai/architect.md](./.ai/architect.md)
+Use the narrowest checks that cover the changed surface, then run the repository
+aggregator when the change spans surfaces.
 
-- Design structure.
-- Choose patterns.
-- Own dependencies, scalability and maintainability.
+- Native C/CMake: configure with `cmake -B build -DBUILD_TESTING=ON`, build with
+  `cmake --build build`, and run
+  `ctest --test-dir build --output-on-failure`.
+- Repository suite: run `python run_all_tests.py`.
+- Web, mobile, extension, and tool changes: use the package-manager commands and
+  workflow documented in the nearest manifest and in
+  [`.github/workflows/`](./.github/workflows/).
+- Catalog or storefront changes: validate `data/apps.json`, links, asset paths,
+  and the relevant GitHub Pages build.
 
-## Backend — [.ai/backend.md](./.ai/backend.md)
+Do not claim a platform was tested when its SDK or runtime was unavailable.
+Record skipped platform validation explicitly.
 
-- APIs
-- Database
-- Business logic
+## Change discipline
 
-## Frontend — [.ai/frontend.md](./.ai/frontend.md)
+Preserve platform portability and existing public catalog fields. Do not commit
+build output, downloaded SDKs, credentials, signing material, or generated
+release artifacts unless the repository already tracks that exact artifact.
+Update documentation and changelog entries when a user-visible app, catalog,
+installation, or compatibility contract changes.
 
-- UI
-- Components
-- Accessibility
-
-## Testing — [.ai/testing.md](./.ai/testing.md)
-
-- Unit tests
-- Integration tests
-- Regression tests
-
-## Security — [.ai/security.md](./.ai/security.md)
-
-- Authentication and authorization
-- Validation
-- Secrets
-- Dependency review
-
-## Performance — [.ai/performance.md](./.ai/performance.md)
-
-- Profiling
-- Optimization
-- Scalability
-
-## Reviewer — [.ai/reviewer.md](./.ai/reviewer.md)
-
-- Final review
-- Verify requirements
-- Merge findings
-
-## Documentation — [.ai/docs.md](./.ai/docs.md)
-
-- README
-- API docs
-- Changelog
-- Migration and architecture notes
-
-## Release — [.ai/release.md](./.ai/release.md)
-
-- Release notes
-- Deployment preparation
-- Rollback guidance
-
----
-
-## Switching roles
-
-Switch when the task changes domain, when specialist knowledge is required,
-when independent review is required, or when the context has grown past what
-one agent can hold accurately. Every switch runs the protocol in
-[HANDOFF.md](./HANDOFF.md).
-
-## Finding work that is not yours
-
-You will. The rule is: **record it, do not absorb it, do not drop it.**
-
-| What you found | Do |
-|----------------|-----|
-| A defect unrelated to your task | Note it in [TASKS.md](./TASKS.md) and keep going. |
-| A defect your change would sit on top of | Stop; say it blocks you; propose fixing it as its own task. |
-| A security issue | Report immediately, whatever role you hold. This one never waits for a handoff. |
-| A design decision missing from the plan | Return to the architect rather than deciding it inside an implementation. |
-| Work that belongs to a role nobody assigned | Say so. An unowned task is how requirements go missing. |
-
-Silently fixing something outside your task makes the diff unreviewable.
-Silently ignoring it means nobody ever looks again. Neither is acceptable; the
-note is what makes the difference.
+Every human-authored pull request must use a GitHub-recognized closing keyword
+for an issue in this repository, for example `Fixes #123`. Cross-repository
+issues and plain issue mentions do not satisfy the linked-issue policy. Follow
+[`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md), and
+keep the published Wiki snapshot in [`docs/wiki/`](./docs/wiki/) synchronized
+when Wiki content changes.

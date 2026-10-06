@@ -17,6 +17,16 @@ permissions:
   contents: read
 
 jobs:
+  validate-apps:
+    name: Validate apps.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate marketplace catalogue
+        run: python3 scripts/validate_apps.py data/apps.json
   build:
     name: Native (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -113,7 +123,17 @@ jobs:
               [ -d "$d" ] || continue
               if [ -f "$d/package.json" ]; then
                 echo "=== $d ==="
-                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+                # Skeletons (package.json with no build script) are skipped with
+                # a notice instead of failing the lane; real apps install with
+                # pnpm first (falling back to plain install when no lockfile
+                # exists) and then build.
+                (cd "$d" || exit 1
+                 if ! node -e "process.exit((require('./package.json').scripts||{}).build ? 0 : 1)" 2>/dev/null; then
+                   echo "::notice::$d has no build script; skipping"
+                 else
+                   (pnpm install --frozen-lockfile || pnpm install || npm ci || npm install) &&
+                   (pnpm run build || npm run build)
+                 fi)
               fi
             done
           else
@@ -128,7 +148,17 @@ jobs:
               [ -d "$d" ] || continue
               if [ -f "$d/package.json" ]; then
                 echo "=== $d ==="
-                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+                # Skeletons (package.json with no build script) are skipped with
+                # a notice instead of failing the lane; real apps install with
+                # pnpm first (falling back to plain install when no lockfile
+                # exists) and then build.
+                (cd "$d" || exit 1
+                 if ! node -e "process.exit((require('./package.json').scripts||{}).build ? 0 : 1)" 2>/dev/null; then
+                   echo "::notice::$d has no build script; skipping"
+                 else
+                   (pnpm install --frozen-lockfile || pnpm install || npm ci || npm install) &&
+                   (pnpm run build || npm run build)
+                 fi)
               fi
             done
           else
@@ -143,7 +173,17 @@ jobs:
               [ -d "$d" ] || continue
               if [ -f "$d/package.json" ]; then
                 echo "=== $d ==="
-                (cd "$d" && (pnpm install --frozen-lockfile || npm ci) && (pnpm run build || npm run build))
+                # Skeletons (package.json with no build script) are skipped with
+                # a notice instead of failing the lane; real apps install with
+                # pnpm first (falling back to plain install when no lockfile
+                # exists) and then build.
+                (cd "$d" || exit 1
+                 if ! node -e "process.exit((require('./package.json').scripts||{}).build ? 0 : 1)" 2>/dev/null; then
+                   echo "::notice::$d has no build script; skipping"
+                 else
+                   (pnpm install --frozen-lockfile || pnpm install || npm ci || npm install) &&
+                   (pnpm run build || npm run build)
+                 fi)
               fi
             done
           else

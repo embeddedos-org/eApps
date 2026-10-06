@@ -1,58 +1,44 @@
-## Summary
+# Pull Request
 
-<!-- Brief description of what this PR does. -->
+## Closing issue
 
+<!--
+Required for human-authored pull requests. Replace #123 below with an issue in
+THIS repository. Cross-repository links and plain mentions do not satisfy policy.
+-->
 
-## Type of Change
+Fixes #123
 
-<!-- Check all that apply -->
+> Replace `#123` with the real issue number before requesting review.
 
-- [ ] eat — New feature
-- [ ] ix — Bug fix
-- [ ] docs — Documentation only
-- [ ] style — Formatting, no code change
-- [ ] efactor — Code restructuring without behavior change
-- [ ] 	est — Add or fix tests
-- [ ] uild — Build system or dependency changes
-- [ ] ci — CI/CD pipeline changes
-- [ ] perf — Performance improvement
+## Description
+
+Brief description of the changes.
+
+## Motivation
+
+Why is this change needed?
 
 ## Changes
 
-<!-- List each change made in this PR -->
-
-- 
-- 
+- [ ] Change 1
+- [ ] Change 2
 
 ## Testing
 
-<!-- How was this tested? Which test suites were run? -->
+How were these changes tested?
 
-- [ ] Unit tests pass (ctest --test-dir build --output-on-failure)
-- [ ] Integration tests pass
+- [ ] Unit tests added/updated
+- [ ] Integration tests added/updated
 - [ ] Manual testing performed
-- [ ] New tests added for new functionality
+- [ ] Tested on SDL2 desktop port
+- [ ] Tested on EoS embedded port (if applicable)
+- [ ] Tested on Web/WASM port (if applicable)
 
-## Pre-Submission Checklist
+## Checklist
 
-- [ ] Code compiles without warnings (-Wall -Wextra -Werror for C)
-- [ ] All existing tests pass
-- [ ] New tests added for new functionality
-- [ ] Documentation updated if API changed
-- [ ] Commit messages follow <type>(<scope>): <description> convention
-- [ ] Branch is rebased on latest master
-
-## Related Issues
-
-<!-- Reference related issues: Closes #XX, Fixes #YY -->
-
-
-## Screenshots / Logs
-
-<!-- If applicable, add screenshots or relevant log output -->
-
-
-## Additional Notes
-
-<!-- Any other context reviewers should know -->
-
+- [ ] Tests pass (`ctest --test-dir build --output-on-failure`)
+- [ ] Code formatted (`clang-format`)
+- [ ] Static analysis clean (`cppcheck`, `clang-tidy`)
+- [ ] Documentation updated (if applicable)
+- [ ] Changelog entry added (if applicable)

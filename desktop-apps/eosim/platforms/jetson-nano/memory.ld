@@ -1,1 +1,0 @@
-/* jetson-nano linker script */
