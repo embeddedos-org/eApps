@@ -130,8 +130,6 @@ eApps/
 │
 ├── desktop-apps/                   # 🖥️ Desktop applications
 │   ├── eoffice/                    #   Electron app + 12 office suite apps + web apps
-│   ├── eostudio/                   #   Python/Tkinter visual design IDE
-│   ├── eosim/                      #   Python/QEMU hardware simulator (63+ platforms)
 │   └── ebrowser/                   #   C/SDL2 browser engine
 │
 ├── mobile-apps/                    # 📱 36 Flutter mobile apps (incl. eServiceApps)
@@ -202,12 +200,6 @@ cmake -B build && cmake --build build && cd build && ctest
 
 # eOffice Desktop (Electron)
 cd desktop-apps/eoffice && npm install && npm start
-
-# EoStudio (Python)
-cd desktop-apps/eostudio && pip install -e . && python -m eostudio
-
-# EoSim (Python + QEMU)
-cd desktop-apps/eosim && pip install -e . && python -m eosim
 
 # eBrowser (C/CMake)
 cd desktop-apps/ebrowser && cmake -B build && cmake --build build
@@ -325,8 +317,6 @@ The `shared/` directory contains reusable code across platforms:
 | Original Repo | Merged Into | Content |
 |---|---|---|
 | [eOffice](https://github.com/embeddedos-org/eOffice) | `extensions/`, `desktop-apps/eoffice/` | 11 extensions, Electron desktop, 12 office apps, web apps, server |
-| [EoStudio](https://github.com/embeddedos-org/EoStudio) | `desktop-apps/eostudio/` | Visual design IDE, codegen, 13 GUI editors |
-| [EoSim](https://github.com/embeddedos-org/EoSim) | `desktop-apps/eosim/` | Hardware simulator, 63 platforms, QEMU, GUI renderers |
 | [eServiceApps](https://github.com/embeddedos-org/eServiceApps) | `mobile-apps/eserviceapps/` | Flutter mobile apps, Firebase backend |
 | [eBrowser](https://github.com/embeddedos-org/eBrowser) | `desktop-apps/ebrowser/` | C browser engine, rendering, TLS, plugins |
 
@@ -354,12 +344,6 @@ cd build && ctest --output-on-failure
 
 # Run Flutter tests
 cd mobile-apps/eserviceapps && flutter test
-
-# Run EoStudio tests
-cd desktop-apps/eostudio && python -m pytest tests/ -v
-
-# Run EoSim tests
-cd desktop-apps/eosim && python -m pytest tests/ -v
 ```
 
 ---

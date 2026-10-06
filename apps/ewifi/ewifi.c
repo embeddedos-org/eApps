@@ -39,7 +39,7 @@ static uint32_t signal_color(int rssi) {
     return 0xF44336;
 }
 
-static uint32_t risk_color(ewifi_risk_level_t r) {
+static uint32_t risk_color(ewifi_risk_t r) {
     switch (r) {
     case EWIFI_RISK_SECURE:  return 0x00E676;
     case EWIFI_RISK_LOW:     return 0x66BB6A;
@@ -534,10 +534,14 @@ static void build_passwords_tab(lv_obj_t *body) {
         lv_obj_set_style_text_font(pass, &lv_font_montserrat_12, 0);
 
         /* Security info */
-        if (strlen(creds[i].security) > 0) {
+        /* .security is an ewifi_security_t enum, not a string: strlen() and
+         * "%s" on it were a pointer-from-integer error. ewifi_security_str()
+         * is the accessor, used correctly at line 147. */
+        const char *sec_str = ewifi_security_str(creds[i].security);
+        if (sec_str && *sec_str) {
             lv_obj_t *sec = lv_label_create(card);
             char stxt[48];
-            snprintf(stxt, 48, "Cipher: %s", creds[i].security);
+            snprintf(stxt, 48, "Cipher: %s", sec_str);
             lv_label_set_text(sec, stxt);
             lv_obj_set_style_text_color(sec, hc(p->on_surface), 0);
             lv_obj_set_style_text_opa(sec, LV_OPA_50, 0);
@@ -794,7 +798,24 @@ static void build_nav(lv_obj_t *parent) {
     }
 }
 
-/* ---- Lifecycle ---- */
+/* ---- Lifecycle ----
+ *
+ * NOTE: this block was appended as a placeholder and its ewifi_ctx_t / ctx
+ * definition was lost, leaving `ctx` undeclared. The struct is restored below
+ * from its uses so the app builds.
+ *
+ * It is still a PLACEHOLDER: it draws a title, a status line and a button, and
+ * never calls the real UI in this file - build_scan_tab(), build_channel_tab(),
+ * build_security_tab(), build_passwords_tab(), build_nav(). Wiring the lifecycle
+ * to those is a product decision about tab scaffolding, not a build fix, so it
+ * is left for the owner. */
+typedef struct {
+    lv_obj_t   *lbl_title;
+    lv_obj_t   *lbl_status;
+    lv_timer_t *timer;
+} ewifi_ctx_t;
+static ewifi_ctx_t ctx;
+
 static bool ewifi_init(lv_obj_t *parent) {
     ctx.lbl_title = lv_label_create(parent);
     lv_obj_set_style_text_font(ctx.lbl_title, &lv_font_montserrat_24, 0);

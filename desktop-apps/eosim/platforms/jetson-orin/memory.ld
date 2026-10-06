@@ -1,1 +1,0 @@
-/* jetson-orin linker script */
