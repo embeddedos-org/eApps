@@ -52,6 +52,7 @@ static void test_aabb(void) {
 static void test_game_lifecycle(void) {
     eapps_game_t *g = eapps_game_create(800, 480);
     EAPPS_ASSERT(g != NULL, "game create");
+    if (g == NULL) return; /* cannot exercise lifecycle without a game */
     EAPPS_ASSERT(g->width == 800 && g->height == 480, "game dimensions");
 
     eapps_game_obj_t *obj = eapps_game_add_obj(g);

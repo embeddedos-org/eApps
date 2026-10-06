@@ -1,1 +1,0 @@
-class OpenocdIntegration: pass

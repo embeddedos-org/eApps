@@ -1,0 +1,160 @@
+{
+  "$id": "https://embeddedos.org/schemas/app-metadata.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Schema for eApps data/apps.json \u2014 the marketplace catalogue.",
+  "properties": {
+    "apps": {
+      "items": {
+        "additionalProperties": true,
+        "properties": {
+          "ai_capabilities": {
+            "type": "object",
+            "description": "AI capabilities the app declares (Track 1: feeds the eIPC capability model and model-envelope claims). Keys are dotted capability names (e.g. camera_frames, inference.local); values are access levels. Absent = no AI capabilities declared.",
+            "propertyNames": {
+              "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$"
+            },
+            "additionalProperties": {
+              "enum": [
+                "none",
+                "read",
+                "write",
+                "readwrite"
+              ]
+            }
+          },
+          "category": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "downloadUrl": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "platform": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "releaseUrl": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "tags": {
+            "items": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "test_label": {
+            "type": "string"
+          },
+          "test_status": {
+            "enum": [
+              "passing",
+              "failing",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "version": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "category"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "categories": {
+      "items": {
+        "additionalProperties": true,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "icon": {
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "meta": {
+      "properties": {
+        "last_updated": {
+          "type": "string"
+        },
+        "test_status": {
+          "type": "string"
+        },
+        "total_apps": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "total_tests": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "total_apps",
+        "version"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "meta",
+    "categories",
+    "apps"
+  ],
+  "title": "EoS Marketplace app metadata",
+  "type": "object"
+}
