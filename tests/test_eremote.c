@@ -60,10 +60,8 @@ static void test_scenes(void) {
     ASSERT_EQ(eremote_scene_count(), 3, "scene count is 3 after init");
 
     const eremote_scene_t *s = eremote_scene_get(0);
-    ASSERT_NOT_NULL(s, "scene_get(0) non-NULL");
-    if (s != NULL) {
-        ASSERT_STR_EQ(s->name, "Movie Mode", "scene 0 name is Movie Mode");
-    }
+    ASSERT_NOT_NULL_RETURN(s, "scene_get(0) non-NULL");
+    ASSERT_STR_EQ(s->name, "Movie Mode", "scene 0 name is Movie Mode");
 }
 
 /* ---- Schedule Tests ---- */

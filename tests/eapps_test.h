@@ -82,6 +82,20 @@ static const char *t_current_suite = "";
     } else { t_passes++; } \
 } while(0)
 
+/* Same as ASSERT_NOT_NULL, but returns from the test function on failure.
+ * A failed NULL check must not fall through to the dereference below it:
+ * without the return, the suite segfaults after recording the failure and
+ * the failure itself is lost in the crash. Test functions are void, so a
+ * bare `return;` is always valid here. (#47) */
+#define ASSERT_NOT_NULL_RETURN(ptr, msg) do { \
+    if ((ptr) == NULL) { \
+        fprintf(stderr, "%sFAIL%s: %s — expected non-NULL, aborting test (%s:%d)\n", \
+                T_RED, T_RESET, msg, __FILE__, __LINE__); \
+        t_failures++; \
+        return; \
+    } else { t_passes++; } \
+} while(0)
+
 #define ASSERT_NULL(ptr, msg) do { \
     if ((ptr) != NULL) { \
         fprintf(stderr, "%sFAIL%s: %s — expected NULL (%s:%d)\n", \
