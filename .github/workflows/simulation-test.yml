@@ -83,10 +83,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install EoSim from source
-        run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git /tmp/EoSim
-          pip install -e /tmp/EoSim
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Doctor check
         run: eosim doctor
       - name: Validate all platforms

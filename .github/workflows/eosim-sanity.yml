@@ -30,10 +30,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install EoSim from source
-        run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git /tmp/EoSim
-          pip install -e /tmp/EoSim
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Verify installation
         run: |
           eosim --version
@@ -75,10 +75,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install EoSim from source
-        run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git /tmp/EoSim
-          pip install -e /tmp/EoSim
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Validate ${{ matrix.platform }}
         run: eosim list
       - name: Test ${{ matrix.platform }}
@@ -109,10 +109,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install EoSim from source
-        run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git /tmp/EoSim
-          pip install -e /tmp/EoSim
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Boot guest and test EoSim inside
         run: |
           echo "=== Nested Guest: ${{ matrix.guest }} ==="
@@ -130,10 +130,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Test EoSim on Windows
         run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git ${{ runner.temp }}/EoSim
-          pip install ${{ runner.temp }}/EoSim
           eosim --version
           eosim doctor
           eosim list && eosim doctor
@@ -149,10 +151,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install EoSim
+        uses: embeddedos-org/.github/.github/actions/install-eosim@master
+        with:
+          version: ${{ env.EOSIM_VERSION }}
       - name: Test EoSim on macOS
         run: |
-          git clone --depth 1 --branch v${{ env.EOSIM_VERSION }} https://github.com/embeddedos-org/EoSim.git ${{ runner.temp }}/EoSim
-          pip install ${{ runner.temp }}/EoSim
           eosim --version
           eosim doctor
           eosim list && eosim doctor
