@@ -5,12 +5,17 @@ Stdlib-only so it runs in CI without extra dependencies. Mirrors
 schemas/app-metadata.schema.json; the schema is the contract, this script
 is the executable check (uniqueness and cross-references need code).
 
-Usage: python3 scripts/validate_apps.py [path/to/apps.json]
+Usage: python3 scripts/validate_apps.py [path/to/apps.json] [path/to/registry.json]
 Exit 0 when valid, 1 with a list of violations otherwise.
+
+The ai-capabilities registry (schemas/ai-capabilities.registry.json) is the
+curated vocabulary of capability names. Unknown names are rejected
+(fail-closed); pass an explicit registry path for testing.
 """
 import json
 import re
 import sys
+from pathlib import Path
 
 APP_ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 AI_CAP_RE = re.compile(r"^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)*$")
@@ -18,10 +23,37 @@ AI_CAP_LEVELS = ("none", "read", "write", "readwrite")
 VERSION_RE = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+")
 
 
-def validate(data):
+def default_registry_path():
+    return (Path(__file__).resolve().parent.parent
+            / "schemas" / "ai-capabilities.registry.json")
+
+
+def load_registry(path=None):
+    """Load the curated ai_capabilities vocabulary.
+
+    Returns the name -> entry dict from the registry. Raises OSError when the
+    file cannot be read and ValueError when it has no 'capabilities' object.
+    """
+    p = Path(path) if path else default_registry_path()
+    with open(p, encoding="utf-8") as f:
+        data = json.load(f)
+    caps = data.get("capabilities")
+    if not isinstance(caps, dict):
+        raise ValueError(f"registry {p} has no 'capabilities' object")
+    return caps
+
+
+def validate(data, registry=None):
     errors = []
     if not isinstance(data, dict):
         return ["top level must be an object"]
+
+    if registry is None:
+        try:
+            registry = load_registry()
+        except (OSError, ValueError) as e:
+            errors.append(f"could not load ai-capabilities registry: {e}")
+            registry = {}
 
     for key in ("meta", "categories", "apps"):
         if key not in data:
@@ -89,6 +121,10 @@ def validate(data):
                 for k, v in caps.items():
                     if not AI_CAP_RE.match(k):
                         errors.append(f"{where} ({aid}) bad ai_capability name {k!r}")
+                    elif k not in registry:
+                        errors.append(
+                            f"{where} ({aid}) unknown ai_capability {k!r} "
+                            "(not in ai-capabilities.registry.json)")
                     if v not in AI_CAP_LEVELS:
                         errors.append(
                             f"{where} ({aid}) bad ai_capability level {v!r} for {k!r}")
@@ -100,10 +136,15 @@ def validate(data):
     return errors
 
 
-def main(path="data/apps.json"):
+def main(path="data/apps.json", registry_path=None):
+    try:
+        registry = load_registry(registry_path)
+    except (OSError, ValueError) as e:
+        print(f"registry error: {e}")
+        return 1
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
-    errors = validate(data)
+    errors = validate(data, registry)
     if errors:
         print(f"{len(errors)} violation(s) in {path}:")
         for e in errors:
@@ -115,4 +156,5 @@ def main(path="data/apps.json"):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "data/apps.json"))
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "data/apps.json",
+                  sys.argv[2] if len(sys.argv) > 2 else None))

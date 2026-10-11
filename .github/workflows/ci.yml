@@ -27,6 +27,8 @@ jobs:
           python-version: "3.12"
       - name: Validate marketplace catalogue
         run: python3 scripts/validate_apps.py data/apps.json
+      - name: Validator unit tests (incl. AI-capability registry negatives)
+        run: python3 -m unittest discover -s tests -p "test_app_metadata.py"
   build:
     name: Native (${{ matrix.os }})
     runs-on: ${{ matrix.os }}

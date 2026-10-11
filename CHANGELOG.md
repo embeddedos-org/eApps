@@ -37,6 +37,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- AI capability registry (`schemas/ai-capabilities.registry.json`): curated
+  vocabulary of 8 capabilities (`camera_frames`, `mic_frames`, `speaker_frames`,
+  `inference.local`, `inference.cloud`, `npu`, `location`, `contacts`) with
+  fail-closed default access levels. `scripts/validate_apps.py` now rejects any
+  `ai_capabilities` key not present in the registry.
+- Install-time permission model (`docs/ai-capability-permissions.md`):
+  declared access level -> allow/ask/deny UX, bound to the #162 envelope claims
+  and the eIPC `Message.Capability` field.
+
 ## [2.1.0] - 2026-04-04
 
 ### Added

@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
-from validate_apps import validate
+from validate_apps import validate, load_registry
 
 
 def good_app(**over):
@@ -75,6 +75,55 @@ class TestValidateApps(unittest.TestCase):
     def test_optional_fields_may_be_absent(self):
         a = {"id": "slim", "name": "Slim", "category": "c1"}
         self.assertEqual(validate(good_doc(apps=[a])), [])
+
+
+# Curated vocabulary for the AI-capability tests below: a fail-closed registry
+# must reject anything it does not list.
+TEST_REGISTRY = {
+    "camera_frames": {"description": "camera", "default_access": "none"},
+    "inference.local": {"description": "on-device", "default_access": "read"},
+}
+
+
+class TestAiCapabilities(unittest.TestCase):
+    def test_unknown_ai_capability_rejected(self):
+        a = good_app(ai_capabilities={"teleport": "read"})
+        errs = validate(good_doc(apps=[a]), registry=TEST_REGISTRY)
+        self.assertTrue(any("unknown ai_capability" in e and "teleport" in e
+                            for e in errs), errs)
+
+    def test_dotted_unknown_ai_capability_rejected(self):
+        a = good_app(ai_capabilities={"inference.quantum": "read"})
+        errs = validate(good_doc(apps=[a]), registry=TEST_REGISTRY)
+        self.assertTrue(any("unknown ai_capability" in e for e in errs), errs)
+
+    def test_bad_ai_capability_level_rejected(self):
+        a = good_app(ai_capabilities={"camera_frames": "execute"})
+        errs = validate(good_doc(apps=[a]), registry=TEST_REGISTRY)
+        self.assertTrue(any("bad ai_capability level" in e for e in errs), errs)
+
+    def test_known_ai_capability_accepted(self):
+        a = good_app(ai_capabilities={"camera_frames": "none",
+                                       "inference.local": "read"})
+        self.assertEqual(validate(good_doc(apps=[a]),
+                                  registry=TEST_REGISTRY), [])
+
+    def test_registry_loads_curated_vocabulary(self):
+        reg = load_registry()
+        expected = {"camera_frames", "mic_frames", "speaker_frames",
+                    "inference.local", "inference.cloud", "npu",
+                    "location", "contacts"}
+        self.assertEqual(set(reg), expected)
+        self.assertEqual(reg["camera_frames"]["default_access"], "none")
+        self.assertEqual(reg["inference.local"]["default_access"], "read")
+        self.assertEqual(reg["npu"]["default_access"], "read")
+
+    def test_current_apps_json_passes_registry(self):
+        repo = Path(__file__).resolve().parent.parent
+        with open(repo / "data" / "apps.json", encoding="utf-8") as f:
+            import json
+            data = json.load(f)
+        self.assertEqual(validate(data, registry=load_registry()), [])
 
 
 if __name__ == "__main__":

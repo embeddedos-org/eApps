@@ -1,0 +1,97 @@
+{
+  "$id": "https://embeddedos.org/schemas/ai-capabilities.registry.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EoS AI capability registry",
+  "description": "Curated vocabulary of AI capabilities an app may declare in data/apps.json `ai_capabilities` (Track 1: app manifests -> install-time permission model). FAIL-CLOSED: a capability name not listed here is rejected by scripts/validate_apps.py. Capability names are dotted; access levels are none/read/write/readwrite. `default_access` is the level granted at install with no user decision - a default of \"none\" means the installer must prompt the user before anything flows (see docs/ai-capability-permissions.md).",
+  "type": "object",
+  "required": [
+    "capabilities"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "description": "Capability name -> registry entry. Only these names are valid.",
+      "type": "object",
+      "properties": {
+        "camera_frames": {
+          "type": "object",
+          "required": [
+            "description",
+            "default_access"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "default_access": {
+              "type": "string",
+              "enum": [
+                "none",
+                "read",
+                "write",
+                "readwrite"
+              ]
+            }
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "description",
+          "default_access"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "default_access": {
+            "type": "string",
+            "enum": [
+              "none",
+              "read",
+              "write",
+              "readwrite"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "camera_frames": {
+      "description": "Frames from the device camera (vision input: stills, video, depth where available).",
+      "default_access": "none"
+    },
+    "mic_frames": {
+      "description": "Audio frames from the device microphone (voice input, ambient audio).",
+      "default_access": "none"
+    },
+    "speaker_frames": {
+      "description": "Audio rendered through the device speaker (TTS, alerts, playback).",
+      "default_access": "none"
+    },
+    "inference.local": {
+      "description": "On-device model inference (compute only; no data leaves the device). read = run inference over data the app may already access; write = install/persist models on device; readwrite = both.",
+      "default_access": "read"
+    },
+    "inference.cloud": {
+      "description": "Off-device (cloud) model inference. Any use sends app data off the device, so explicit user consent is always required. read = submit jobs and receive results; write = fine-tune/train remote models with app data; readwrite = both.",
+      "default_access": "none"
+    },
+    "npu": {
+      "description": "Direct access to the on-device neural accelerator (Track-1 accelerator HAL tier target). read = submit workloads; write = manage accelerator partitions/firmware; readwrite = both.",
+      "default_access": "read"
+    },
+    "location": {
+      "description": "Device location (GNSS, network, or fused fixes). Personal data; explicit user consent is always required.",
+      "default_access": "none"
+    },
+    "contacts": {
+      "description": "Access to the device contacts/people graph. Personal data; explicit user consent is always required.",
+      "default_access": "none"
+    }
+  }
+}
