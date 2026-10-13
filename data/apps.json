@@ -1020,7 +1020,13 @@
     "android-tablet": "https://github.com/embeddedos-org/eApps/releases/download/ebot-android-v1.0.0/ebot-android-1.0.0-android-tablet.apk"
    },
    "test_status": "passing",
-   "test_label": "37 tests"
+   "test_label": "37 tests",
+   "ai_capabilities": {
+    "inference.local": "readwrite",
+    "inference.cloud": "readwrite",
+    "mic_frames": "read",
+    "camera_frames": "none"
+   }
   },
   {
    "id": "eride-ios",
