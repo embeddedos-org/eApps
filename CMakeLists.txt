@@ -59,8 +59,13 @@ else()
     )
     set(LV_USE_DRAW_SW_ASM "none" CACHE STRING "" FORCE)
     FetchContent_MakeAvailable(lvgl)
-    # Apple's assembler cannot handle LVGL's Helium/NEON .S files
-    if(APPLE OR NOT CMAKE_SYSTEM_PROCESSOR MATCHES "arm|aarch64|ARM")
+    # LVGL's Helium/NEON .S files cannot be assembled by the mobile
+    # toolchains (Apple's assembler; NDK clang on the Android ARM ABIs —
+    # #50). LV_USE_DRAW_SW_ASM is "none" above, so these sources are
+    # inert (fully guarded by the ASM-mode macros) and stripping them
+    # changes no generated code — it only removes the broken assemble
+    # step. Strip on every platform, not just Apple/non-ARM.
+    if(TRUE)
         get_target_property(_lvgl_srcs lvgl SOURCES)
         if(_lvgl_srcs)
             list(FILTER _lvgl_srcs EXCLUDE REGEX "\\.S$")
