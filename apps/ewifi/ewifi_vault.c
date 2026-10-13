@@ -15,6 +15,22 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if defined(__APPLE__)
+#include <TargetConditionals.h>
+#endif
+
+/* __APPLE__ covers iOS as well as macOS, but the command-line tools the
+ * connect/disconnect paths below drive (networksetup, and system()
+ * itself) exist only on macOS: system() is unavailable on iOS and
+ * networksetup is not shipped there. Gate the desktop-Apple paths on
+ * TARGET_OS_OSX so iOS builds take the stub path, like other
+ * unsupported platforms. */
+#if defined(__APPLE__) && TARGET_OS_OSX
+#define EWIFI_APPLE_DESKTOP 1
+#else
+#define EWIFI_APPLE_DESKTOP 0
+#endif
+
 #ifdef _WIN32
 #define popen  _popen
 #define pclose _pclose
@@ -210,7 +226,7 @@ bool ewifi_ac_connect(const char *ssid, const char *password)
 #ifdef _WIN32
     if (!ewifi_shell_arg_is_safe_win(ssid)) return false;
     snprintf(cmd, sizeof(cmd), "netsh wlan connect name=\"%s\" 2>nul", ssid);
-#elif defined(__linux__) || defined(__APPLE__)
+#elif defined(__linux__) || EWIFI_APPLE_DESKTOP
     {
         char q_ssid[128];
         char q_pass[192];
@@ -250,7 +266,7 @@ bool ewifi_ac_connect(const char *ssid, const char *password)
     return true;
 #endif
 
-#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__linux__) || EWIFI_APPLE_DESKTOP
     int ret = system(cmd);
     return (ret == 0);
 #endif
@@ -263,7 +279,7 @@ bool ewifi_ac_disconnect(void)
     snprintf(cmd, sizeof(cmd), "netsh wlan disconnect 2>nul");
 #elif defined(__linux__)
     snprintf(cmd, sizeof(cmd), "nmcli device disconnect wlan0 2>/dev/null");
-#elif defined(__APPLE__)
+#elif EWIFI_APPLE_DESKTOP
     snprintf(cmd, sizeof(cmd),
              "networksetup -setairportpower en0 off && "
              "networksetup -setairportpower en0 on 2>/dev/null");
@@ -272,7 +288,7 @@ bool ewifi_ac_disconnect(void)
     return true;
 #endif
 
-#if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__linux__) || EWIFI_APPLE_DESKTOP
     return system(cmd) == 0;
 #endif
 }
