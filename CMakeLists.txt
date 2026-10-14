@@ -150,6 +150,15 @@ if(EAPPS_BUILD_WEB)
     add_subdirectory(apps/eweb)
 endif()
 
+# --- System apps ---
+# ehmi and esettings are core system apps: every platform build includes
+# them and the mobile smoke lists count them among the 41 suite apps.
+# They had no add_subdirectory anywhere, so no platform ever produced
+# libehmi.a / libesettings.a and the miss only surfaced in the iOS
+# Simulator smoke test (#52).
+add_subdirectory(apps/ehmi)
+add_subdirectory(apps/esettings)
+
 if(EAPPS_BUILD_SUITE)
     add_subdirectory(apps/suite)
 endif()

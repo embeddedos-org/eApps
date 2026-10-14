@@ -39,8 +39,21 @@ jobs:
       - name: Verify binaries
         run: |
           echo "=== Built binaries for ${{ matrix.abi }} ==="
-          find build -name "*.so" -o -name "*.a" | head -20
-          echo "Android ${{ matrix.abi }}: BUILD PASSED"
+          # Assert every app the smoke tests will look for was actually
+          # built, so a missing app fails here, not at smoke time (#52).
+          APPS=(dice ebirds eblocks ebuffer ecal echat echess ecleaner eclock econverter ecrush efiles eftp egallery eguard ehmi emusic enote epaint epdf eplay erunner eserial esession esettings eslice essh esurfer etimer etools etunnel evideo eviewer evirustower evnc evpn eweb ezip minesweeper snake tetris)
+          missing=0
+          for app in "${APPS[@]}"; do
+            if [ ! -f "build/apps/$app/lib$app.a" ]; then
+              echo "MISSING: build/apps/$app/lib$app.a"
+              missing=$((missing+1))
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "Android ${{ matrix.abi }}: $missing app binaries missing"
+            exit 1
+          fi
+          echo "Android ${{ matrix.abi }}: BUILD PASSED (${#APPS[@]} apps verified)"
       - uses: actions/upload-artifact@v4
         with:
           name: android-${{ matrix.abi }}
@@ -101,8 +114,21 @@ jobs:
       - name: Verify binaries
         run: |
           echo "=== Built binaries for iOS arm64 ==="
-          find build -name "*.a" | head -20
-          echo "iOS arm64: BUILD PASSED"
+          # Same assertion as the Android build: fail here, not at smoke
+          # time, when an app in the smoke list produced no binary (#52).
+          APPS=(dice ebirds eblocks ebuffer ecal echat echess ecleaner eclock econverter ecrush efiles eftp egallery eguard ehmi emusic enote epaint epdf eplay erunner eserial esession esettings eslice essh esurfer etimer etools etunnel evideo eviewer evirustower evnc evpn eweb ezip minesweeper snake tetris)
+          missing=0
+          for app in "${APPS[@]}"; do
+            if [ ! -f "build/apps/$app/lib$app.a" ]; then
+              echo "MISSING: build/apps/$app/lib$app.a"
+              missing=$((missing+1))
+            fi
+          done
+          if [ "$missing" -gt 0 ]; then
+            echo "iOS arm64: $missing app binaries missing"
+            exit 1
+          fi
+          echo "iOS arm64: BUILD PASSED (${#APPS[@]} apps verified)"
       - uses: actions/upload-artifact@v4
         with:
           name: ios-arm64
