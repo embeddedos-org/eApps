@@ -1,3 +1,7 @@
 add_library(ehmi STATIC ehmi.c)
 target_include_directories(ehmi PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(ehmi PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(ehmi_standalone ehmi.c)
+    target_link_libraries(ehmi_standalone PRIVATE ehmi eapps_port)
+endif()

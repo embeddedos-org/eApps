@@ -1,3 +1,7 @@
 add_library(esettings STATIC esettings.c)
 target_include_directories(esettings PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(esettings PUBLIC eapps_ui)
+if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
+    add_executable(esettings_standalone esettings.c)
+    target_link_libraries(esettings_standalone PRIVATE esettings eapps_port)
+endif()

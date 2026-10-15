@@ -23,6 +23,9 @@ endif()
 if(EAPPS_BUILD_WEB)
     list(APPEND SUITE_LINK_LIBS eweb)
 endif()
+# System apps are unconditional in the root build (see root
+# CMakeLists.txt), so the suite links them unconditionally too.
+list(APPEND SUITE_LINK_LIBS ehmi esettings)
 
 add_library(suite STATIC suite.c)
 target_include_directories(suite PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -81,6 +84,12 @@ if(EAPPS_BUILD_STANDALONE AND TARGET eapps_port)
     if(TARGET eweb_standalone)
         install(TARGETS eweb_standalone RUNTIME DESTINATION bin COMPONENT web)
     endif()
+
+    foreach(app ehmi esettings)
+        if(TARGET ${app}_standalone)
+            install(TARGETS ${app}_standalone RUNTIME DESTINATION bin COMPONENT system)
+        endif()
+    endforeach()
 endif()
 
 # Linux desktop integration
