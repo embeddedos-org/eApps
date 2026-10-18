@@ -1,0 +1,25 @@
+# eApps
+
+> llms.txt for the eApps repository (embeddedos-org/eApps).
+> Status: the EmbeddedOS marketplace and app store —
+> app packaging, distribution, and install-time permissions
+> for the ecosystem.
+
+eApps is where EmbeddedOS applications are published, found,
+and installed: the marketplace architecture, the platform
+guide for app authors, and the AI capability permission model
+apps declare in their manifests.
+
+
+## Docs
+
+- [eApps Architecture](docs/architecture.md)
+- [EoS Marketplace Architecture](docs/marketplace-architecture.md)
+- [eApps Platform Guide](docs/platform-guide.md)
+- [Adding a New App](docs/adding-apps.md)
+- [AI capability permissions — install-time permission model](docs/ai-capability-permissions.md)
+
+## Machine-readable
+
+- [llms.txt](llms.txt) — this file
+- [llms-full.txt](llms-full.txt) — the docs above concatenated as one document
