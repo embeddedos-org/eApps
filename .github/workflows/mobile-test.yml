@@ -1,3 +1,16 @@
+# KNOWN UPSTREAM FAILURE — see issue #53 (filed 2026-10-27):
+# The Android Emulator Test job's "Setup Android SDK" step
+# (setup-android@v3) fails with "Failed to find package 'tools'"
+# because the upstream Android SDK package feed no longer serves
+# the legacy 'tools' package. This is an upstream feed failure,
+# NOT an eApps code defect. Signature seen on two consecutive
+# scheduled runs: 39203327060 (2026-10-19) and 40273067054
+# (2026-10-26) — same job, same step, all other jobs success.
+# The Mobile Test Gate intentionally does not gate on this job
+# while the upstream failure stands — see #53 for the remedy
+# options and the closure rule. Do not "fix" this by coupling
+# the gate to the emulator job.
+#
 name: Mobile Platform Tests
 on:
   schedule:
