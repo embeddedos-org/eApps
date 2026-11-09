@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- `test_app_lifecycle` now checks the apps. It guarded every check with `#ifdef EAPPS_BUILD_<CATEGORY>`,
+  but `tests/CMakeLists.txt` never passed those defines, so it ran 0 assertions and always passed.
+  The enabled categories are now compiled in and `esettings` and `ebot` are linked. The test fails
+  when no check runs, and when the number of categories it checked differs from the number of
+  `EAPPS_BUILD_<CATEGORY>` options that are ON.
+
 ## [3.0.1] - 2026-05-16
 
 ### Production Release — Unified EmbeddedOS-org v3.0.1

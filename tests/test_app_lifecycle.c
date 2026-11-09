@@ -3,6 +3,10 @@
 #include "eapps_test.h"
 #include "../core/common/include/eapps/types.h"
 
+#ifndef EAPPS_LIFECYCLE_EXPECTED_CATEGORIES
+#error "EAPPS_LIFECYCLE_EXPECTED_CATEGORIES must be set by tests/CMakeLists.txt"
+#endif
+
 /* ================================================================
  * Extern declarations for all app infos and lifecycles.
  * Grouped by build category, matching the pattern in suite.c.
@@ -172,24 +176,42 @@ static void test_web_apps(void) {
 #endif
 
 int main(void) {
+    int categories_checked = 0;
+
 #ifdef EAPPS_BUILD_PRODUCTIVITY
     test_productivity_apps();
+    categories_checked++;
 #endif
 #ifdef EAPPS_BUILD_MEDIA
     test_media_apps();
+    categories_checked++;
 #endif
 #ifdef EAPPS_BUILD_GAMES
     test_games_apps();
+    categories_checked++;
 #endif
 #ifdef EAPPS_BUILD_CONNECTIVITY
     test_connectivity_apps();
+    categories_checked++;
 #endif
 #ifdef EAPPS_BUILD_SECURITY
     test_security_apps();
+    categories_checked++;
 #endif
 #ifdef EAPPS_BUILD_WEB
     test_web_apps();
+    categories_checked++;
 #endif
+
+    /* No checks at all means the EAPPS_BUILD_* category defines did not reach
+     * this file (see tests/CMakeLists.txt). Fail instead of passing empty. */
+    ASSERT_TRUE(t_passes + t_failures > 0, "at least one app check ran");
+
+    /* tests/CMakeLists.txt counts the categories enabled by the CMake options,
+     * separately from the defines it passes, so a category whose define goes
+     * missing fails here instead of silently dropping its checks. */
+    ASSERT_EQ(categories_checked, EAPPS_LIFECYCLE_EXPECTED_CATEGORIES,
+              "app categories checked match the categories enabled in CMake");
 
     TEST_EXIT();
 }
