@@ -8,6 +8,9 @@
   The enabled categories are now compiled in and `esettings` and `ebot` are linked. The test fails
   when no check runs, and when the number of categories it checked differs from the number of
   `EAPPS_BUILD_<CATEGORY>` options that are ON.
+- A `-DBUILD_TESTING=ON` build with `EAPPS_BUILD_CONNECTIVITY=OFF` failed to link (`library 'eremote' not found`,
+  `library 'ewifi' not found`): `tests/CMakeLists.txt` built `test_eremote`, `test_ewifi` and `test_ewifi_shellsafe`
+  unconditionally. Those three tests are now only built when the connectivity apps are.
 
 ## [3.0.1] - 2026-05-16
 
