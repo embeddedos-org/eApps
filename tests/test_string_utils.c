@@ -33,6 +33,23 @@ static void test_base64(void) {
     EAPPS_ASSERT(memcmp(decoded, "Hello", 5) == 0, "b64 roundtrip");
 }
 
+static void test_base64_decode_rejects_invalid(void) {
+    uint8_t out[32];
+    /* a character outside the alphabet in the 3rd or 4th place of a quad */
+    EAPPS_ASSERT(eapps_base64_decode("SGVsbG8!", out, sizeof(out)) == -1, "b64 reject '!' in 4th place");
+    EAPPS_ASSERT(eapps_base64_decode("SGVsbG!=", out, sizeof(out)) == -1, "b64 reject '!' in 3rd place");
+    EAPPS_ASSERT(eapps_base64_decode("SGVsbG 8", out, sizeof(out)) == -1, "b64 reject space");
+    /* padding followed by data, inside a quad or before another quad */
+    EAPPS_ASSERT(eapps_base64_decode("SG=k", out, sizeof(out)) == -1, "b64 reject data after '='");
+    EAPPS_ASSERT(eapps_base64_decode("SGk=SGk=", out, sizeof(out)) == -1, "b64 reject quad after padding");
+    EAPPS_ASSERT(eapps_base64_decode("====", out, sizeof(out)) == -1, "b64 reject padding only");
+    /* valid input still decodes */
+    EAPPS_ASSERT(eapps_base64_decode("SGk=", out, sizeof(out)) == 2 && memcmp(out, "Hi", 2) == 0, "b64 one pad");
+    EAPPS_ASSERT(eapps_base64_decode("SA==", out, sizeof(out)) == 1 && out[0] == 'H', "b64 two pads");
+    EAPPS_ASSERT(eapps_base64_decode("SGVsbG8h", out, sizeof(out)) == 6 && memcmp(out, "Hello!", 6) == 0, "b64 no pad");
+    EAPPS_ASSERT(eapps_base64_decode("", out, sizeof(out)) == 0, "b64 empty");
+}
+
 static void test_case_insensitive(void) {
     EAPPS_ASSERT(eapps_str_contains_ci("Hello World", "hello") == true, "ci search found");
     EAPPS_ASSERT(eapps_str_contains_ci("Hello World", "xyz") == false, "ci search not found");
@@ -50,6 +67,7 @@ static void test_to_lower_upper(void) {
 int main(void) {
     test_truncate();
     test_base64();
+    test_base64_decode_rejects_invalid();
     test_case_insensitive();
     test_to_lower_upper();
     printf("test_string_utils: %d passed, %d failed\n", passes, failures);

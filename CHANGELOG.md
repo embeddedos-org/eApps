@@ -11,6 +11,10 @@
 - A `-DBUILD_TESTING=ON` build with `EAPPS_BUILD_CONNECTIVITY=OFF` failed to link (`library 'eremote' not found`,
   `library 'ewifi' not found`): `tests/CMakeLists.txt` built `test_eremote`, `test_ewifi` and `test_ewifi_shellsafe`
   unconditionally. Those three tests are now only built when the connectivity apps are.
+- `eapps_base64_decode()` returns -1 for input that is not Base64. It checked only the first two characters
+  of each 4-character group, so a character outside the alphabet in the 3rd or 4th place (`"SGVsbG8!"`)
+  was decoded as all one bits and the call returned bytes that were never encoded. It also accepted `=`
+  followed by data (`"SG=k"`) and padding before the last group (`"SGk=SGk="`).
 
 ## [3.0.1] - 2026-05-16
 
