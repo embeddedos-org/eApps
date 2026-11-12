@@ -67,10 +67,14 @@ int eapps_base64_decode(const char *src, uint8_t *dst, size_t dst_len) {
     if (slen % 4 != 0) return -1;
     size_t out = 0;
     for (size_t i = 0; i < slen; i += 4) {
+        bool pad_c = src[i + 2] == '=', pad_d = src[i + 3] == '=';
+        /* '=' only at the end of the last quad, and never before data */
+        if ((pad_c || pad_d) && i + 4 != slen) return -1;
+        if (pad_c && !pad_d) return -1;
         int a = b64_val(src[i]), b = b64_val(src[i + 1]);
-        int c = (src[i + 2] != '=') ? b64_val(src[i + 2]) : 0;
-        int d = (src[i + 3] != '=') ? b64_val(src[i + 3]) : 0;
-        if (a < 0 || b < 0) return -1;
+        int c = pad_c ? 0 : b64_val(src[i + 2]);
+        int d = pad_d ? 0 : b64_val(src[i + 3]);
+        if (a < 0 || b < 0 || c < 0 || d < 0) return -1;
         uint32_t v = ((uint32_t)a << 18) | ((uint32_t)b << 12) | ((uint32_t)c << 6) | (uint32_t)d;
         if (out < dst_len) dst[out++] = (uint8_t)(v >> 16);
         if (src[i + 2] != '=' && out < dst_len) dst[out++] = (uint8_t)(v >> 8);
