@@ -36,10 +36,29 @@ static void test_format_file_size(void) {
     EAPPS_ASSERT(strcmp(buf, "1.0 MB") == 0, "1 MB");
 }
 
+/* A size that rounds up to 1024.0 of one unit is shown as 1.0 of the next. */
+static void check_size(unsigned long long bytes, const char *want) {
+    char buf[32], msg[96];
+    eapps_format_file_size(bytes, buf, sizeof(buf));
+    printf("  %llu bytes -> \"%s\"\n", bytes, buf);
+    snprintf(msg, sizeof(msg), "%llu bytes: want \"%s\", got \"%s\"", bytes, want, buf);
+    EAPPS_ASSERT(strcmp(buf, want) == 0, msg);
+}
+
+static void test_format_file_size_unit_rollover(void) {
+    check_size(1023ULL, "1023 B");
+    check_size(1048524ULL, "1023.9 KB");     /* 1023.949 KB stays in KB */
+    check_size(1048525ULL, "1.0 MB");        /* 1023.950 KB rounds to 1024.0 */
+    check_size(1048575ULL, "1.0 MB");        /* 1 MiB - 1 byte */
+    check_size(1073741823ULL, "1.0 GB");     /* 1 GiB - 1 byte */
+    check_size(1099511627775ULL, "1.0 TB");  /* 1 TiB - 1 byte */
+}
+
 int main(void) {
     test_clamp();
     test_lerp();
     test_format_file_size();
+    test_format_file_size_unit_rollover();
     printf("test_math_utils: %d passed, %d failed\n", passes, failures);
     return failures > 0 ? 1 : 0;
 }

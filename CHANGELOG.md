@@ -15,6 +15,8 @@
   of each 4-character group, so a character outside the alphabet in the 3rd or 4th place (`"SGVsbG8!"`)
   was decoded as all one bits and the call returned bytes that were never encoded. It also accepted `=`
   followed by data (`"SG=k"`) and padding before the last group (`"SGk=SGk="`).
+- `eapps_format_file_size()` shows a size that rounds up to 1024.0 of a unit as 1.0 of the next unit:
+  1048575 bytes is `"1.0 MB"`, not `"1024.0 KB"`, and 1 GiB - 1 byte is `"1.0 GB"`, not `"1024.0 MB"`.
 
 ## [3.0.1] - 2026-05-16
 
