@@ -35,7 +35,9 @@ void eapps_format_file_size(uint64_t bytes, char *buf, size_t buf_len) {
     const char *units[] = {"B", "KB", "MB", "GB", "TB"};
     int u = 0;
     double size = (double)bytes;
-    while (size >= 1024.0 && u < 4) { size /= 1024.0; u++; }
+    /* Compare against 1023.95, not 1024: anything from there up prints as
+     * "1024.0" with one decimal, which is 1.0 of the next unit. */
+    while (u < 4 && (u == 0 ? size >= 1024.0 : size >= 1023.95)) { size /= 1024.0; u++; }
     if (u == 0) snprintf(buf, buf_len, "%d B", (int)bytes);
     else        snprintf(buf, buf_len, "%.1f %s", size, units[u]);
 }
