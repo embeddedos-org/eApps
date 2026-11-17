@@ -50,6 +50,23 @@ static void test_base64_decode_rejects_invalid(void) {
     EAPPS_ASSERT(eapps_base64_decode("", out, sizeof(out)) == 0, "b64 empty");
 }
 
+static void test_hexdump_exact_buffer(void) {
+    const uint8_t data[] = {0xDE, 0xAD, 0xBE};
+    char out[16];
+    /* "DE AD BE" is 8 characters plus the terminator: 3 bytes per input byte */
+    eapps_hexdump(data, 3, out, 9);
+    EAPPS_ASSERT(strcmp(out, "DE AD BE") == 0, "hexdump fits a buffer of exactly 3*len");
+    eapps_hexdump(data, 1, out, 3);
+    EAPPS_ASSERT(strcmp(out, "DE") == 0, "hexdump one byte into 3 bytes");
+    /* a short buffer still keeps only whole bytes */
+    eapps_hexdump(data, 3, out, 8);
+    EAPPS_ASSERT(strcmp(out, "DE AD") == 0, "hexdump drops the byte that does not fit");
+    eapps_hexdump(data, 3, out, 2);
+    EAPPS_ASSERT(strcmp(out, "") == 0, "hexdump buffer too small for one byte");
+    eapps_hexdump(data, 3, out, sizeof(out));
+    EAPPS_ASSERT(strcmp(out, "DE AD BE") == 0, "hexdump roomy buffer");
+}
+
 static void test_case_insensitive(void) {
     EAPPS_ASSERT(eapps_str_contains_ci("Hello World", "hello") == true, "ci search found");
     EAPPS_ASSERT(eapps_str_contains_ci("Hello World", "xyz") == false, "ci search not found");
@@ -68,6 +85,7 @@ int main(void) {
     test_truncate();
     test_base64();
     test_base64_decode_rejects_invalid();
+    test_hexdump_exact_buffer();
     test_case_insensitive();
     test_to_lower_upper();
     printf("test_string_utils: %d passed, %d failed\n", passes, failures);

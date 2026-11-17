@@ -26,7 +26,9 @@ void eapps_str_truncate(const char *src, char *dst, size_t max_len) {
 void eapps_hexdump(const uint8_t *data, size_t len, char *out, size_t out_len) {
     if (!data || !out || out_len == 0) return;
     size_t pos = 0;
-    for (size_t i = 0; i < len && pos + 3 < out_len; i++) {
+    /* Each byte needs "XX" plus a separator; the last separator becomes the
+     * terminator, so a byte fits while 3 bytes remain (3*len in total). */
+    for (size_t i = 0; i < len && pos + 3 <= out_len; i++) {
         pos += (size_t)snprintf(out + pos, out_len - pos, "%02X ", data[i]);
     }
     if (pos > 0) out[pos - 1] = '\0';

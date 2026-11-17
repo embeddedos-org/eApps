@@ -17,6 +17,9 @@
   followed by data (`"SG=k"`) and padding before the last group (`"SGk=SGk="`).
 - `eapps_format_file_size()` shows a size that rounds up to 1024.0 of a unit as 1.0 of the next unit:
   1048575 bytes is `"1.0 MB"`, not `"1024.0 KB"`, and 1 GiB - 1 byte is `"1.0 GB"`, not `"1024.0 MB"`.
+- `eapps_hexdump()` writes every byte into a buffer of exactly `3 * len` bytes. It stopped while fewer than
+  4 bytes were left, so the last byte was dropped: `{0xDE, 0xAD, 0xBE}` into 9 bytes gave `"DE AD"`, not
+  `"DE AD BE"`, and one byte into 3 bytes gave `""`.
 
 ## [3.0.1] - 2026-05-16
 
