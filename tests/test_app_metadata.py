@@ -77,6 +77,54 @@ class TestValidateApps(unittest.TestCase):
         self.assertEqual(validate(good_doc(apps=[a])), [])
 
 
+class TestFieldTypes(unittest.TestCase):
+    """Fields the schema types as strings: a wrong type is a violation, and
+    the validator reports it instead of raising."""
+
+    def errors_for(self, doc):
+        return validate(doc, registry={})
+
+    def test_non_string_app_id_is_reported(self):
+        errs = self.errors_for(good_doc(apps=[good_app(id=7)]))
+        self.assertTrue(any("slug" in e for e in errs), errs)
+
+    def test_app_id_with_trailing_newline_is_not_a_slug(self):
+        errs = self.errors_for(good_doc(apps=[good_app(id="my-app\n")]))
+        self.assertTrue(any("slug" in e for e in errs), errs)
+
+    def test_non_string_category_is_reported(self):
+        errs = self.errors_for(good_doc(apps=[good_app(category=["c1"])]))
+        self.assertTrue(any("category must be a string" in e for e in errs), errs)
+
+    def test_non_string_category_id_is_reported(self):
+        errs = self.errors_for(good_doc(categories=[{"id": ["c1"], "name": "Cat"}]))
+        self.assertTrue(any("id must be a string" in e for e in errs), errs)
+
+    def test_non_string_names_are_reported(self):
+        errs = self.errors_for(good_doc(categories=[{"id": "c1", "name": 3}],
+                                        apps=[good_app(name=5)]))
+        self.assertTrue(any("categories[0] name must be a string" in e
+                            for e in errs), errs)
+        self.assertTrue(any("apps[0] (my-app) name must be a string" in e
+                            for e in errs), errs)
+
+    def test_meta_that_is_not_an_object_is_reported(self):
+        errs = self.errors_for(good_doc(meta=[1]))
+        self.assertTrue(any("meta must be an object" in e for e in errs), errs)
+
+    def test_platform_entries_must_be_non_empty_strings(self):
+        for plats in ([1], [""], ["web", None]):
+            errs = self.errors_for(good_doc(apps=[good_app(platform=plats)]))
+            self.assertTrue(any("platform entries" in e for e in errs),
+                            (plats, errs))
+
+    def test_tags_must_be_non_empty_strings(self):
+        for tags in ([""], [2], ["ok", {}]):
+            errs = self.errors_for(good_doc(apps=[good_app(tags=tags)]))
+            self.assertTrue(any("tags must be non-empty strings" in e
+                                for e in errs), (tags, errs))
+
+
 # Curated vocabulary for the AI-capability tests below: a fail-closed registry
 # must reject anything it does not list.
 TEST_REGISTRY = {
