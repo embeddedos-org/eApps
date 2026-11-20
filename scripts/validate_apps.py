@@ -43,6 +43,11 @@ def load_registry(path=None):
     return caps
 
 
+def _is_text(value):
+    """A non-empty string: the schema's {"type": "string", "minLength": 1}."""
+    return isinstance(value, str) and value != ""
+
+
 def validate(data, registry=None):
     errors = []
     if not isinstance(data, dict):
@@ -59,7 +64,11 @@ def validate(data, registry=None):
         if key not in data:
             errors.append(f"missing required top-level key: {key}")
 
-    meta = data.get("meta") or {}
+    meta = data.get("meta")
+    if not isinstance(meta, dict):
+        if meta is not None:
+            errors.append("meta must be an object")
+        meta = {}
     if not isinstance(meta.get("total_apps"), int):
         errors.append("meta.total_apps must be an integer")
 
@@ -71,12 +80,16 @@ def validate(data, registry=None):
             continue
         if not c.get("id"):
             errors.append(f"categories[{i}] missing id")
+        elif not isinstance(c["id"], str):
+            errors.append(f"categories[{i}] id must be a string")
         elif c["id"] in cat_ids:
             errors.append(f"duplicate category id: {c['id']!r}")
         else:
             cat_ids.add(c["id"])
         if not c.get("name"):
             errors.append(f"categories[{i}] missing name")
+        elif not isinstance(c["name"], str):
+            errors.append(f"categories[{i}] name must be a string")
 
     apps = data.get("apps") or []
     seen_ids = set()
@@ -88,7 +101,7 @@ def validate(data, registry=None):
         aid = a.get("id")
         if not aid:
             errors.append(f"{where} missing id")
-        elif not APP_ID_RE.match(aid):
+        elif not isinstance(aid, str) or not APP_ID_RE.fullmatch(aid):
             errors.append(f"{where} id {aid!r} must be lowercase slug")
         elif aid in seen_ids:
             errors.append(f"duplicate app id: {aid!r}")
@@ -96,9 +109,13 @@ def validate(data, registry=None):
             seen_ids.add(aid)
         if not a.get("name"):
             errors.append(f"{where} ({aid}) missing name")
+        elif not isinstance(a["name"], str):
+            errors.append(f"{where} ({aid}) name must be a string")
         cat = a.get("category")
         if not cat:
             errors.append(f"{where} ({aid}) missing category")
+        elif not isinstance(cat, str):
+            errors.append(f"{where} ({aid}) category must be a string")
         elif cat_ids and cat not in cat_ids:
             errors.append(f"{where} ({aid}) unknown category {cat!r}")
         ver = a.get("version")
@@ -107,9 +124,14 @@ def validate(data, registry=None):
         plats = a.get("platform")
         if plats is not None and (not isinstance(plats, list) or not plats):
             errors.append(f"{where} ({aid}) platform must be a non-empty list")
+        elif plats is not None and not all(_is_text(p) for p in plats):
+            errors.append(
+                f"{where} ({aid}) platform entries must be non-empty strings")
         tags = a.get("tags")
         if tags is not None and not isinstance(tags, list):
             errors.append(f"{where} ({aid}) tags must be a list")
+        elif tags is not None and not all(_is_text(t) for t in tags):
+            errors.append(f"{where} ({aid}) tags must be non-empty strings")
         ts = a.get("test_status")
         if ts is not None and ts not in ("passing", "failing", "unknown"):
             errors.append(f"{where} ({aid}) bad test_status {ts!r}")

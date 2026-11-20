@@ -20,6 +20,10 @@
 - `eapps_hexdump()` writes every byte into a buffer of exactly `3 * len` bytes. It stopped while fewer than
   4 bytes were left, so the last byte was dropped: `{0xDE, 0xAD, 0xBE}` into 9 bytes gave `"DE AD"`, not
   `"DE AD BE"`, and one byte into 3 bytes gave `""`.
+- `scripts/validate_apps.py` checks the types that `schemas/app-metadata.schema.json` gives the catalogue's
+  fields. A non-string app `id`, app `category` or category `id`, or a `meta` that is not an object, made it
+  stop with a `TypeError`/`AttributeError` traceback instead of listing the violation, and a non-string `name`,
+  empty or non-string `platform` and `tags` entries, and an `id` ending in a newline passed.
 
 ## [3.0.1] - 2026-05-16
 
