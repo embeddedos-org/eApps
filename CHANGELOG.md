@@ -24,6 +24,9 @@
   fields. A non-string app `id`, app `category` or category `id`, or a `meta` that is not an object, made it
   stop with a `TypeError`/`AttributeError` traceback instead of listing the violation, and a non-string `name`,
   empty or non-string `platform` and `tags` entries, and an `id` ending in a newline passed.
+- eBot's `models` and `tools` lists show each entry once. `ebot_fetch_models()` and `ebot_fetch_tools()` began
+  the search for the next `"name"` one character into the reply, which found the first entry again, so a
+  reply with two models listed three (`eai-tiny`, `eai-tiny`, `eai-base`).
 
 ## [3.0.1] - 2026-05-16
 

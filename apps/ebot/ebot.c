@@ -239,8 +239,8 @@ int ebot_fetch_models(ebot_state_t *state) {
                                response, EBOT_RESPONSE_BUF);
     if (rc == 0) {
         state->model_count = 0;
-        const char *p = response;
-        while (state->model_count < EBOT_MAX_MODELS) {
+        const char *p = strstr(response, "\"name\""); /* p + 1 then finds the next */
+        while (p && state->model_count < EBOT_MAX_MODELS) {
             char name[64];
             if (!json_get_string(p, "name", name, sizeof(name))) break;
             strncpy(state->models[state->model_count].name, name, 63);
@@ -277,8 +277,8 @@ int ebot_fetch_tools(ebot_state_t *state) {
                                response, EBOT_RESPONSE_BUF);
     if (rc == 0) {
         state->tool_count = 0;
-        const char *p = response;
-        while (state->tool_count < EBOT_MAX_TOOLS) {
+        const char *p = strstr(response, "\"name\""); /* p + 1 then finds the next */
+        while (p && state->tool_count < EBOT_MAX_TOOLS) {
             char name[64];
             if (!json_get_string(p, "name", name, sizeof(name))) break;
             strncpy(state->tools[state->tool_count].name, name, 63);

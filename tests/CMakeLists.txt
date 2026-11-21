@@ -51,6 +51,14 @@ else()
     message(STATUS "test_eremote, test_ewifi, test_ewifi_shellsafe skipped: EAPPS_BUILD_CONNECTIVITY is OFF")
 endif()
 
+# eBot client tests run a loopback HTTP server with fork(), so POSIX only.
+# The ebot target only exists when LVGL does (apps/ebot/CMakeLists.txt).
+if(UNIX AND TARGET ebot)
+    add_executable(test_ebot test_ebot.c)
+    target_link_libraries(test_ebot PRIVATE ebot m)
+    add_test(NAME test_ebot COMMAND test_ebot)
+endif()
+
 # App lifecycle tests — needs all app libraries
 # test_app_lifecycle.c checks each category only under #ifdef EAPPS_BUILD_<CATEGORY>,
 # so every enabled category must also be passed as a compile definition. Without
