@@ -464,7 +464,7 @@ void ewifi_vault_lock(ewifi_vault_t *v);
  * @param pass      Passphrase.
  * @param note      Optional free-text note; may be NULL.
  * @param auto_conn Whether auto-connect may use this entry.
- * @return false if the vault is locked or full.
+ * @return false if the vault is locked, or full and @p ssid is not in it yet.
  */
 bool ewifi_vault_add(ewifi_vault_t *v, const char *ssid, const char *pass,
                      const char *note, bool auto_conn);

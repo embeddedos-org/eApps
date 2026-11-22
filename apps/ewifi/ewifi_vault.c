@@ -80,7 +80,6 @@ void ewifi_vault_lock(ewifi_vault_t *v)
 bool ewifi_vault_add(ewifi_vault_t *v, const char *ssid, const char *pass,
                       const char *note, bool auto_conn)
 {
-    if (v->count >= EWIFI_VAULT_MAX) return false;
     if (!v->unlocked) return false;
 
     int existing = ewifi_vault_find(v, ssid);
@@ -90,6 +89,10 @@ bool ewifi_vault_add(ewifi_vault_t *v, const char *ssid, const char *pass,
         v->entries[existing].auto_connect = auto_conn;
         return true;
     }
+
+    /* Only a new SSID needs a free slot; updating a saved one must still
+     * work when the vault is full. */
+    if (v->count >= EWIFI_VAULT_MAX) return false;
 
     ewifi_vault_entry_t *e = &v->entries[v->count];
     memset(e, 0, sizeof(*e));
