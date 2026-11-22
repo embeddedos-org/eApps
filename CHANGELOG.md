@@ -27,6 +27,9 @@
 - eBot's `models` and `tools` lists show each entry once. `ebot_fetch_models()` and `ebot_fetch_tools()` began
   the search for the next `"name"` one character into the reply, which found the first entry again, so a
   reply with two models listed three (`eai-tiny`, `eai-tiny`, `eai-base`).
+- `ewifi_vault_add()` updates a saved network when the vault is full. It checked for a free slot before
+  looking up the SSID, so once all 32 slots were in use a new password, note or auto-connect setting for a
+  network already in the vault was rejected and the old one kept. Only a new SSID now needs a free slot.
 
 ## [3.0.1] - 2026-05-16
 

@@ -116,6 +116,38 @@ static void test_vault_remove(void) {
               "vault find after remove returns -1");
 }
 
+static void test_vault_update_when_full(void) {
+    ewifi_vault_t v;
+    ewifi_vault_init(&v);
+    char ssid[EWIFI_SSID_MAX];
+    for (int i = 0; i < EWIFI_VAULT_MAX; i++) {
+        snprintf(ssid, sizeof(ssid), "Net%02d", i);
+        ewifi_vault_add(&v, ssid, "oldpass1", "old", false);
+    }
+    ASSERT_EQ(v.count, EWIFI_VAULT_MAX, "vault holds EWIFI_VAULT_MAX entries");
+
+    /* A saved SSID can still be updated when every slot is in use. */
+    ASSERT_TRUE(ewifi_vault_add(&v, "Net05", "newpass2", "new", true),
+                "vault add updates a saved SSID when the vault is full");
+    int idx = ewifi_vault_find(&v, "Net05");
+    ASSERT_GTE(idx, 0, "updated SSID is still in the vault");
+    if (idx >= 0) {
+        ASSERT_STR_EQ(v.entries[idx].password, "newpass2",
+                      "full vault: password of a saved SSID is updated");
+        ASSERT_STR_EQ(v.entries[idx].note, "new",
+                      "full vault: note of a saved SSID is updated");
+        ASSERT_TRUE(v.entries[idx].auto_connect,
+                    "full vault: auto_connect of a saved SSID is updated");
+    }
+    ASSERT_EQ(v.count, EWIFI_VAULT_MAX, "updating does not add an entry");
+
+    /* A new SSID still has no room. */
+    ASSERT_FALSE(ewifi_vault_add(&v, "Extra", "pass1234", NULL, false),
+                 "vault add rejects a new SSID when the vault is full");
+    ASSERT_EQ(ewifi_vault_find(&v, "Extra"), -1, "rejected SSID is not stored");
+    ASSERT_EQ(v.count, EWIFI_VAULT_MAX, "rejected add leaves the count alone");
+}
+
 static void test_vault_pin_lock_unlock(void) {
     ewifi_vault_t v;
     ewifi_vault_init(&v);
@@ -238,6 +270,7 @@ int main(void) {
     TEST_SUITE("eWiFi Password Vault");
     test_vault_add_find();
     test_vault_remove();
+    test_vault_update_when_full();
     test_vault_pin_lock_unlock();
     test_vault_wrong_pin();
     test_vault_encrypt_decrypt_roundtrip();
