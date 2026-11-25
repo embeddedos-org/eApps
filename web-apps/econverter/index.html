@@ -132,6 +132,11 @@ const CATS={
   area:{units:['m²','km²','cm²','ft²','in²','acre','ha'],rates:{'m²':1,'km²':1e6,'cm²':0.0001,'ft²':0.092903,'in²':0.00064516,'acre':4046.86,'ha':10000}},
 };
 let cat='length';
+// 6 significant digits without trailing zeros. Only zeros after the decimal
+// point are dropped: 100000 stays "100000", 1.50000e+6 becomes "1.5e+6".
+function formatResult(n){
+  return n.toPrecision(6).replace(/(\.\d*?)0+(e|$)/,'$1$2').replace(/\.(e|$)/,'$1');
+}
 function populateUnits(){
   const c=CATS[cat];
   ['fromUnit','toUnit'].forEach((id,i)=>{
@@ -157,7 +162,7 @@ function convert(){
     const rates=CATS[cat].rates;
     result=val*rates[from]/rates[to];
   }
-  document.getElementById('toVal').value=result.toPrecision(6).replace(/\.?0+$/,'');
+  document.getElementById('toVal').value=formatResult(result);
   document.getElementById('convResult').textContent=`${val} ${from} = ${document.getElementById('toVal').value} ${to}`;
 }
 document.getElementById('swapBtn').addEventListener('click',()=>{

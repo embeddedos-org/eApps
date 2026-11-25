@@ -30,6 +30,9 @@
 - `ewifi_vault_add()` updates a saved network when the vault is full. It checked for a free slot before
   looking up the SSID, so once all 32 slots were in use a new password, note or auto-connect setting for a
   network already in the vault was rejected and the old one kept. Only a new SSID now needs a free slot.
+- The eConverter web app shows results with six integer digits correctly. It stripped trailing zeros even
+  when the number had no decimal point, so `1 km` to `cm` showed `1` instead of `100000` and `500 kg` to `g`
+  showed `5`. Only zeros after the decimal point are dropped now (`1.00000e+6` is shown as `1e+6`).
 
 ## [3.0.1] - 2026-05-16
 
