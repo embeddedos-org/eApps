@@ -29,6 +29,17 @@ jobs:
         run: python3 scripts/validate_apps.py data/apps.json
       - name: Validator unit tests (incl. AI-capability registry negatives)
         run: python3 -m unittest discover -s tests -p "test_app_metadata.py"
+      # The eConverter web-app regression tests drive the app's inline script in
+      # Node, so they need a Node runtime and pytest. Scoped to this file on
+      # purpose: the rest of tests/ is not green yet, so running all of it here
+      # would make the lane red for unrelated reasons.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pytest
+        run: python3 -m pip install --upgrade pytest
+      - name: Web app conversion regression tests
+        run: python3 -m pytest tests/test_econverter_web.py -v
   build:
     name: Native (${{ matrix.os }})
     runs-on: ${{ matrix.os }}

@@ -30,15 +30,18 @@ function el(id) {
   if (!els[id]) {
     els[id] = {
       id, value: '', textContent: '', innerHTML: '', selectedIndex: 0,
-      addEventListener(type, fn) { (listeners[id] = listeners[id] || []).push(fn); },
+      addEventListener(type, fn) {
+        listeners[id] = listeners[id] || {};
+        (listeners[id][type] = listeners[id][type] || []).push(fn);
+      },
     };
   }
   return els[id];
 }
 const tabs = ['length', 'weight', 'temp', 'area'].map(cat => ({
-  dataset: { cat }, handlers: [],
+  dataset: { cat }, handlers: {},
   classList: { add() {}, remove() {} },
-  addEventListener(type, fn) { this.handlers.push(fn); },
+  addEventListener(type, fn) { (this.handlers[type] = this.handlers[type] || []).push(fn); },
 }));
 const document = {
   getElementById: el,
@@ -48,12 +51,21 @@ const ctx = vm.createContext({ document, navigator: {}, console });
 vm.runInContext(script, ctx);
 
 const out = [];
+// Only the listeners registered for the real user event are fired, so a
+// handler wired to the wrong event type fails the test instead of passing.
+function fire(registered, type, what) {
+  const fns = (registered || {})[type] || [];
+  if (fns.length === 0) throw new Error(`no '${type}' listener registered on ${what}`);
+  fns.forEach(fn => fn());
+}
+
 for (const [cat, value, from, to] of JSON.parse(casesJson)) {
-  tabs.find(t => t.dataset.cat === cat).handlers.forEach(fn => fn());
+  const tab = tabs.find(t => t.dataset.cat === cat);
+  fire(tab.handlers, 'click', `the ${cat} tab`);
   el('fromUnit').value = from;
   el('toUnit').value = to;
   el('fromVal').value = String(value);
-  listeners.fromVal.forEach(fn => fn());
+  fire(listeners.fromVal, 'input', 'fromVal');
   out.push(el('toVal').value);
 }
 process.stdout.write(JSON.stringify(out));
